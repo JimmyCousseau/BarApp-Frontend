@@ -1,0 +1,37 @@
+.mat-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .mat-card-content{
+        display: grid;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+.container-global {
+    justify-content: center;
+    display: grid;
+
+    .container {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 600px;
+    }
+}
+
+.dialog-actions {
+    justify-content: center;
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    p {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        margin: 0 1em;
+
+    }
+}

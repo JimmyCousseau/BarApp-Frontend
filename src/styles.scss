@@ -1,1 +1,123 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$BarApp-primary: mat.define-palette(mat.$green-palette);
+$BarApp-accent: mat.define-palette(mat.$green-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$BarApp-warn: mat.define-palette(mat.$red-palette);
+
+:root {
+  --first-color: #6D071A;
+  --second-color: #03224C;
+  --third-color: #ceb37d;
+  --text-color: #ffffff;
+  --text-shadow-color: #000000;
+  --btn-text-color: #ffffff;
+  --header-nav-color: rgba(46, 46, 46, 0);
+}
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$BarApp-theme: mat.define-light-theme((color: (primary: $BarApp-primary,
+        accent: $BarApp-accent,
+        warn: $BarApp-warn,
+      )));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($BarApp-theme);
+
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html {
+  background-image: url("/assets/images/background-temp.jpeg");
+  background-repeat: repeat-y;
+  background-size: cover;
+  background-color: rgb(24, 24, 24);
+}
+
+
+
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px auto;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 350px;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+  thead {
+    tr {
+      background-color: #009879;
+      color: #ffffff;
+      text-align: center;
+    }
+  }
+
+  th {
+    padding: 12px 15px;
+  }
+
+  td {
+    padding: 12px 15px;
+  }
+
+  tbody {
+    tr {
+      text-align: center;
+      border-bottom: 1px solid #dddddd;
+
+      &:nth-of-type(even) {
+        background-color: #ffffff;
+        color: #000000;
+      }
+
+      &:nth-of-type(odd) {
+        background-color: #313131;
+        color: #FFFFFF;
+
+        .mat-select-value {
+          color: #FFFFFF;
+        }
+      }
+
+      &:last-of-type {
+        border-bottom: 2px solid #009879;
+      }
+    }
+
+    tr.active-row {
+      font-weight: bold;
+      color: #009879;
+    }
+  }
+}
+
+.mat-card-template {
+  text-align: center;
+  justify-content: center;
+  display: grid;
+}

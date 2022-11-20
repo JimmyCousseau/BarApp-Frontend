@@ -1,0 +1,28 @@
+
+<div class="card-container">
+    <mat-card>
+        <mat-card-title>
+            Bienvenue {{user['Username']}}
+        </mat-card-title>
+        <mat-card-subtitle>
+            {{user['Role']}}
+        </mat-card-subtitle>
+        <mat-card-content class="mat-card-content">
+            <button mat-raised-button class="navigate-btn" routerLink="../menu">
+                Menu
+            </button>
+            <button mat-raised-button class="navigate-btn" routerLink="../orders">
+                Commandes
+            </button>
+            <button mat-raised-button class="navigate-btn" routerLink="../checkout" *ngIf="user['Role'] == 'Serveur' || user['Role'] == 'Administrateur'">
+                Caisse
+            </button>
+            <button mat-raised-button class="navigate-btn" routerLink="../history">
+                Historique
+            </button>
+            <button mat-raised-button class="navigate-btn" routerLink="../parameters">
+                Configuration
+            </button>
+        </mat-card-content>
+    </mat-card>
+</div>

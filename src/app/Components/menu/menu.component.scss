@@ -1,0 +1,84 @@
+$btn_color: var(--first-color);
+$btn_text_color: var(--btn-text-color);
+
+.mat-display-2 {
+    color: var(--text-color);
+    text-align: center;
+    margin: 2vh 0 6vh 0;
+}
+
+.mat-display-1 {
+    color: var(--text-color);
+    text-align: center;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.back-section-btn {
+    display: flex;
+    position: absolute;
+    margin: 2vw;
+    text-align: center;
+    right: 10px;
+    top: 10px;
+    font-size: large;
+}
+
+.btn-text {
+    white-space: normal;
+}
+
+.container-global {
+    justify-content: center;
+    display: grid;
+
+    .container {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 600px;
+
+        .section-btn {
+            height: 150px;
+            width: 150px;
+            background-color: $btn_color;
+            justify-content: space-evenly;
+            margin: 0 15px 15px 15px;
+            font-size: x-large;
+            border-radius: 60px;
+            color: $btn_text_color;
+        }
+
+        .products-btn {
+            height: 150px;
+            width: 150px;
+            background-color: $btn_color;
+            justify-content: space-evenly;
+            margin: 0 15px 15px 15px;
+            font-size: x-large;
+            border-radius: 3px;
+            color: $btn_text_color;
+        }
+    }
+}
+
+.confirm-order {
+    display: inline-grid;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog-actions {
+    justify-content: center;
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+        p {
+            display: inline-flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            margin: 0 1em;
+
+        }
+}

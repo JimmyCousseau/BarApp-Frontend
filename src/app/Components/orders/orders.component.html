@@ -1,0 +1,60 @@
+<div class="container-global">
+    <div class="container">
+        <mat-card class="mat-card-template">
+            <mat-card-title> Commandes en attente </mat-card-title>
+
+            <mat-card-content>
+                <table class='styled-table'>
+                    <caption>List of orders that the server is dealing with</caption>
+                    <thead>
+                        <tr>
+                            <th> Table </th>
+                            <th> Intitulé </th>
+                            <th> Quantité </th>
+                            <th> État </th>
+                            <th> Actions </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let order of ordersPending" [ngClass]="styleTable(order.IDTable)">
+                            <td> {{order.IDTable}} </td>
+                            <td> {{order.Intitule}} </td>
+                            <td> {{order.Quantite}} </td>
+                            <td> {{order.Etat}} </td>
+                            <td>
+                                <button mat-raised-button (click)="openActionDialog(actionDialog, order)">
+                                    Modifier
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<ng-template #actionDialog let-data>
+    <h1 mat-dialog-title> Modification du produit </h1>
+    <div mat-dialog-content>
+        <p>Quelle action voulez-vous effectuer sur ce produit ?</p>
+        <p>Informations:</p>
+        <p> - Table: <span style="font-weight: bold;">{{data.IDTable}}</span> </p>
+        <p> - Intitulé: <span style="font-weight: bold;">{{data.Intitule}}</span> </p>
+        <p> - Quantité: <span style="font-weight: bold;">{{data.Quantite}}</span> </p>
+        <p> - État: <span style="font-weight: bold;">{{data.Etat}}</span> </p>
+    </div>
+    <div mat-dialog-actions class="dialog-actions">
+        <p>
+            <button mat-raised-button class="table-btn-take" (click)="markOrderDealt(data)">
+                Pris en charge
+            </button>
+        </p>
+        <p>
+            <button mat-raised-button class="table-btn-delete" color="warn"
+                (click)="deleteProductInOrderSnack(data.IDTable, data.Intitule)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </p>
+    </div>
+</ng-template>

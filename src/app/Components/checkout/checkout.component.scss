@@ -1,0 +1,20 @@
+.ckeckout-content-container-global {
+    justify-content: center;
+    display: grid;
+    .ckeckout-content-container {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 600px;
+    }
+}
+
+.confirm-order {
+    display: inline-grid;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    button {
+        margin-top: 1em;
+    }
+}

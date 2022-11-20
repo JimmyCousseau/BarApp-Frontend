@@ -1,0 +1,13 @@
+.card-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    .mat-card-content {
+        display: grid;
+        text-align: center;
+        justify-content: space-evenly;
+        .navigate-btn {
+            margin-top: 15px;
+        }
+    }
+}

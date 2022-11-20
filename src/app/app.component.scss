@@ -1,0 +1,38 @@
+
+::ng-deep .snackbar {
+    white-space: pre-wrap;
+}
+
+.header-container {
+    
+    display: flex;
+    margin: 0 10px 0 10px;
+
+    .logo-container {
+
+        display: table;
+        margin: 10px auto 15px auto;
+        background-color: white;
+        border-radius: 10px;
+        cursor: pointer;
+
+        .logo {
+            display: table-cell;
+            text-align: center;
+            font-size: xx-large;
+            vertical-align: middle;
+        }
+    }
+
+    .mat-toolbar {
+        background-color: var(--header-nav-color);
+        justify-content: space-evenly;
+        margin-bottom: 1vh;
+        .mat-nav-btn {
+            height:50px;
+            font-size: large;
+            background-color: var(--second-color);
+            color: var(--btn-text-color);
+        }
+    }
+}

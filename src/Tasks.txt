@@ -1,0 +1,9 @@
+Parameters :
+- Change global parameters of the app :
+    - Title
+    - Adresse
+- Add information about the user (os, device, IP, etc.) to logs
+- Add cook interface
+- Add panel in parameters "Add a new role and change role permissions"
+- Graphic matter: More buttons on one line
+- Message when the user has changed his password and refresh page.
