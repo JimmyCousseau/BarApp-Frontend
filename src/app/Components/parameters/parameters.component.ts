@@ -18,7 +18,7 @@ export class ParametersComponent implements OnInit {
   roleSelected = '';
   roleSelectedForChange = '';
   listOfRoles: any;
-  currentUser: User;
+  currentUser: User = { Username: "", Password: "", Role: "" };
   users: any;
 
   newPasswordForm = new FormGroup({
@@ -30,12 +30,12 @@ export class ParametersComponent implements OnInit {
     role: new FormControl(null, Validators.required)
   })
 
-
-  constructor(private authService: AuthService, private _snackBar: MatSnackBar, private paramService: ParameterService, private dialog: MatDialog) {
-    this.currentUser = this.authService.getUser();
-  }
+  constructor(private _snackBar: MatSnackBar,
+    private paramService: ParameterService,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.currentUser = AuthService.getUser();
     this.roleSelected = '';
     this.paramService.getUsersList().subscribe(users => {
       this.users = users;
@@ -45,7 +45,6 @@ export class ParametersComponent implements OnInit {
         }
       });
     });
-
 
     this.paramService.getRoleList().subscribe(roleList => {
       this.listOfRoles = roleList;

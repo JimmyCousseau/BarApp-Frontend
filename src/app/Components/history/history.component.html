@@ -3,13 +3,13 @@
         <div class="mat-card-container">
             <mat-card>
                 <mat-card-title>Historique</mat-card-title>
-                <mat-card-subtitle>Retrouvez ici l'historique des commandes terminés</mat-card-subtitle>
+                <mat-card-subtitle>Retrouvez ici l'historique des commandes. La date indique la première fois que la commande a été prise</mat-card-subtitle>
                 <mat-card-content class="mat-card-content">
                     <table class="styled-table">
                         <caption>History table of the finished orders</caption>
                         <thead>
                             <tr>
-                                <th>Heure</th>
+                                <th>Date</th>
                                 <th>Table</th>
                                 <th>Intitulé</th>
                                 <th>Quantité</th>
@@ -43,13 +43,13 @@
     <h1 mat-dialog-title>Modification</h1>
     <div mat-dialog-content>
         <p>Informations sur cet historique</p>
-        <p> - Heure: <span style="font-weight: bold;">data.Horodatage</span> </p>
-        <p> - Table: <span style="font-weight: bold;">data.Horodatage</span> </p>
-        <p> - Intitulé: <span style="font-weight: bold;">data.Intitule</span> </p>
-        <p> - Quantité: <span style="font-weight: bold;">data.Quantite</span> </p>
-        <p> - État: <span style="font-weight: bold;">data.Etat</span> </p>
+        <p> - Heure: <span class="set-text-bold"> {{data.Horodatage | date:'M/d, h\'h\'mm\'m\'ss\'s\''}} </span></p>
+        <p> - Table: <span class="set-text-bold"> {{data.IDTable}} </span></p>
+        <p> - Intitulé: <span class="set-text-bold"> {{data.Intitule}} </span></p>
+        <p> - Quantité: <span class="set-text-bold"> {{data.Quantite}} </span></p>
+        <p> - État: <span class="set-text-bold"> {{data.Etat}} </span></p>
     </div>
-    <div mat-dialog-actions class="dialog-actions">
+    <div mat-dialog-actions class="mat-dialog-actions">
         <p>
             Actions buttons, it's not finished yet
         </p>

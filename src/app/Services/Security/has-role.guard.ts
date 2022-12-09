@@ -9,14 +9,12 @@ import { AuthService } from './auth.service';
 })
 export class HasRoleGuard implements CanActivate {
 
-  constructor(private authService: AuthService, private _snackBar: MatSnackBar) {
-
-  }
+  constructor(private _snackBar: MatSnackBar) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const hasRole = route.data['role'].includes(this.authService.getUser()['Role']);
+    const hasRole = route.data['role'].includes(AuthService.getUserRole());
     if (!hasRole) {
       this._snackBar.open("You don't have the permissions", "Ok", {
         duration: 3000

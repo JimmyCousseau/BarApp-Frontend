@@ -1,47 +1,51 @@
-<button mat-raised-button *ngIf="currentSection != null" (click)="backButton()" class="back-section-btn" color="warn">
-    <span class="btn-text">
-        Retour
-    </span>
-</button>
-
-<div class="container-global">
+<div class="container-global ng-star-inserted">
     <div class="container">
-        <div *ngFor="let sec of sections">
-            <button mat-raised-button *ngIf="sec.sectionParente == currentSection"
-                (click)="changeSections(sec.sectionCourante)" class="section-btn">
-                <span class="btn-text">
-                    {{sec.sectionCourante}}
-                </span>
-            </button>
-        </div>
-    </div>
-</div>
+        <mat-card id="sections">
+            <mat-card-title> {{currentSection ? currentSection : "Menu"}} </mat-card-title>
 
-<div class="mat-display-2" *ngIf="haveProductsInside()"> Products </div>
+            <mat-card-content>
+                <button mat-raised-button *ngIf="currentSection != null" (click)="backButton()" class="section-btn primary-color">
+                    <span class="btn-text">
+                        Retour
+                    </span>
+                </button>
+                <div *ngFor="let sec of sections">
+                    <button mat-raised-button *ngIf="sec.sectionParente == currentSection"
+                        (click)="changeSections(sec.sectionCourante)" class="section-btn primary-color">
+                        <span class="btn-text">
+                            {{sec.sectionCourante}}
+                        </span>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
 
-<div class="container-global">
-    <div class="container">
-        <div *ngFor="let prod of products">
-            <button mat-raised-button *ngIf="prod.Section == currentSection" class="products-btn"
-                (click)="addProductInOrder(prod)">
-                <span class="btn-text">
-                    {{prod.Intitule}}
-                </span>
-            </button>
-        </div>
+        <mat-card *ngIf="haveProductsInside()" id="products">
+            <mat-card-title>Produits</mat-card-title>
+
+            <mat-card-content>
+                <div *ngFor="let prod of products">
+                    <button mat-raised-button *ngIf="prod.Section == currentSection" class="products-btn primary-color"
+                        (click)="addProductInOrder(prod)">
+                        <span class="btn-text">
+                            {{prod.Intitule}}
+                        </span>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
     </div>
 </div>
 
 <div class="container-global" *ngIf="isOrderContainItems()">
-    <div class="container" style="margin-bottom: 20px; margin-top: 20px">
-        <mat-card style="margin-bottom: 20px; margin-top: 20px">
+    <div class="container">
+        <mat-card class="mat-card">
             <mat-card-title>
                 Commande en cours
             </mat-card-title>
 
             <mat-card-content>
                 <table class='styled-table'>
-                    <caption>List of products that the client wants to consume</caption>
                     <thead>
                         <tr>
                             <th> Intitulé </th>
@@ -57,7 +61,7 @@
                             <td> {{order.Quantite}} </td>
                             <td>
                                 <button mat-raised-button (click)="openActionDialog(actionDialog, order)"
-                                    color="primary">
+                                    class="primary-color">
                                     <span class="btn-text"> Modifier </span>
                                 </button>
                             </td>
@@ -66,23 +70,69 @@
                 </table>
             </mat-card-content>
         </mat-card>
-        <mat-card style="margin-bottom: 20px; margin-top: 20px">
+    </div>
+</div>
+
+<div class="container-global" *ngIf="isOrderContainItems()">
+    <div class="container">
+        <mat-card class="mat-card">
             <mat-card-title>
                 Numéro de table
             </mat-card-title>
-            <form (ngSubmit)="sendOrderToPrepare()" [formGroup]="form" autocomplete="off">
-                <div class="confirm-order">
-                    <mat-form-field appearance="fill" style="border-top: 0px; padding-top: 0px;">
-                        <mat-label>
-                            Entre 1 et 255
-                        </mat-label>
-                        <input matInput placeholder="Ex. 102" type="number" formControlName="idtable">
-                    </mat-form-field>
-                    <button mat-raised-button type="submit" color="primary">
+
+            <mat-card-content>
+                <mat-card-title>
+                    <span class="mat-display-2" style="color: black">
+                        {{tableID}}
+                    </span>
+                </mat-card-title>
+            </mat-card-content>
+
+            <mat-card-content id="set-table-id">
+                <button mat-fab class="third-color" (click)="incrementTableNumber(1)">
+                    1
+                </button>
+                <button mat-fab class="third-color" (click)="incrementTableNumber(2)">
+                    2
+                </button>
+                <button mat-fab class="third-color" (click)="incrementTableNumber(3)">
+                    3
+                </button>
+                <button mat-fab class="third-color" (click)="incrementTableNumber(4)">
+                    4
+                </button>
+                <button mat-fab class="third-color" (click)="incrementTableNumber(5)">
+                    5
+                </button>
+                <button mat-fab class="third-color" (click)="incrementTableNumber(6)">
+                    6
+                </button>
+                <button mat-fab class="third-color" (click)="incrementTableNumber(7)">
+                    7
+                </button>
+                <button mat-fab class="third-color" (click)="incrementTableNumber(8)">
+                    8
+                </button>
+                <button mat-fab class="third-color" (click)="incrementTableNumber(9)">
+                    9
+                </button>
+                <button mat-fab class="accent-color"></button>
+                <button mat-fab class="third-color" (click)="incrementTableNumber(0)">
+                    0
+                </button>
+
+                <button mat-fab class="accent-color" (click)="decrementTableNumber()">
+                    <mat-icon>arrow_left</mat-icon>
+                </button>
+            </mat-card-content>
+
+            <mat-card-content>
+                <form (ngSubmit)="sendOrderToPrepare()" autocomplete="off" class="mat-form">
+                    <button mat-raised-button type="submit" class="primary-color">
                         Valider
                     </button>
-                </div>
-            </form>
+                </form>
+            </mat-card-content>
         </mat-card>
     </div>
 </div>
@@ -92,24 +142,18 @@
     <div mat-dialog-content>
         <p>Quelle action voulez-vous effectuer sur ce produit ?</p>
         <p>Informations:</p>
-        <p> - Intitulé: <span style="font-weight: bold;">{{data.Intitule}}</span> </p>
-        <p> - Quantité: <span style="font-weight: bold;">{{data.Quantite}}</span> </p>
+        <p> - Intitulé: <span class="set-text-bold">{{data.Intitule}}</span> </p>
+        <p> - Quantité: <span class="set-text-bold">{{data.Quantite}}</span> </p>
     </div>
-    <div mat-dialog-actions class="dialog-actions">
-        <p>
-            <button mat-fab color="accent" (click)="addProductInOrder(data)">
-                +1
-            </button>
-        </p>
-        <p>
-            <button mat-fab color="warn" (click)="reduceQuantiteInOrder(data)">
-                -1
-            </button>
-        </p>
-        <p>
-            <button mat-fab color="warn" (click)="validateDeleteProductInOrder(data)">
-                <mat-icon>delete</mat-icon>
-            </button>
-        </p>
-     </div>
+    <div mat-dialog-actions class="mat-dialog-actions">
+        <button mat-fab class="primary-color" (click)="addProductInOrder(data)">
+            +1
+        </button>
+        <button mat-fab class="accent-color" (click)="reduceQuantiteInOrder(data)">
+            -1
+        </button>
+        <button mat-fab class="third-color" (click)="validateDeleteProductInOrder(data)">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
 </ng-template>

@@ -9,16 +9,16 @@ import { LoginService } from '../ComponentService/LoginService';
   providedIn: 'root'
 })
 export class AuthService {
-  private _isLoggedIn$ = new BehaviorSubject<boolean>(false);
-  isLoggedIn$ = this._isLoggedIn$.asObservable();
+  private _isLoggedIn = new BehaviorSubject<boolean>(false);
+  isLoggedIn = this._isLoggedIn.asObservable();
 
-  private user: User = { Username: "", Role: "", Password: "" };
+  private static user: User = { Username: "", Role: "", Password: "" };
 
   constructor(
     private loginService: LoginService,
     private _snackBar: MatSnackBar,
   ) {
-    this._isLoggedIn$.next(false);
+    this._isLoggedIn.next(false);
   }
 
   login(username: string | null | undefined, password: string | null | undefined) {
@@ -26,10 +26,10 @@ export class AuthService {
       .pipe(
         tap((response: any) => {
           if (response != null) {
-            this._isLoggedIn$.next(true);
-            this.user = { Username: response.Username, Role: response.Role, Password: '' };
+            this._isLoggedIn.next(true);
+            AuthService.user = { Username: response.Username, Role: response.Role, Password: '' };
           } else {
-            this._isLoggedIn$.next(false);
+            this._isLoggedIn.next(false);
             this._snackBar.open("Mauvais identifiant / mot de passe,\nVeuillez réessayer", "Ok", {
               duration: 3000,
               panelClass: ['snackbar'],
@@ -39,9 +39,15 @@ export class AuthService {
       )
   }
 
-  getUser() {
-    return this.user;
+  static getUserRole(): Readonly<string> {
+    return AuthService.user.Role;
   }
 
+  static getUserUsername(): Readonly<string> {
+    return AuthService.user.Username;
+  }
 
+  static getUser(): Readonly<User> {
+    return { Username: AuthService.user.Username, Role: AuthService.user.Role, Password: '' };
+  }
 }

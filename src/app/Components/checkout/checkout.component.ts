@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { AuthService } from '../../Services/Security/auth.service';
+import jsPDF from 'jspdf';
 import { CheckoutOrder } from '../../Interfaces/CheckoutOrder';
-import { CheckoutService } from 'src/app/Services/ComponentService/CheckoutService';
+import { CheckoutService } from '../../Services/ComponentService/CheckoutService';
+import { AuthService } from '../../Services/Security/auth.service';
 
 
 @Component({
@@ -22,7 +22,6 @@ export class CheckoutComponent implements OnInit {
 
   constructor(
     private readonly checkoutService: CheckoutService,
-    private readonly authService: AuthService,
   ) { }
 
   ngOnInit(): void {
@@ -51,8 +50,8 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  listTable(): any[] {
-    let tables: any[] = [];
+  listTable(): number[] {
+    let tables: number[] = [];
     this.checkoutOrders.forEach(order => {
       if (!(tables.includes(order.IDTable))) {
         tables.push(order.IDTable);
@@ -89,8 +88,18 @@ export class CheckoutComponent implements OnInit {
   }
 
   confirmOrder(idtable: number): void {
-    this.checkoutService.confirmOrderPaiement(this.authService.getUser().Username, idtable).subscribe((data) => {
+    this.checkoutService.confirmOrderPaiement(AuthService.getUserUsername(), idtable).subscribe((data) => {
       this.ngOnInit();
     });
+  }
+
+  getDateOrder(idtable: number): Date {
+    let date: Date = new Date();
+    this.checkoutOrders.forEach(order => {
+      if (order.IDTable == idtable) {
+        date = order.Horodatage;
+      }
+    });
+    return date;
   }
 }

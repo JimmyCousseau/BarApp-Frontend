@@ -18,7 +18,7 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {
   }
 
-  submitForm() {
+  submitForm(): void {
     if (this.form.invalid) {
       return;
     }
@@ -26,7 +26,7 @@ export class LoginComponent {
     this.authService
       .login(this.form.get('username')?.value, this.form.get('password')?.value)
       .subscribe((response: any) => {
-        this.router.navigate(['../home']);
+        this.router.navigate(['menu']);
       });
   }
 }

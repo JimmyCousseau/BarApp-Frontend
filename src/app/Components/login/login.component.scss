@@ -1,0 +1,21 @@
+.mat-card {
+  padding: 1.7em;
+}
+
+html {
+  height: fit-content;
+}
+
+.login-container {
+  width: 100%;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  display: inline-grid;
+
+  .form-group {
+    height: fit-content;
+    width: fit-content;
+    margin-bottom: 7.5em;
+  }
+}

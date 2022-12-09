@@ -1,84 +1,51 @@
-$btn_color: var(--first-color);
-$btn_text_color: var(--btn-text-color);
-
-.mat-display-2 {
-    color: var(--text-color);
-    text-align: center;
-    margin: 2vh 0 6vh 0;
-}
-
-.mat-display-1 {
-    color: var(--text-color);
-    text-align: center;
-    font-weight: 300;
-    margin-bottom: 10px;
-}
-
-.back-section-btn {
-    display: flex;
-    position: absolute;
-    margin: 2vw;
-    text-align: center;
-    right: 10px;
-    top: 10px;
-    font-size: large;
-}
-
 .btn-text {
     white-space: normal;
+    vertical-align: baseline;
+    line-height: normal;
+    justify-content: center;
 }
 
-.container-global {
-    justify-content: center;
-    display: grid;
+#sections {
+    width: 20vw;
 
-    .container {
-        display: inline-flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        max-width: 600px;
+    .mat-card-content {
+        justify-content: initial;
 
         .section-btn {
-            height: 150px;
-            width: 150px;
-            background-color: $btn_color;
-            justify-content: space-evenly;
-            margin: 0 15px 15px 15px;
-            font-size: x-large;
-            border-radius: 60px;
-            color: $btn_text_color;
-        }
-
-        .products-btn {
-            height: 150px;
-            width: 150px;
-            background-color: $btn_color;
-            justify-content: space-evenly;
-            margin: 0 15px 15px 15px;
-            font-size: x-large;
-            border-radius: 3px;
-            color: $btn_text_color;
+            height: fit-content;
+            width: 100%;
+            font-size: large;
         }
     }
 }
 
-.confirm-order {
-    display: inline-grid;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+#products {
+    max-width: 500px;
+    width: 50vw;
+    min-width: 25vh;
+
+    .mat-card-content {
+        display: inline-flex;
+        justify-content: flex-start;
+
+        .mat-raised-button {
+            line-height: normal;
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+
+        .products-btn {
+            display: grid;
+            height: fit-content;
+            min-height: 100%;
+            width: 119px;
+            justify-content: space-evenly;
+            align-content: center;
+            font-size: large;
+        }
+    }
 }
 
-.dialog-actions {
-    justify-content: center;
-    display: inline-flex;
-    flex-wrap: wrap;
-    width: 100%;
-        p {
-            display: inline-flex;
-            flex-wrap: wrap;
-            justify-content: space-evenly;
-            margin: 0 1em;
-
-        }
+#set-table-id {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%/3, max(64px, 100%/5)), 1fr));
 }

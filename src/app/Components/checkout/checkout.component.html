@@ -1,32 +1,42 @@
-
-<div class="ckeckout-content-container-global">
-    <div class="ckeckout-content-container">
-        <mat-card class="mat-card-template">
+<div class="container-global">
+    <div class="container">
+        <mat-card class="mat-card">
             <mat-card-title> Caisse </mat-card-title>
-            <mat-card-content>
+            <mat-card-content class="mat-card-content">
                 <mat-form-field appearance="fill" mat-form-field>
-                    <mat-label> Sélectionne une table </mat-label>   
+                    <mat-label> Sélectionne une table </mat-label>
                     <mat-select [(value)]="selected">
-                        <mat-option class="mat-option" *ngFor="let idtable of listTable()" [value]="idtable">
+                        <mat-option *ngFor="let idtable of listTable()" [value]="idtable">
                             {{idtable}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <div #contentToExportPdf>
-                    <table class='styled-table' *ngIf="!listOrderIsEmpty(selected)">
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<div class="container-global">
+    <div class="container">
+        <mat-card class="mat-card" *ngIf="!listOrderIsEmpty(selected)">
+            <div #contentToExportPdf>
+                <mat-card-title> Table n°{{selected}} </mat-card-title>
+                <mat-card-subtitle> {{getDateOrder(selected) | date:'dd/MM, h\'h\'mm\'m\''}} </mat-card-subtitle>
+                <mat-card-content class="mat-card-content">
+                    <table class="styled-table">
                         <thead>
                             <tr>
-                                <th> Numéro de la table </th>
-                                <th> Intitulé </th>
-                                <th> Quantité </th>
-                                <th> Prix unitaire </th>
-                                <th> Prix Total </th>
+                                <th>Serveur</th>
+                                <th>Intitulé</th>
+                                <th>Quantité</th>
+                                <th>Prix unitaire</th>
+                                <th>Prix Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <ng-container *ngFor="let order of checkoutOrders">
-                                <tr *ngIf="order.IDTable == selected" >
-                                    <td> {{order.IDTable}} </td>
+                                <tr *ngIf="order.IDTable == selected">
+                                    <td> {{order.Serveur}} </td>
                                     <td> {{order.Intitule}} </td>
                                     <td> {{order.Quantite}} </td>
                                     <td> {{order.Prix}} €</td>
@@ -35,16 +45,19 @@
                             </ng-container>
                         </tbody>
                     </table>
-                    <div class="confirm-order" *ngIf="!listOrderIsEmpty(selected)">
+                    <div class="mat-card-actions">
                         <mat-card-title-group> Pour un total de {{totalPriceOrder(selected)}} € </mat-card-title-group>
                     </div>
-                </div>
-                <div class="confirm-order" *ngIf="!listOrderIsEmpty(selected)">
-                    <button mat-raised-button color="primary" (click)="confirmOrder(selected)"> Commande payé </button>
-                    <button mat-raised-button color="primary" (click)="generatePdf()"> Generate pdf </button>
-                </div>
-            </mat-card-content>
+                </mat-card-content>
+            </div>
+            <mat-card-actions class="mat-card-actions">
+                <button mat-raised-button class="primary-color" (click)="confirmOrder(selected)">
+                    Commande payé
+                </button>
+                <button mat-raised-button class="primary-color" (click)="generatePdf()">
+                    Generate pdf
+                </button>
+            </mat-card-actions>
         </mat-card>
-
     </div>
 </div>

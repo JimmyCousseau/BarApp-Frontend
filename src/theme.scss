@@ -1,0 +1,54 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@import '~@angular/material/theming';
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+$BarApp-primary: mat.define-palette(mat.$red-palette);
+$BarApp-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$BarApp-warn: mat.define-palette(mat.$red-palette);
+
+:root {
+    --red-bordeaux: #6d071a;
+    --blue-night: #03224c;
+    --gold: #D79A10;
+    --royal-blue: #4169E1;
+    --text-color: #ffffff;
+    --text-shadow-color: #000000;
+    --btn-text-color: #ffffff;
+    --header-nav-color: rgba(46, 46, 46, 0);
+}
+
+// $custom-typo: mat.define-typography-config(
+//         $headline-1: mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
+//         $headline-2: mat.define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
+//         $headline-3: mat.define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
+//         $headline-4: mat.define-typography-level(34px, 40px, 400),
+//         $headline-5: mat.define-typography-level(24px, 32px, 400),
+//     );
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$BarApp-theme: mat.define-light-theme((
+        color: (primary: $BarApp-primary,
+                accent: $BarApp-accent,
+                warn: $BarApp-warn,
+            ),
+        ));
+
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($BarApp-theme);

@@ -2,13 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { SendOrder } from "src/app/Interfaces/SendOrder";
+import { GlobalSettings } from "./GlobalSettings";
 
 @Injectable({
     providedIn: 'root'
 })
 export class MenuService {
 
-    private url: string = 'http://localhost:3000/';
     private type: SendOrder[] = [];
     private order = new BehaviorSubject(this.type);
     sharedOrder = this.order.asObservable();
@@ -16,15 +16,15 @@ export class MenuService {
     constructor(private http: HttpClient) { }
 
     getMenuSections(): Observable<any> {
-        return this.http.get(this.url + 'menu/sections');
+        return this.http.get(GlobalSettings.getURL() + 'menu/sections');
     }
 
     getMenuProducts(): Observable<any> {
-        return this.http.get(this.url + 'menu/products');
+        return this.http.get(GlobalSettings.getURL() + 'menu/products');
     }
 
     sendOrderToPrepare(username: string, idtable: number, order: SendOrder): Observable<any> {
-        return this.http.post(this.url + 'menu/send_order/' + username + '/' + idtable, order);
+        return this.http.post(GlobalSettings.getURL() + 'menu/send_order/' + username + '/' + idtable, order);
     }
 
     resetSharedOrder(): void {

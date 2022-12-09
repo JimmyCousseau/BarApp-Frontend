@@ -1,7 +1,26 @@
-<div class="header-container">
-    <div class="logo-container" routerLink="home">
-        <img src="../assets/images/logo2.png" height="150px" width="150px" class="logo" alt="Bar">
-    </div>
+<div class="header-container" *ngIf="isLoggedIn">
+    <mat-button-toggle-group class="mat-button-toggle-group">
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../menu">
+            Menu
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../orders">
+            Commandes
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../checkout"
+            *ngIf="getRole() == 'Serveur' || getRole() == 'Administrateur'">
+            Caisse
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../history">
+            Historique
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../parameters">
+            Configuration
+        </mat-button-toggle>
+    </mat-button-toggle-group>
 </div>
 
 

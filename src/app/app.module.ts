@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -20,11 +21,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CheckoutComponent } from './Components/checkout/checkout.component';
 import { HistoryComponent } from './Components/history/history.component';
-import { HomeComponent } from './Components/home/home.component';
 import { LoginComponent } from './Components/login/login.component';
 import { MenuComponent } from './Components/menu/menu.component';
 import { OrdersComponent } from './Components/orders/orders.component';
 import { ParametersComponent } from './Components/parameters/parameters.component';
+import { MatDividerModule } from '@angular/material/divider'
 
 @NgModule({
   declarations: [
@@ -33,7 +34,6 @@ import { ParametersComponent } from './Components/parameters/parameters.componen
     OrdersComponent,
     CheckoutComponent,
     LoginComponent,
-    HomeComponent,
     ParametersComponent,
     HistoryComponent,
   ],
@@ -55,6 +55,8 @@ import { ParametersComponent } from './Components/parameters/parameters.componen
     MatInputModule,
     MatTabsModule,
     MatDialogModule,
+    MatButtonToggleModule,
+    MatDividerModule,
   ],
   bootstrap: [AppComponent]
 })

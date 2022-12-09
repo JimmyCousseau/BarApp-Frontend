@@ -16,17 +16,15 @@ export class HistoryComponent implements OnInit {
 
   constructor(
     private historyService: HistoryService,
-    private readonly authService: AuthService,
     private dialog: MatDialog,
   ) {
 
   }
 
   ngOnInit(): void {
-    console.log('init')
-    this.historyService.getHistoryContent(this.authService.getUser().Username).subscribe(data => {
+    this.historyService.getHistoryContent(AuthService.getUserUsername()).subscribe(data => {
       this.historyContent = data;
-    })
+    });
   }
 
   closeAllDialog() {
@@ -34,7 +32,6 @@ export class HistoryComponent implements OnInit {
   }
 
   openActionDialog(ref: TemplateRef<any>, data: Order) {
-    console.log("opened");
     this.dialog.open(ref, { data: data })
   }
 

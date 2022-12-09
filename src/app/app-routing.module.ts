@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './Services/Security/auth.guard';
 import { CheckoutComponent } from './Components/checkout/checkout.component';
 import { HistoryComponent } from './Components/history/history.component';
-import { HomeComponent } from './Components/home/home.component';
 import { LoginComponent } from './Components/login/login.component';
 import { MenuComponent } from './Components/menu/menu.component';
 import { OrdersComponent } from './Components/orders/orders.component';
@@ -22,9 +21,8 @@ const routes: Routes = [
     }
   },
   { path: 'history', component: HistoryComponent, canActivate: [AuthGuard] },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: '**', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: '**', component: LoginComponent },
 ];
 
 @NgModule({

@@ -1,35 +1,43 @@
-
 ::ng-deep .snackbar {
     white-space: pre-wrap;
 }
 
+.mat-button-toggle-group {
+    max-width: inherit;
+    display: inline-flex;
+    flex-wrap: wrap;
+    border-color: transparent;
+    justify-content: center;
+}
+
 .header-container {
-    
-    display: flex;
-    margin: 0 10px 0 10px;
+    display: inline-flex;
+    width: 100%;
+    justify-content: space-evenly;
+    margin-bottom: 3vh;
 
-    .logo-container {
-
-        display: table;
-        margin: 10px auto 15px auto;
-        background-color: white;
-        border-radius: 10px;
+    button {
+        display: inline;
+        width: inherit;
+        text-align: center;
         cursor: pointer;
+        margin: 0 5px 0 5px;
+    }
 
-        .logo {
-            display: table-cell;
-            text-align: center;
-            font-size: xx-large;
-            vertical-align: middle;
-        }
+    .logo {
+        display: table-cell;
+        text-align: center;
+        font-size: xx-large;
+        vertical-align: middle;
     }
 
     .mat-toolbar {
         background-color: var(--header-nav-color);
         justify-content: space-evenly;
         margin-bottom: 1vh;
+
         .mat-nav-btn {
-            height:50px;
+            height: 50px;
             font-size: large;
             background-color: var(--second-color);
             color: var(--btn-text-color);
