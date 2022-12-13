@@ -16,7 +16,7 @@
 }
 
 .text-third-color {
-  color : var(--royal-blue) !important;
+  color: var(--royal-blue) !important;
 }
 
 .accent-color {
@@ -35,6 +35,10 @@ body {
 }
 
 html {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   background-image: url("/assets/images/background-temp.jpeg");
   background-repeat: repeat-y;
   background-size: cover;
@@ -53,8 +57,8 @@ html {
 
   thead {
     tr {
-      background-color: var(--gold);
-      color: #ffffff;
+      color: var(--red-bordeaux);
+      background-color: white;
       text-align: center;
     }
   }
@@ -72,25 +76,8 @@ html {
       text-align: center;
       border-bottom: 1px solid #dddddd;
 
-      &:nth-of-type(even) {
-        background-color: var(--royal-blue);
-        color: white;
-
-        .mat-form-field-outline {
-            color: inherit;
-          }
-        
-          .mat-select-arrow {
-            color: inherit;
-          }
-        
-          .mat-select-value {
-            color: inherit;
-          }
-      }
-
       &:nth-of-type(odd) {
-        background-color: var(--blue-night);
+        background-color: var(--royal-blue);
         color: white;
 
         .mat-form-field-outline {
@@ -106,14 +93,31 @@ html {
         }
       }
 
+      &:nth-of-type(even) {
+        background-color: white;
+        color: black;
+
+        .mat-form-field-outline {
+          color: inherit;
+        }
+
+        .mat-select-arrow {
+          color: inherit;
+        }
+
+        .mat-select-value {
+          color: inherit;
+        }
+      }
+
       &:last-of-type {
-        border-bottom: 2px solid var(--gold);
+        border-bottom: 2px solid var(--red-bordeaux);
       }
     }
 
     tr.active-row {
       font-weight: bold;
-      color: var(--gold);
+      color: var(--red-bordeaux);
     }
   }
 }
@@ -141,8 +145,8 @@ html {
   margin: 0.5em 0.5em 2em 0.5em;
 
   .mat-card-title {
-    padding-bottom: 0.7em;
-    padding-top: 0.5em;
+    margin-bottom: 0.7em;
+    margin-top: 0.5em;
   }
 
   .mat-card-content {

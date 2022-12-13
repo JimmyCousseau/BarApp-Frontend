@@ -4,7 +4,7 @@
             <mat-card-title> Caisse </mat-card-title>
             <mat-card-content class="mat-card-content">
                 <mat-form-field appearance="fill" mat-form-field>
-                    <mat-label> Sélectionne une table </mat-label>
+                    <mat-label i18n="@@1"> Sélectionne une table </mat-label>
                     <mat-select [(value)]="selected">
                         <mat-option *ngFor="let idtable of listTable()" [value]="idtable">
                             {{idtable}}
@@ -21,7 +21,7 @@
         <mat-card class="mat-card" *ngIf="!listOrderIsEmpty(selected)">
             <div #contentToExportPdf>
                 <mat-card-title> Table n°{{selected}} </mat-card-title>
-                <mat-card-subtitle> {{getDateOrder(selected) | date:'dd/MM, h\'h\'mm\'m\''}} </mat-card-subtitle>
+                <mat-card-subtitle> {{getDateOrder(selected) | date:'EEEE, MMMM d, y, h:mm:ss'}} </mat-card-subtitle>
                 <mat-card-content class="mat-card-content">
                     <table class="styled-table">
                         <thead>

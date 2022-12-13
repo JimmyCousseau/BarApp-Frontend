@@ -25,7 +25,13 @@ import { LoginComponent } from './Components/login/login.component';
 import { MenuComponent } from './Components/menu/menu.component';
 import { OrdersComponent } from './Components/orders/orders.component';
 import { ParametersComponent } from './Components/parameters/parameters.component';
-import { MatDividerModule } from '@angular/material/divider'
+import { MatDividerModule } from '@angular/material/divider';
+import { UnknownPageComponent } from './Components/unknown-page/unknown-page.component';
+
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr, 'fr-CA');
 
 @NgModule({
   declarations: [
@@ -36,6 +42,7 @@ import { MatDividerModule } from '@angular/material/divider'
     LoginComponent,
     ParametersComponent,
     HistoryComponent,
+    UnknownPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +65,6 @@ import { MatDividerModule } from '@angular/material/divider'
     MatButtonToggleModule,
     MatDividerModule,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

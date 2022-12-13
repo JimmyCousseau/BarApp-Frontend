@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from './Services/Security/auth.service';
 
@@ -12,9 +13,12 @@ export class AppComponent {
   isLoggedIn = false;
 
   constructor(private _router: Router,
-    private readonly authService: AuthService)
-  { }
-  
+    private readonly authService: AuthService,
+    private titleService: Title,
+  ) {
+    this.titleService.setTitle($localize`${this.title}`)
+  }
+
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(data => {
       this.isLoggedIn = data;

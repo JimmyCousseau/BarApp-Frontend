@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './Services/Security/auth.guard';
 import { CheckoutComponent } from './Components/checkout/checkout.component';
 import { HistoryComponent } from './Components/history/history.component';
-import { LoginComponent } from './Components/login/login.component';
 import { MenuComponent } from './Components/menu/menu.component';
 import { OrdersComponent } from './Components/orders/orders.component';
 import { ParametersComponent } from './Components/parameters/parameters.component';
+import { UnknownPageComponent } from './Components/unknown-page/unknown-page.component';
+import { AuthGuard } from './Services/Security/auth.guard';
 import { HasRoleGuard } from './Services/Security/has-role.guard';
 
 const routes: Routes = [
@@ -21,8 +21,8 @@ const routes: Routes = [
     }
   },
   { path: 'history', component: HistoryComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginComponent },
-  { path: '**', component: LoginComponent },
+  { path: 'login', component: UnknownPageComponent },
+  { path: '**', component: UnknownPageComponent },
 ];
 
 @NgModule({

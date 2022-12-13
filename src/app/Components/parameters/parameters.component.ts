@@ -1,10 +1,10 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../Services/Security/auth.service';
-import { User } from '../../Interfaces/User';
 import { ParameterService } from 'src/app/Services/ComponentService/ParameterService';
+import { User } from '../../Interfaces/User';
+import { AuthService } from '../../Services/Security/auth.service';
 
 @Component({
   selector: 'app-parameters',
@@ -24,10 +24,15 @@ export class ParametersComponent implements OnInit {
   newPasswordForm = new FormGroup({
     oldPassword: new FormControl(null, Validators.required),
     newPassword: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(20)]),
-  });
+  })
+
   newUserForm = new FormGroup({
     username: new FormControl(null, [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
     role: new FormControl(null, Validators.required)
+  })
+
+  newRoleForm = new FormGroup({
+    role: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(25)])
   })
 
   constructor(private _snackBar: MatSnackBar,
@@ -35,6 +40,10 @@ export class ParametersComponent implements OnInit {
     private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.newUserForm.reset()
+    this.newPasswordForm.reset()
+
+
     this.currentUser = AuthService.getUser();
     this.roleSelected = '';
     this.paramService.getUsersList().subscribe(users => {
@@ -51,7 +60,7 @@ export class ParametersComponent implements OnInit {
     })
   }
 
-  submitNewPasswordForm() {
+  changePassword = (): void => {
     if (this.newPasswordForm.invalid) {
       return;
     }
@@ -61,11 +70,22 @@ export class ParametersComponent implements OnInit {
       Role: this.currentUser.Role
     };
     this.paramService.changePassword(currentUser, this.newPasswordForm.get('newPassword')?.value || 'wrong').subscribe((data: any) => {
-
+      if (data === null) {
+        this._snackBar.open("Mauvais mot de passe, veuillez réessayer", "Ok", {
+          duration: 3000,
+        });
+      }
+      else {
+        this._snackBar.open("Mot de passe changé !", "Ok", {
+          duration: 3000,
+        });
+        this.ngOnInit()
+      }
     });
+    this.dialog.closeAll();
   }
 
-  submitNewUserForm() {
+  addUser = (): void => {
     if (this.newUserForm.invalid) {
       return;
     }
@@ -84,7 +104,7 @@ export class ParametersComponent implements OnInit {
     this.password = '';
 
     this.paramService.addUser(newUser, currentUser).subscribe((data: any) => {
-      if (data == null) {
+      if (data === null) {
         this._snackBar.open("Mauvais mot de passe, veuillez réessayer", "Ok", {
           duration: 3000,
         });
@@ -113,10 +133,12 @@ export class ParametersComponent implements OnInit {
     return '';
   }
 
-  deleteUserForm(username: string, role: string): void {
+  deleteUser = (args: any[]): void => {
+    if (args.length < 2)
+      return;
     const userToDelete: User = {
-      Username: username,
-      Role: role,
+      Username: args[0],
+      Role: args[1],
       Password: 'it doesnt matter'
     };
 
@@ -147,18 +169,21 @@ export class ParametersComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-  openPswDialog(ref: TemplateRef<any>, data: any = '') {
-    this.dialog.open(ref, { data: data });
+  @Input()
+  openPswDialog(ref: TemplateRef<any>, funcion: (args: any[]) => void, args: any[]): void {
+    this.dialog.open(ref, { data : { funcion: funcion, args: args }});
   }
 
-  changeUsersRole(user: User, nextRole: string) {
+  changeUsersRole = (args: any[]): void => {
+    if (args.length < 2)
+      return
     const adminUser = {
       Username: this.currentUser.Username,
       Role: this.currentUser.Role,
       Password: this.password
     }
     this.password = '';
-    this.paramService.changeUsersRole(user, adminUser, nextRole).subscribe(data => {
+    this.paramService.changeUsersRole(args[0], adminUser, args[1]).subscribe(data => {
       if (data === null) {
         this._snackBar.open("Mauvais mot de passe, veuillez réessayer", "Ok", {
           duration: 3000,
@@ -171,5 +196,13 @@ export class ParametersComponent implements OnInit {
       }
     });
     this.dialog.closeAll();
+  }
+
+  addRole() {
+    return
+  }
+
+  redirectDialogValidation(func: (args: any[]) => void, args: any[]): void {
+    func(args);
   }
 }

@@ -18,8 +18,8 @@ export class ParameterService {
         return this.http.post(GlobalSettings.getURL() + 'parameters/change-role/' + role, { userToModify, adminUser });
     }
 
-    addUser(user: User, adminUser: User) {
-        return this.http.post(GlobalSettings.getURL() + 'parameters/add-user', { user, adminUser });
+    addUser(userToAdd: User, adminUser: User) {
+        return this.http.post(GlobalSettings.getURL() + 'parameters/add-user', { userToAdd, adminUser });
     }
 
     deleteUser(userToDelete: User, adminUser: User) {

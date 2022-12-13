@@ -3,7 +3,7 @@
         <mat-card class="mat-card">
             <mat-tab-group mat-align-tabs="center" mat-stretch-tabs="false">
                 <mat-tab label="Informations personnelles">
-                    <form (ngSubmit)="submitNewPasswordForm()" [formGroup]="newPasswordForm" autocomplete="off">
+                    <form (ngSubmit)="changePassword()" [formGroup]="newPasswordForm" autocomplete="off">
                         <mat-card-title class="mat-card-title">Changer de mot de passe</mat-card-title>
                         <div style="display: grid; justify-content: space-evenly;">
 
@@ -25,7 +25,7 @@
                 <mat-tab label="Administration">
                     <mat-tab-group mat-stretch-tabs="false">
                         <mat-tab label="Utilisateurs & Rôles">
-                            <form (ngSubmit)="openPswDialog(passwordDialogNewUser)" [formGroup]="newUserForm"
+                            <form (ngSubmit)="openPswDialog(passwordVerification, addUser, [])" [formGroup]="newUserForm"
                                 autocomplete="off" class="mat-form">
 
                                 <mat-card-title class="mat-card-title">
@@ -37,7 +37,7 @@
                                         <input matInput formControlName="username" type="text" />
                                     </mat-form-field>
 
-                                    <mat-form-field appearance="outline" style="margin-bottom: 10px">
+                                    <mat-form-field appearance="outline">
                                         <mat-label>Rôle de l'utilisateur</mat-label>
                                         <mat-select [(value)]="roleSelected" formControlName="role">
                                             <mat-option class="mat-option" *ngFor="let role of listOfRoles"
@@ -46,8 +46,11 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                    <mat-error style="margin-bottom:10px"> {{getErrorMessage(newUserForm)}}
+
+                                    <mat-error style="margin-bottom:10px"> 
+                                        {{getErrorMessage(newUserForm)}}
                                     </mat-error>
+                                    
                                     <button type="submit" mat-raised-button class="primary-color">
                                         Ajouter l'utilisateur
                                     </button>
@@ -70,10 +73,7 @@
                                         <td> {{user.Username}} </td>
                                         <td>
                                             <mat-form-field appearance="outline">
-                                                <mat-select [value]="user.Role" (selectionChange)="openPswDialog(changeUserRoleDialog, {
-                                                        user: user, 
-                                                        userRole: userRole.value
-                                                    })" #userRole>
+                                                <mat-select [value]="user.Role" (selectionChange)="openPswDialog(passwordVerification, changeUsersRole, [user, user.Role])" >
                                                     <mat-option class="mat-option" *ngFor="let role of listOfRoles"
                                                         [value]="role.Role">
                                                         {{role.Role}}
@@ -83,7 +83,7 @@
                                         </td>
                                         <td>
                                             <button mat-raised-button
-                                                (click)="openPswDialog(passwordDialogDeleteUser, user)">
+                                                (click)="openPswDialog(passwordVerification, deleteUser, [user.Username, user.Role])">
                                                 <span class="btn-text"> Delete </span>
                                             </button>
                                         </td>
@@ -103,21 +103,30 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        <tr>
+                                            <td>Acteur</td>
+                                            <td>Il fait rire bordel</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </mat-card-content>
-                            <mat-card-footer class="mat-card-footer">
-                                <form class="mat-form">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Nom du rôle</mat-label>
-                                        <input matInput type="text" />
-                                    </mat-form-field>
-                                    <button mat-raised-button class="primary-color" type="submit">
-                                        Ajouter le rôle
-                                    </button>
-                                </form>
-                            </mat-card-footer>
+                            <mat-card-content class="mat-card-content">
+                                <div style="display: grid; justify-content: space-evenly;">
+                                    <form class="mat-form" [formGroup]="newRoleForm" (ngSubmit)="openPswDialog(passwordVerification, addRole, [])">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Nom du rôle</mat-label>
+                                            <input matInput type="text" />
+                                        </mat-form-field>
+                                        <mat-error style="margin-bottom:10px">
+                                            {{getErrorMessage(newUserForm)}}
+                                        </mat-error>
+                                        <button mat-raised-button class="primary-color" type="submit">
+                                            Ajouter le rôle
+                                        </button>
+                                    </form>
+                                </div>
+                            </mat-card-content>
+
                         </mat-tab>
                         <mat-tab label="Produits">
 
@@ -132,7 +141,7 @@
     </div>
 </div>
 
-<ng-template #passwordDialogNewUser let-data>
+<ng-template #passwordVerification let-data>
     <h1 mat-dialog-title> Vérification de l'identité </h1>
     <div mat-dialog-content>
         <p>
@@ -145,45 +154,7 @@
     </div>
     <div mat-dialog-actions class="mat-dialog-actions">
         <button mat-button (click)="OnNoClickDialog()"> Retour </button>
-        <button mat-button (click)="submitNewUserForm()"> Valider </button>
-    </div>
-
-</ng-template>
-
-<ng-template #passwordDialogDeleteUser let-data>
-    <h1 mat-dialog-title> Vérification de l'identité </h1>
-    <div mat-dialog-content>
-        <p>
-            {{data.Username}}
-            Veuillez insérer votre mot de passe
-        </p>
-        <mat-form-field appearance="fill">
-            <mat-label> Mot de passe </mat-label>
-            <input matInput [(ngModel)]="password" type="password">
-        </mat-form-field>
-    </div>
-    <div mat-dialog-actions class="mat-dialog-actions">
-        <button mat-button (click)="OnNoClickDialog()"> Retour </button>
-        <button mat-button (click)="deleteUserForm(data.Username, data.Role)"> Valider </button>
-    </div>
-
-</ng-template>
-
-<ng-template #changeUserRoleDialog let-data>
-    <h1 mat-dialog-title> Vérification de l'identité </h1>
-    <div mat-dialog-content>
-        <p>
-            {{data.Username}}
-            Veuillez insérer votre mot de passe
-        </p>
-        <mat-form-field appearance="fill">
-            <mat-label> Mot de passe </mat-label>
-            <input matInput [(ngModel)]="password" type="password">
-        </mat-form-field>
-    </div>
-    <div mat-dialog-actions class="mat-dialog-actions">
-        <button mat-button (click)="OnNoClickDialog()"> Retour </button>
-        <button mat-button (click)="changeUsersRole(data.user, data.userRole)"> Valider </button>
+        <button mat-button (click)="redirectDialogValidation(data.funcion, data.args)"> Valider </button>
     </div>
 
 </ng-template>

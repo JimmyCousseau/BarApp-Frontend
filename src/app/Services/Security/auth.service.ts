@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { User } from '../../Interfaces/User';
@@ -17,8 +18,23 @@ export class AuthService {
   constructor(
     private loginService: LoginService,
     private _snackBar: MatSnackBar,
-  ) {
-    this._isLoggedIn.next(false);
+    private router: Router,
+  ) { }
+
+  async verifyToken(): Promise<any> {
+    const token = localStorage.getItem('log_token');
+    const username = localStorage.getItem('log_token_username');
+    return this.loginService.verifyToken(token, username)
+      .subscribe((userReturned) => {
+        if (userReturned != null) {
+          AuthService.user = userReturned
+          this._isLoggedIn.next(true)
+          this.router.navigate(['menu'])
+        } else {
+          this._isLoggedIn.next(false)
+          this.router.navigate(['login'])
+        }
+      })
   }
 
   login(username: string | null | undefined, password: string | null | undefined) {
@@ -26,10 +42,12 @@ export class AuthService {
       .pipe(
         tap((response: any) => {
           if (response != null) {
-            this._isLoggedIn.next(true);
-            AuthService.user = { Username: response.Username, Role: response.Role, Password: '' };
+            localStorage.setItem('log_token', response.token)
+            localStorage.setItem('log_token_username', response.user.Username)
+            AuthService.user = response.user
+            this._isLoggedIn.next(true)
           } else {
-            this._isLoggedIn.next(false);
+            this._isLoggedIn.next(false)
             this._snackBar.open("Mauvais identifiant / mot de passe,\nVeuillez réessayer", "Ok", {
               duration: 3000,
               panelClass: ['snackbar'],
@@ -48,6 +66,7 @@ export class AuthService {
   }
 
   static getUser(): Readonly<User> {
-    return { Username: AuthService.user.Username, Role: AuthService.user.Role, Password: '' };
+    AuthService.user.Password = "";
+    return AuthService.user;
   }
 }
