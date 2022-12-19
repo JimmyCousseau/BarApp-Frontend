@@ -15,16 +15,16 @@ export class MenuService {
 
     constructor(private http: HttpClient) { }
 
-    getMenuSections(): Observable<any> {
+    findAllSections(): Observable<any> {
         return this.http.get(GlobalSettings.getURL() + 'menu/sections');
     }
 
-    getMenuProducts(): Observable<any> {
+    findAllProducts(): Observable<any> {
         return this.http.get(GlobalSettings.getURL() + 'menu/products');
     }
 
     sendOrderToPrepare(username: string, idtable: number, order: SendOrder): Observable<any> {
-        return this.http.post(GlobalSettings.getURL() + 'menu/send_order/' + username + '/' + idtable, order);
+        return this.http.post(GlobalSettings.getURL() + 'menu/' + username + '/' + idtable, order);
     }
 
     resetSharedOrder(): void {

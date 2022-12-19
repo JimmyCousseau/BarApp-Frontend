@@ -23,24 +23,43 @@
         cursor: pointer;
         margin: 0 5px 0 5px;
     }
+}
 
-    .logo {
-        display: table-cell;
-        text-align: center;
-        font-size: xx-large;
-        vertical-align: middle;
+.calculator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: transparent;
+    display: flex;
+    text-align: center;
+    
+    .calc-sidenav {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: auto;
+        height: fit-content;
+        background-color: transparent;
+        display: inline-grid;
+        align-content: end;
+        border: none;
+
+        .calc-card {
+            width: 200px;
+
+            .templateCalculator {
+                grid-template-columns: repeat(auto-fit, minmax(min(100%/3, max(64px, 100%/5)), 1fr));
+                
+                button {
+                    font-size: medium;
+                }
+            }
+        }
     }
 
-    .mat-toolbar {
-        background-color: var(--header-nav-color);
-        justify-content: space-evenly;
-        margin-bottom: 1vh;
-
-        .mat-nav-btn {
-            height: 50px;
-            font-size: large;
-            background-color: var(--second-color);
-            color: var(--btn-text-color);
-        }
+    .trigger-calc {
+        position: fixed;
+        bottom: 0;
+        left: auto;
     }
 }

@@ -18,6 +18,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 
+import { MatDividerModule } from '@angular/material/divider';
 import { AppComponent } from './app.component';
 import { CheckoutComponent } from './Components/checkout/checkout.component';
 import { HistoryComponent } from './Components/history/history.component';
@@ -25,7 +26,6 @@ import { LoginComponent } from './Components/login/login.component';
 import { MenuComponent } from './Components/menu/menu.component';
 import { OrdersComponent } from './Components/orders/orders.component';
 import { ParametersComponent } from './Components/parameters/parameters.component';
-import { MatDividerModule } from '@angular/material/divider';
 import { UnknownPageComponent } from './Components/unknown-page/unknown-page.component';
 
 import { registerLocaleData } from '@angular/common';

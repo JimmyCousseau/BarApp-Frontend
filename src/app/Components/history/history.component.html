@@ -2,19 +2,18 @@
     <div class="container">
         <div class="mat-card-container">
             <mat-card>
-                <mat-card-title>Historique</mat-card-title>
-                <mat-card-subtitle>Retrouvez ici l'historique des commandes. La date indique la première fois que la commande a été prise</mat-card-subtitle>
+                <mat-card-title i18n>Historique</mat-card-title>
+                <mat-card-subtitle i18n>Retrouvez ici l'historique des commandes. La date indique la première fois que la commande a été prise</mat-card-subtitle>
                 <mat-card-content class="mat-card-content">
                     <table class="styled-table">
-                        <caption>History table of the finished orders</caption>
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Table</th>
-                                <th>Intitulé</th>
-                                <th>Quantité</th>
-                                <th>Etat</th>
-                                <th>Actions</th>
+                                <th i18n>Date</th>
+                                <th i18n>Table</th>
+                                <th i18n>Intitulé</th>
+                                <th i18n>Quantité</th>
+                                <th i18n>Etat</th>
+                                <th i18n>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -26,7 +25,7 @@
                                 <td> {{history.Quantite}} </td>
                                 <td> {{history.Etat}} </td>
                                 <td>
-                                    <button mat-raised-button (click)="openActionDialog(actionDialog,history)">
+                                    <button mat-raised-button (click)="openActionDialog(actionDialog,history)" i18n>
                                         Modifier
                                     </button>
                                 </td>
@@ -40,8 +39,11 @@
 </div>
 
 <ng-template #actionDialog let-data>
-    <h1 mat-dialog-title>Modification</h1>
-    <div mat-dialog-content>
+    <div class="back-button">
+        <mat-icon (click)="closeAllDialog()">cancel</mat-icon>
+    </div>
+    <h1 mat-dialog-title i18n>Modification</h1>
+    <div mat-dialog-content i18n>
         <p>Informations sur cet historique</p>
         <p> - Heure: <span class="set-text-bold"> {{data.Horodatage | date:'M/d, h\'h\'mm\'m\'ss\'s\''}} </span></p>
         <p> - Table: <span class="set-text-bold"> {{data.IDTable}} </span></p>
@@ -49,7 +51,7 @@
         <p> - Quantité: <span class="set-text-bold"> {{data.Quantite}} </span></p>
         <p> - État: <span class="set-text-bold"> {{data.Etat}} </span></p>
     </div>
-    <div mat-dialog-actions class="mat-dialog-actions">
+    <div mat-dialog-actions class="mat-dialog-actions" i18n>
         <p>
             Actions buttons, it's not finished yet
         </p>

@@ -2,9 +2,12 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ParameterService } from 'src/app/Services/ComponentService/ParameterService';
+import { RoleService } from '../../Services/ComponentService/RoleService';
+import { UserService } from '../../Services/ComponentService/UserService';
 import { User } from '../../Interfaces/User';
 import { AuthService } from '../../Services/Security/auth.service';
+import { PermissionService } from '../../Services/ComponentService/PermissionService';
+import { PermissionsRole } from '../../../app/Interfaces/PermissionsRole';
 
 @Component({
   selector: 'app-parameters',
@@ -13,13 +16,20 @@ import { AuthService } from '../../Services/Security/auth.service';
 })
 export class ParametersComponent implements OnInit {
 
+  private readonly defaultPerm: PermissionsRole = {
+    role_id: 0, can_access_menu: false, can_access_orders: false,
+    can_access_history: false, can_access_checkout: false, can_access_administration_panel: false
+  }
+
   password: string = "";
 
   roleSelected = '';
   roleSelectedForChange = '';
-  listOfRoles: any;
+  roleList: any;
   currentUser: User = { Username: "", Password: "", Role: "" };
   users: any;
+  rolePermissions: any;
+  actualPerm: PermissionsRole = this.defaultPerm
 
   newPasswordForm = new FormGroup({
     oldPassword: new FormControl(null, Validators.required),
@@ -35,18 +45,24 @@ export class ParametersComponent implements OnInit {
     role: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(25)])
   })
 
-  constructor(private _snackBar: MatSnackBar,
-    private paramService: ParameterService,
-    private dialog: MatDialog) { }
+  constructor(
+    private snackBar: MatSnackBar,
+    private userService: UserService,
+    private roleService: RoleService,
+    private dialog: MatDialog,
+    private permissionService: PermissionService,
+  ) { }
 
   ngOnInit(): void {
     this.newUserForm.reset()
     this.newPasswordForm.reset()
+    this.newRoleForm.reset()
 
+    this.actualPerm = this.defaultPerm
 
     this.currentUser = AuthService.getUser();
     this.roleSelected = '';
-    this.paramService.getUsersList().subscribe(users => {
+    this.userService.findAll().subscribe(users => {
       this.users = users;
       this.users.forEach((user: User, i: number) => {
         if (user.Username === this.currentUser.Username) {
@@ -55,34 +71,26 @@ export class ParametersComponent implements OnInit {
       });
     });
 
-    this.paramService.getRoleList().subscribe(roleList => {
-      this.listOfRoles = roleList;
+    this.roleService.findAll().subscribe(roleList => {
+      this.roleList = roleList;
     })
+
+    this.permissionService.findAll().subscribe(permissions => {
+      this.rolePermissions = permissions;
+    })
+
+    this.dialog.closeAll();
   }
 
   changePassword = (): void => {
     if (this.newPasswordForm.invalid) {
       return;
     }
-    const currentUser: User = {
-      Username: this.currentUser.Username,
-      Password: this.newPasswordForm.get('oldPassword')?.value || 'wrong',
-      Role: this.currentUser.Role
-    };
-    this.paramService.changePassword(currentUser, this.newPasswordForm.get('newPassword')?.value || 'wrong').subscribe((data: any) => {
-      if (data === null) {
-        this._snackBar.open("Mauvais mot de passe, veuillez réessayer", "Ok", {
-          duration: 3000,
-        });
-      }
-      else {
-        this._snackBar.open("Mot de passe changé !", "Ok", {
-          duration: 3000,
-        });
-        this.ngOnInit()
-      }
+    const currentUser: User = this.getCurrentUser()
+
+    this.userService.updatePassword(currentUser, this.newPasswordForm.get('newPassword')?.value || '').subscribe(data => {
+      this.showResponseDialog(data, "Mot de passe changé !")
     });
-    this.dialog.closeAll();
   }
 
   addUser = (): void => {
@@ -94,28 +102,11 @@ export class ParametersComponent implements OnInit {
       Role: this.newUserForm.get('role')?.value || '',
       Password: 'it doesnt matter'
     };
+    const currentUser: User = this.getCurrentUser()
 
-    const currentUser: User = {
-      Username: this.currentUser.Username,
-      Role: this.currentUser.Role,
-      Password: this.password
-    };
-
-    this.password = '';
-
-    this.paramService.addUser(newUser, currentUser).subscribe((data: any) => {
-      if (data === null) {
-        this._snackBar.open("Mauvais mot de passe, veuillez réessayer", "Ok", {
-          duration: 3000,
-        });
-      } else {
-        this._snackBar.open("Utilisateur enregistré !", "Ok", {
-          duration: 3000,
-        });
-        this.ngOnInit();
-      }
+    this.userService.create(newUser, currentUser).subscribe((data: any) => {
+      this.showResponseDialog(data, "Utilisateur enregistré !")
     });
-    this.dialog.closeAll();
   }
 
   getErrorMessage(form: FormGroup): string {
@@ -142,67 +133,84 @@ export class ParametersComponent implements OnInit {
       Password: 'it doesnt matter'
     };
 
-    const adminUser: User = {
-      Username: this.currentUser.Username,
-      Role: this.currentUser.Role,
-      Password: this.password
-    };
+    const adminUser: User = this.getCurrentUser()
 
-    this.password = '';
-
-    this.paramService.deleteUser(userToDelete, adminUser).subscribe((data: any) => {
-      if (data == null) {
-        this._snackBar.open("Mauvais mot de passe, veuillez réessayer", "Ok", {
-          duration: 3000,
-        });
-      } else {
-        this.ngOnInit();
-        this._snackBar.open("Utilisateur supprimé !", "Ok", {
-          duration: 3000,
-        });
-      }
+    this.userService.delete(userToDelete, adminUser).subscribe((data: any) => {
+      this.showResponseDialog(data, "Utilisateur supprimé !")
     });
-    this.dialog.closeAll();
   }
 
-  OnNoClickDialog() {
+  closeAllDialog() {
     this.dialog.closeAll();
   }
 
   @Input()
-  openPswDialog(ref: TemplateRef<any>, funcion: (args: any[]) => void, args: any[]): void {
-    this.dialog.open(ref, { data : { funcion: funcion, args: args }});
+  openDialog(ref: TemplateRef<any>, funcion: (args: any[]) => void, args: any[]): void {
+    this.dialog.open(ref, { data: { funcion: funcion, args: args } });
   }
 
   changeUsersRole = (args: any[]): void => {
-    if (args.length < 2)
+    if (args.length < 1)
       return
-    const adminUser = {
-      Username: this.currentUser.Username,
-      Role: this.currentUser.Role,
-      Password: this.password
-    }
-    this.password = '';
-    this.paramService.changeUsersRole(args[0], adminUser, args[1]).subscribe(data => {
-      if (data === null) {
-        this._snackBar.open("Mauvais mot de passe, veuillez réessayer", "Ok", {
-          duration: 3000,
-        });
-      } else {
-        this.ngOnInit();
-        this._snackBar.open("Le rôle à bien été changé !", "Ok", {
-          duration: 3000,
-        });
-      }
+    const adminUser: User = this.getCurrentUser()
+    this.userService.updateRole(args[0], adminUser).subscribe(data => {
+      this.showResponseDialog(data, "Le rôle a bien été changé !")
     });
-    this.dialog.closeAll();
   }
 
-  addRole() {
-    return
+  addRole = (): void => {
+    const adminUser: User = this.getCurrentUser()
+    this.roleService.create(this.newRoleForm.get("role")?.value || "", adminUser).subscribe(data => {
+      this.showResponseDialog(data, "Le rôle a bien été ajouté")
+    })
+  }
+
+  saveRolePermissions = (args: any[]): void => {
+    this.permissionService.update(args[1], this.getCurrentUser()).subscribe(data => {
+      this.dialog.closeAll()
+      this.ngOnInit()
+    })
   }
 
   redirectDialogValidation(func: (args: any[]) => void, args: any[]): void {
     func(args);
+  }
+
+  getPermissionBy(role_id: number): PermissionsRole {
+    const found = { ...this.rolePermissions.find((x: PermissionsRole) => x.role_id === role_id) }
+    if (found != undefined)
+      return found
+    return this.defaultPerm
+  }
+
+  deleteRole = (args: any[]): void => {
+    this.roleService.delete(args[0], this.getCurrentUser())
+  }
+
+  canAccessAdminPanel() {
+    return AuthService.getPermissions().can_access_administration_panel
+  }
+
+  private showResponseDialog(data: any, message: string) {
+    if (data === null) {
+      this.snackBar.open("Mauvais mot de passe, veuillez réessayer", "Ok", {
+        duration: 3000,
+      });
+    } else {
+      this.ngOnInit();
+      this.snackBar.open(message, "Ok", {
+        duration: 3000,
+      });
+    }
+  }
+
+  private getCurrentUser(): User {
+    const currentUser = {
+      Username: this.currentUser.Username,
+      Role: this.currentUser.Role,
+      Password: this.password
+    };
+    this.password = '';
+    return currentUser;
   }
 }

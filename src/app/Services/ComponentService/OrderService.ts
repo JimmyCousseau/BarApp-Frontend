@@ -12,16 +12,24 @@ export class OrderService {
 
     constructor(private http: HttpClient) { }
 
-    getOrdersPending(): Observable<any> {
-        return this.http.get(GlobalSettings.getURL() + 'order/pending/admin');
+    findAllBy(server: string): Observable<any> {
+        return this.http.get(GlobalSettings.getURL() + "order/" + server);
     }
 
-    deleteProductInOrder(server: string, idtable: number, intitule: string): Observable<any> {
-        return this.http.post(GlobalSettings.getURL() + "order/delete/" + server + "/" + idtable + "/" + intitule, null);
+    delete(server: string, idtable: number, intitule: string): Observable<any> {
+        return this.http.delete(GlobalSettings.getURL() + "order/" + server + "/" + idtable + "/" + intitule);
     }
 
-    updateOrderDealt(order: Order): Observable<any> {
-        return this.http.post(GlobalSettings.getURL() + "order/update/dealt", order);
+    update(order: Order): Observable<any> {
+        return this.http.patch(GlobalSettings.getURL() + "order", order)
+    }
+
+    updateEtatByOrder(order: Order): Observable<any> {
+        return this.http.patch(GlobalSettings.getURL() + "order/etat", order)
+    }
+    
+    updateEtatByTable(idtable: number, serveur: string): Observable<any> {
+        return this.http.patch(GlobalSettings.getURL() + "order/etat/" + idtable, serveur);
     }
 
 }

@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { PermissionsRole } from '../../../app/Interfaces/PermissionsRole';
 import { User } from '../../Interfaces/User';
 import { LoginService } from '../ComponentService/LoginService';
 
@@ -14,6 +15,10 @@ export class AuthService {
   isLoggedIn = this._isLoggedIn.asObservable();
 
   private static user: User = { Username: "", Role: "", Password: "" };
+  private static permissions: PermissionsRole = {
+    role_id: 1, can_access_menu: false, can_access_orders: false, can_access_checkout: false,
+    can_access_history: false, can_access_administration_panel: false
+  }
 
   constructor(
     private loginService: LoginService,
@@ -25,9 +30,11 @@ export class AuthService {
     const token = localStorage.getItem('log_token');
     const username = localStorage.getItem('log_token_username');
     return this.loginService.verifyToken(token, username)
-      .subscribe((userReturned) => {
-        if (userReturned != null) {
-          AuthService.user = userReturned
+      .subscribe((response) => {
+        if (response != null) {
+          AuthService.user = response.user
+          AuthService.permissions = response.permissions
+
           this._isLoggedIn.next(true)
           this.router.navigate(['menu'])
         } else {
@@ -44,7 +51,10 @@ export class AuthService {
           if (response != null) {
             localStorage.setItem('log_token', response.token)
             localStorage.setItem('log_token_username', response.user.Username)
+
             AuthService.user = response.user
+            AuthService.permissions = response.permissions
+
             this._isLoggedIn.next(true)
           } else {
             this._isLoggedIn.next(false)
@@ -57,16 +67,13 @@ export class AuthService {
       )
   }
 
-  static getUserRole(): Readonly<string> {
-    return AuthService.user.Role;
-  }
-
-  static getUserUsername(): Readonly<string> {
-    return AuthService.user.Username;
-  }
-
   static getUser(): Readonly<User> {
     AuthService.user.Password = "";
     return AuthService.user;
   }
+
+  static getPermissions(): Readonly<PermissionsRole> {
+    return AuthService.permissions
+  }
+  
 }

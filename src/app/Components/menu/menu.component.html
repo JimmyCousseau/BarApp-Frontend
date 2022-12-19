@@ -26,7 +26,7 @@
             <mat-card-content>
                 <div *ngFor="let prod of products">
                     <button mat-raised-button *ngIf="prod.Section == currentSection" class="products-btn primary-color"
-                        (click)="addProductInOrder(prod)">
+                        (click)="incrementProductQuantity(prod)">
                         <span class="btn-text">
                             {{prod.Intitule}}
                         </span>
@@ -138,6 +138,9 @@
 </div>
 
 <ng-template #actionDialog let-data>
+    <div class="back-button">
+        <mat-icon (click)="closeAllDialog()">cancel</mat-icon>
+    </div>
     <h1 mat-dialog-title> Modification du produit </h1>
     <div mat-dialog-content>
         <p>Quelle action voulez-vous effectuer sur ce produit ?</p>
@@ -146,7 +149,7 @@
         <p> - Quantité: <span class="set-text-bold">{{data.Quantite}}</span> </p>
     </div>
     <div mat-dialog-actions class="mat-dialog-actions">
-        <button mat-fab class="primary-color" (click)="addProductInOrder(data)">
+        <button mat-fab class="primary-color" (click)="incrementProductQuantity(data)">
             +1
         </button>
         <button mat-fab class="accent-color" (click)="reduceQuantiteInOrder(data)">

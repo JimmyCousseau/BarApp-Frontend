@@ -4,12 +4,6 @@
   "newProjectRoot": "projects",
   "projects": {
     "BarApp": {
-      "i18n": {
-        "sourceLocale": "fr-CA",
-        "locales": {
-          "es-PR": "src/locale/messages.es.xlf"
-        }
-      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,9 +17,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "localize": [
-              "es-PR"
-            ],
             "outputPath": "dist/bar-app",
             "index": "src/index.html",
             "main": "src/main.ts",

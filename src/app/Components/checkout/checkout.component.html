@@ -1,10 +1,10 @@
 <div class="container-global">
     <div class="container">
         <mat-card class="mat-card">
-            <mat-card-title> Caisse </mat-card-title>
+            <mat-card-title i18n> Caisse </mat-card-title>
             <mat-card-content class="mat-card-content">
                 <mat-form-field appearance="fill" mat-form-field>
-                    <mat-label i18n="@@1"> Sélectionne une table </mat-label>
+                    <mat-label i18n> Sélectionne une table </mat-label>
                     <mat-select [(value)]="selected">
                         <mat-option *ngFor="let idtable of listTable()" [value]="idtable">
                             {{idtable}}
@@ -20,17 +20,17 @@
     <div class="container">
         <mat-card class="mat-card" *ngIf="!listOrderIsEmpty(selected)">
             <div #contentToExportPdf>
-                <mat-card-title> Table n°{{selected}} </mat-card-title>
+                <mat-card-title i18n> Table n°{{selected}} </mat-card-title>
                 <mat-card-subtitle> {{getDateOrder(selected) | date:'EEEE, MMMM d, y, h:mm:ss'}} </mat-card-subtitle>
                 <mat-card-content class="mat-card-content">
                     <table class="styled-table">
                         <thead>
                             <tr>
-                                <th>Serveur</th>
-                                <th>Intitulé</th>
-                                <th>Quantité</th>
-                                <th>Prix unitaire</th>
-                                <th>Prix Total</th>
+                                <th i18n>Serveur</th>
+                                <th i18n>Intitulé</th>
+                                <th i18n>Quantité</th>
+                                <th i18n>Prix unitaire</th>
+                                <th i18n>Prix Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,23 +39,23 @@
                                     <td> {{order.Serveur}} </td>
                                     <td> {{order.Intitule}} </td>
                                     <td> {{order.Quantite}} </td>
-                                    <td> {{order.Prix}} €</td>
-                                    <td> {{order.Quantite * order.Prix}} € </td>
+                                    <td> {{order.Prix | currency }}</td>
+                                    <td> {{order.Quantite * order.Prix | currency }} </td>
                                 </tr>
                             </ng-container>
                         </tbody>
                     </table>
                     <div class="mat-card-actions">
-                        <mat-card-title-group> Pour un total de {{totalPriceOrder(selected)}} € </mat-card-title-group>
+                        <mat-card-title-group i18n> Pour un total de {{totalPriceOrder(selected) | currency }} </mat-card-title-group>
                     </div>
                 </mat-card-content>
             </div>
             <mat-card-actions class="mat-card-actions">
-                <button mat-raised-button class="primary-color" (click)="confirmOrder(selected)">
+                <button mat-raised-button class="primary-color" (click)="confirmOrder(selected)" i18n>
                     Commande payé
                 </button>
-                <button mat-raised-button class="primary-color" (click)="generatePdf()">
-                    Generate pdf
+                <button mat-raised-button class="primary-color" (click)="generatePdf()" i18n>
+                    Generer un pdf
                 </button>
             </mat-card-actions>
         </mat-card>

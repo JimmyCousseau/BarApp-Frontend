@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="fr-CA" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="5000557677124901778" datatype="html">
+        <source> Caisse </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8494305510196217991" datatype="html">
+        <source> Sélectionne une table </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6412346976516609029" datatype="html">
+        <source> Table n°<x id="INTERPOLATION" equiv-text="{{selected}}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2789019178438540452" datatype="html">
+        <source>Serveur</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5741352721103451605" datatype="html">
+        <source>Intitulé</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7013342739706915791" datatype="html">
+        <source>Quantité</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7440495827415002683" datatype="html">
+        <source>Prix unitaire</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1876794534436361109" datatype="html">
+        <source>Prix Total</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1249364779980879708" datatype="html">
+        <source> Pour un total de <x id="INTERPOLATION" equiv-text="{{totalPriceOrder(selected) | currency }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5920283327305670560" datatype="html">
+        <source> Commande payé </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">54,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4223096889296540051" datatype="html">
+        <source> Generer un pdf </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/checkout/checkout.component.html</context>
+          <context context-type="linenumber">57,59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7831615079320449369" datatype="html">
+        <source>Historique</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1049340665409316618" datatype="html">
+        <source>Retrouvez ici l&apos;historique des commandes. La date indique la première fois que la commande a été prise</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3973931101896534797" datatype="html">
+        <source>Date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1358239534403218079" datatype="html">
+        <source>Table</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8349442718811603678" datatype="html">
+        <source>Etat</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3193976279273491157" datatype="html">
+        <source>Actions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="347898857666909766" datatype="html">
+        <source> Modifier </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">28,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5110775922928231258" datatype="html">
+        <source>Modification</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6893377455591601986" datatype="html">
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Informations sur cet historique<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/> - Heure: <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;set-text-bold&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{data.Horodatage | date:&apos;M/d, h\&apos;h\&apos;mm\&apos;m\&apos;ss\&apos;s\&apos;&apos;}}"/> <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/> - Table: <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;set-text-bold&quot;&gt;"/> <x id="INTERPOLATION_1" equiv-text="{{data.IDTable}}"/> <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/> - Intitulé: <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;set-text-bold&quot;&gt;"/> <x id="INTERPOLATION_2" equiv-text="{{data.Intitule}}"/> <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/> - Quantité: <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;set-text-bold&quot;&gt;"/> <x id="INTERPOLATION_3" equiv-text="{{data.Quantite}}"/> <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/> - État: <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;set-text-bold&quot;&gt;"/> <x id="INTERPOLATION_4" equiv-text="{{data.Etat}}"/> <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">44,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2531683456900568505" datatype="html">
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/> Actions buttons, it&apos;s not finished yet <x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/Components/history/history.component.html</context>
+          <context context-type="linenumber">52,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1737753151350322492" datatype="html">
+        <source><x id="PH" equiv-text="this.title"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

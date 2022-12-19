@@ -22,14 +22,12 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.historyService.getHistoryContent(AuthService.getUserUsername()).subscribe(data => {
+    this.historyService.findAllBy(AuthService.getUser().Username).subscribe(data => {
       this.historyContent = data;
     });
   }
 
-  closeAllDialog() {
-    this.dialog.closeAll();
-  }
+  closeAllDialog() { this.dialog.closeAll(); }
 
   openActionDialog(ref: TemplateRef<any>, data: Order) {
     this.dialog.open(ref, { data: data })

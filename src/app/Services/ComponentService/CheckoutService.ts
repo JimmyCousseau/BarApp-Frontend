@@ -8,15 +8,15 @@ import { GlobalSettings } from "./GlobalSettings";
     providedIn: 'root'
 })
 export class CheckoutService {
-    
+
     constructor(private http: HttpClient) { }
 
-    getCheckoutOrders(): Observable<any> {
+    findAll(): Observable<any> {
         return this.http.get(GlobalSettings.getURL() + 'checkout');
     }
 
-    confirmOrderPaiement(server: string, idtable: number): Observable<any> {
-        return this.http.post(GlobalSettings.getURL() + 'checkout/paid/' + idtable + '/' + server, null);
+    confirmPaiement(server: string, idtable: number): Observable<any> {
+        return this.http.post(GlobalSettings.getURL() + 'checkout/paid', { idtable, server });
     }
 
 }

@@ -22,10 +22,10 @@
                         </div>
                     </form>
                 </mat-tab>
-                <mat-tab label="Administration">
+                <mat-tab label="Administration" *ngIf="canAccessAdminPanel()">
                     <mat-tab-group mat-stretch-tabs="false">
                         <mat-tab label="Utilisateurs & Rôles">
-                            <form (ngSubmit)="openPswDialog(passwordVerification, addUser, [])" [formGroup]="newUserForm"
+                            <form (ngSubmit)="openDialog(passwordVerification, addUser, [])" [formGroup]="newUserForm"
                                 autocomplete="off" class="mat-form">
 
                                 <mat-card-title class="mat-card-title">
@@ -40,17 +40,17 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Rôle de l'utilisateur</mat-label>
                                         <mat-select [(value)]="roleSelected" formControlName="role">
-                                            <mat-option class="mat-option" *ngFor="let role of listOfRoles"
+                                            <mat-option class="mat-option" *ngFor="let role of roleList"
                                                 [value]="role.Role">
                                                 {{role.Role}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
-                                    <mat-error style="margin-bottom:10px"> 
+                                    <mat-error style="margin-bottom:10px">
                                         {{getErrorMessage(newUserForm)}}
                                     </mat-error>
-                                    
+
                                     <button type="submit" mat-raised-button class="primary-color">
                                         Ajouter l'utilisateur
                                     </button>
@@ -73,8 +73,9 @@
                                         <td> {{user.Username}} </td>
                                         <td>
                                             <mat-form-field appearance="outline">
-                                                <mat-select [value]="user.Role" (selectionChange)="openPswDialog(passwordVerification, changeUsersRole, [user, user.Role])" >
-                                                    <mat-option class="mat-option" *ngFor="let role of listOfRoles"
+                                                <mat-select [(value)]="user.Role"
+                                                    (selectionChange)="openDialog(passwordVerification, changeUsersRole, [user])">
+                                                    <mat-option class="mat-option" *ngFor="let role of roleList"
                                                         [value]="role.Role">
                                                         {{role.Role}}
                                                     </mat-option>
@@ -83,7 +84,7 @@
                                         </td>
                                         <td>
                                             <button mat-raised-button
-                                                (click)="openPswDialog(passwordVerification, deleteUser, [user.Username, user.Role])">
+                                                (click)="openDialog(passwordVerification, deleteUser, [user.Username, user.Role])">
                                                 <span class="btn-text"> Delete </span>
                                             </button>
                                         </td>
@@ -103,19 +104,25 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Acteur</td>
-                                            <td>Il fait rire bordel</td>
+                                        <tr *ngFor="let role of roleList">
+                                            <td> {{ role.Role }} </td>
+                                            <td>
+                                                <button mat-raised-button
+                                                    (click)="openDialog(modifyRolePermissions, saveRolePermissions, [role.Role, getPermissionBy(role.role_id)] )">
+                                                    Modifier
+                                                </button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </mat-card-content>
                             <mat-card-content class="mat-card-content">
                                 <div style="display: grid; justify-content: space-evenly;">
-                                    <form class="mat-form" [formGroup]="newRoleForm" (ngSubmit)="openPswDialog(passwordVerification, addRole, [])">
+                                    <form class="mat-form" [formGroup]="newRoleForm"
+                                        (ngSubmit)="openDialog(passwordVerification, addRole, [])">
                                         <mat-form-field appearance="outline">
                                             <mat-label>Nom du rôle</mat-label>
-                                            <input matInput type="text" />
+                                            <input matInput type="text" formControlName="role" />
                                         </mat-form-field>
                                         <mat-error style="margin-bottom:10px">
                                             {{getErrorMessage(newUserForm)}}
@@ -142,6 +149,9 @@
 </div>
 
 <ng-template #passwordVerification let-data>
+    <div class="back-button">
+        <mat-icon (click)="closeAllDialog()">cancel</mat-icon>
+    </div>
     <h1 mat-dialog-title> Vérification de l'identité </h1>
     <div mat-dialog-content>
         <p>
@@ -153,8 +163,63 @@
         </mat-form-field>
     </div>
     <div mat-dialog-actions class="mat-dialog-actions">
-        <button mat-button (click)="OnNoClickDialog()"> Retour </button>
-        <button mat-button (click)="redirectDialogValidation(data.funcion, data.args)"> Valider </button>
+        <button mat-raised-button (click)="redirectDialogValidation(data.funcion, data.args)" class="primary-color">
+            Valider
+        </button>
     </div>
 
+</ng-template>
+
+<ng-template #modifyRolePermissions let-data>
+    <div class="back-button">
+        <mat-icon (click)="closeAllDialog()">cancel</mat-icon>
+    </div>
+    <h1 mat-dialog-title> Modification des permissions </h1>
+    <div mat-dialog-content>
+        <p>
+            Modification des permissions du rôle:
+            <span style="font-weight: bold;">
+                {{data.args[0]}}
+            </span>
+        </p>
+    </div>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th> Permission </th>
+                <th> Valeur </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> Accèder au menu </td>
+                <td><mat-checkbox [(ngModel)]="data.args[1].can_access_menu"></mat-checkbox></td>
+            </tr>
+            <tr>
+                <td> Accèder aux commandes </td>
+                <td><mat-checkbox [(ngModel)]="data.args[1].can_access_orders"></mat-checkbox></td>
+            </tr>
+            <tr>
+                <td> Accèder à la caisse </td>
+                <td><mat-checkbox [(ngModel)]="data.args[1].can_access_checkout"></mat-checkbox></td>
+            </tr>
+            <tr>
+                <td> Accèder à l'historique </td>
+                <td><mat-checkbox [(ngModel)]="data.args[1].can_access_history"></mat-checkbox></td>
+            </tr>
+            <tr>
+                <td> Accèder au panel d'administration </td>
+                <td><mat-checkbox [(ngModel)]="data.args[1].can_access_administration_panel"></mat-checkbox></td>
+            </tr>
+        </tbody>
+    </table>
+    <div mat-dialog-actions class="mat-dialog-actions">
+        <button mat-fab (click)="openDialog(passwordVerification, deleteRole, data.args)">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-fab (click)="openDialog(passwordVerification, saveRolePermissions, data.args)"
+            class="primary-color">
+            <mat-icon>check</mat-icon>
+        </button>
+    </div>
 </ng-template>

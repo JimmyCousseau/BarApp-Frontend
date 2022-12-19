@@ -25,7 +25,7 @@ export class CheckoutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.checkoutService.getCheckoutOrders().subscribe(data => {
+    this.checkoutService.findAll().subscribe(data => {
       this.checkoutOrders = data;
     })
     this.selected = 0;
@@ -88,7 +88,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   confirmOrder(idtable: number): void {
-    this.checkoutService.confirmOrderPaiement(AuthService.getUserUsername(), idtable).subscribe((data) => {
+    this.checkoutService.confirmPaiement(AuthService.getUser().Username, idtable).subscribe((data) => {
       this.ngOnInit();
     });
   }

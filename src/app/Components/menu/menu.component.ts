@@ -26,29 +26,23 @@ export class MenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.menuService.getMenuSections().subscribe(data => {
+    this.menuService.findAllSections().subscribe(data => {
       this.sections = data;
       this.currentSection = this.sections[0].sectionParente;
     });
-    this.menuService.getMenuProducts().subscribe(data => {
+    this.menuService.findAllProducts().subscribe(data => {
       this.products = data;
     });
     this.menuService.sharedOrder.subscribe(order => this.orders = order);
     this.tableID = 1;
-    this.currentUsername = AuthService.getUserUsername();
+    this.currentUsername = AuthService.getUser().Username;
   }
 
   reset(): void {
-    this.menuService.getMenuSections().subscribe(data => {
-      this.sections = data;
-      this.currentSection = this.sections[0].sectionParente;
-    });
-    this.menuService.getMenuProducts().subscribe(data => {
-      this.products = data;
-    });
-    this.orders = [];
-    this.menuService.resetSharedOrder();
-    this.tableID = 1;
+    this.ngOnInit()
+    this.orders = []
+    this.menuService.resetSharedOrder()
+    this.tableID = 1
   }
 
   changeSections(section: string): void {
@@ -60,7 +54,7 @@ export class MenuComponent implements OnInit {
       if (section.sectionCourante == this.currentSection) {
         this.currentSection = section.sectionParente;
       }
-    });
+    })
   }
 
   haveSectionChild(): boolean {
@@ -90,11 +84,11 @@ export class MenuComponent implements OnInit {
     return true;
   }
 
-  addProductInOrder(product: Products | SendOrder): void {
+  incrementProductQuantity(product: Products | SendOrder): void {
     let hasAdded = false;
     this.orders.forEach(order => {
       if (order.Intitule == product.Intitule) {
-        order.Quantite += 1;
+        order.Quantite++;
         hasAdded = true;
       }
     });
@@ -111,7 +105,7 @@ export class MenuComponent implements OnInit {
           this.dialog.closeAll();
         }
         else
-          order.Quantite -= 1;
+          order.Quantite--;
       }
     })
   }
@@ -146,5 +140,9 @@ export class MenuComponent implements OnInit {
 
   decrementTableNumber() {
     this.tableID = Math.floor(this.tableID / 10); 
+  }
+
+  closeAllDialog() {
+    this.dialog.closeAll();
   }
 }

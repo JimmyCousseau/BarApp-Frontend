@@ -35,11 +35,12 @@ body {
 }
 
 html {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background-image: url("/assets/images/background-temp.jpeg");
+  // -webkit-user-select: none;
+  // -moz-user-select: none;
+  // -ms-user-select: none;
+  // user-select: none;
+  caret-color: rgba(0, 0, 0, 0);
+  background-image: url("./assets/images/background-temp.jpeg");
   background-repeat: repeat-y;
   background-size: cover;
   background-color: rgb(24, 24, 24);
@@ -204,16 +205,30 @@ html {
 
 /**************** Dialog design ***************/
 
+.back-button {
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 0;
+
+  mat-icon {
+    display: flex;
+    width: fit-content;
+    cursor: pointer;
+  }
+}
+
 .mat-dialog-actions {
   justify-content: center;
   display: inline-flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
   width: 100%;
+  margin-top: 2vh;
 
   button.dialog-actions {
     display: inline-flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
     margin: 0 1em;
   }
 

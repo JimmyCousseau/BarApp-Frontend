@@ -10,7 +10,7 @@ export class HistoryService {
 
     constructor(private http: HttpClient) { }
 
-    getHistoryContent(waiter: string): Observable<any> {
+    findAllBy(waiter: string): Observable<any> {
         return this.http.get(GlobalSettings.getURL() + 'history/' + waiter);
     }
 }

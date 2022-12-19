@@ -1,9 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Order } from '../../Interfaces/Order';
 import { User } from '../../Interfaces/User';
 import { OrderService } from '../../Services/ComponentService/OrderService';
-import { Order } from '../../Interfaces/Order';
 import { AuthService } from '../../Services/Security/auth.service';
 
 @Component({
@@ -27,8 +27,9 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = AuthService.getUser();
-    this.orderService.getOrdersPending().subscribe(data => {
+    this.orderService.findAllBy(this.currentUser.Username).subscribe(data => {
       this.ordersPending = data;
+      this.tables.splice(0, this.tables.length)
       this.ordersPending.forEach(order => {
         if (!this.tables.includes(order.IDTable)) {
           this.tables.push(order.IDTable);
@@ -37,34 +38,49 @@ export class OrdersComponent implements OnInit {
     })
   }
 
-  deleteProductInOrderSnack(idtable: number, intitule: string): void {
-    let snack = this.snackBar.open("Êtes-vous sûr de vouloir supprimer ce produit de la commande ?", "Oui", {
-      duration: 3000,
-      horizontalPosition: "start",
-    })
-
-    snack.onAction().subscribe(() => {
-      this._deleteProductInOrder(idtable, intitule);
-      this.dialog.closeAll();
-    })
+  private refresh(): void {
+    this.ngOnInit()
+    this.dialog.closeAll()
   }
 
-  private _deleteProductInOrder(idtable: number, intitule: string): void {
-    this.orderService.deleteProductInOrder(this.currentUser.Username, idtable, intitule).subscribe(() => {
-      this.ngOnInit();
+  deleteProduct(idtable: number, intitule: string): void {
+    this.orderService.delete(this.currentUser.Username, idtable, intitule).subscribe(() => {
+      this.refresh()
     });
   }
 
-  markOrderDealt(order: Order): void {
-    order.Serveur = this.currentUser.Username;
-    this.orderService.updateOrderDealt(order).subscribe(() => {
-      this.ngOnInit();
-      this.dialog.closeAll();
+  reduceQuantiteInOrder(order: Order): void {
+    if (order.Quantite > 0)
+      order.Quantite--
+  }
+
+  incrementProductQuantity(order: Order): void {
+    order.Quantite++
+  }
+
+  orderDealtByTable(tableID: number): void {
+    this.orderService.updateEtatByTable(tableID, AuthService.getUser().Username).subscribe(() => {
+      this.refresh()
     });
+  }
+
+  orderDealtByOrder(order: Order): void {
+    this.orderService.update(order).subscribe(() => {
+      this.refresh()
+    });
+  }
+
+  updateOrder(order: Order): void {
+    if (order.Quantite == 0)
+      this.deleteProduct(order.IDTable, order.Intitule)
+    else
+      this.orderService.update(order).subscribe(() => {
+        this.refresh()
+      })
   }
 
   openActionDialog(ref: TemplateRef<any>, data: Order): void {
-    this.dialog.open(ref, { data: data });
+    this.dialog.open(ref, { data: { ...data } });
   }
 
   getOrdersByTable(tableID: number): Order[] {
@@ -76,4 +92,6 @@ export class OrdersComponent implements OnInit {
     })
     return orders;
   }
+
+  closeAllDialog() { this.dialog.closeAll(); }
 }
