@@ -51,20 +51,13 @@
                             <th> Intitulé </th>
                             <th> Prix </th>
                             <th> Quantité </th>
-                            <th> Actions </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let order of orders">
+                        <tr *ngFor="let order of orders" (click)="openActionDialog(actionDialog, order)">
                             <td> {{order.Intitule}} </td>
                             <td> {{order.Prix}} </td>
                             <td> {{order.Quantite}} </td>
-                            <td>
-                                <button mat-raised-button (click)="openActionDialog(actionDialog, order)"
-                                    class="primary-color">
-                                    <span class="btn-text"> Modifier </span>
-                                </button>
-                            </td>
                         </tr>
                     </tbody>
                 </table>

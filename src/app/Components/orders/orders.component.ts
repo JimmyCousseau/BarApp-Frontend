@@ -6,6 +6,7 @@ import { User } from '../../Interfaces/User';
 import { OrderService } from '../../Services/ComponentService/OrderService';
 import { AuthService } from '../../Services/Security/auth.service';
 
+
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -13,6 +14,26 @@ import { AuthService } from '../../Services/Security/auth.service';
 })
 export class OrdersComponent implements OnInit {
 
+  private readonly defaultBlock = "c.svg"
+
+  private readonly urlImg: string = "../../../assets/images/map/"
+  private decors: string[] = [this.defaultBlock, "bunny.ico", "ceramic.jpg", "craft.png", "chef.ico", "cook.png"]
+  readonly contentOldCell: string[] = []
+
+  private pencil: string = this.defaultBlock
+  map = {
+    width: 5,
+    blocks: [
+      "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "craft.png",
+      "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg",
+      "ceramic.jpg", "bunny.ico", "chef.ico", "cook.png", "ceramic.jpg",
+      "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg",
+      "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg",
+    ],
+    hover: 0
+  }
+  pageView: "list" | "map" | "modMap" = "list"
+  test: number = 40;
   ordersPending: Order[] = [];
   oldIdTable: number = -1;
   grey: boolean = true;
@@ -94,4 +115,35 @@ export class OrdersComponent implements OnInit {
   }
 
   closeAllDialog() { this.dialog.closeAll(); }
+
+  addRow() {
+    for (let i = 0; i < this.map.width; i++)
+      this.map.blocks.push(this.defaultBlock)
+  }
+
+  addColumn() {
+    const length = this.map.blocks.length
+    for (let i = length / this.map.width; i > 0; i--)
+      this.map.blocks.splice((i * this.map.width), 0, this.defaultBlock)
+    this.map.width++
+  }
+
+  setHover(id: number) {
+    this.map.hover = id
+  }
+
+  setCell(cellID: number) {
+    this.map.blocks[cellID] = this.pencil
+  }
+
+  getDecors(): Readonly<string>[] { return this.decors }
+
+  setPencil(pencil: string) {
+    if (this.decors.includes(pencil))
+      this.pencil = pencil;
+  }
+
+  getPencil(): Readonly<string> { return this.pencil }
+
+  getUrlImg(): Readonly<string> { return this.urlImg }
 }

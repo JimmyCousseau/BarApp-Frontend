@@ -48,11 +48,11 @@ html {
 
 /**************** Table design ***************/
 .styled-table {
+  min-width: fit-content;
   border-collapse: collapse;
   margin: auto auto;
   font-size: 0.9em;
   font-family: sans-serif;
-  min-width: 350px;
   color: #ffffff;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 
@@ -65,15 +65,20 @@ html {
   }
 
   th {
-    padding: 12px 15px;
+    padding: 10px 7px;
   }
 
   td {
-    padding: 12px 15px;
+    padding: 10px 7px;
   }
 
   tbody {
+    tr:hover {
+      background-color: grey !important;
+      color: black !important;
+    }
     tr {
+      cursor: pointer;
       text-align: center;
       border-bottom: 1px solid #dddddd;
 

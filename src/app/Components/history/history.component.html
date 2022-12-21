@@ -13,22 +13,16 @@
                                 <th i18n>Intitulé</th>
                                 <th i18n>Quantité</th>
                                 <th i18n>Etat</th>
-                                <th i18n>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            <tr *ngFor="let history of historyContent">
+                            <tr *ngFor="let history of historyContent" (click)="openActionDialog(actionDialog,history)">
                                 <td> {{history.Horodatage | date:'M/d, h\'h\'mm\'m\'ss\'s\'' }} </td>
                                 <td> {{history.IDTable}} </td>
                                 <td> {{history.Intitule}} </td>
                                 <td> {{history.Quantite}} </td>
                                 <td> {{history.Etat}} </td>
-                                <td>
-                                    <button mat-raised-button (click)="openActionDialog(actionDialog,history)" i18n>
-                                        Modifier
-                                    </button>
-                                </td>
                             </tr>
                         </tbody>
                     </table>

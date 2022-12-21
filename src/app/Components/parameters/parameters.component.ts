@@ -20,6 +20,7 @@ export class ParametersComponent implements OnInit {
     role_id: 0, can_access_menu: false, can_access_orders: false,
     can_access_history: false, can_access_checkout: false, can_access_administration_panel: false
   }
+  permFound: PermissionsRole = this.defaultPerm
 
   password: string = "";
 
@@ -58,10 +59,10 @@ export class ParametersComponent implements OnInit {
     this.newPasswordForm.reset()
     this.newRoleForm.reset()
 
-    this.actualPerm = this.defaultPerm
-
-    this.currentUser = AuthService.getUser();
     this.roleSelected = '';
+    this.actualPerm = AuthService.getPermissions()
+    this.currentUser = AuthService.getUser();
+
     this.userService.findAll().subscribe(users => {
       this.users = users;
       this.users.forEach((user: User, i: number) => {
@@ -83,12 +84,10 @@ export class ParametersComponent implements OnInit {
   }
 
   changePassword = (): void => {
-    if (this.newPasswordForm.invalid) {
+    if (this.newPasswordForm.invalid)
       return;
-    }
-    const currentUser: User = this.getCurrentUser()
 
-    this.userService.updatePassword(currentUser, this.newPasswordForm.get('newPassword')?.value || '').subscribe(data => {
+    this.userService.updatePassword(this.getCurrentUser(), this.newPasswordForm.get('newPassword')?.value || '').subscribe(data => {
       this.showResponseDialog(data, "Mot de passe changé !")
     });
   }
@@ -120,6 +119,10 @@ export class ParametersComponent implements OnInit {
       return "Le nom d'utilisateur doit être supérieur à 5 caractères";
     } else if (form.get('username')?.hasError('maxlength')) {
       return "Le nom d'utilisateur ne doit pas excéder 25 caractères";
+    } else if (form.get('role')?.hasError('minlength')) {
+      return "Le nom du rôle doit être supérieur à 3 caractères"
+    } else if (form.get('role')?.hasError('maxlength')) {
+      return "Le nom du rôle ne doit pas excèder 25 caractères"
     }
     return '';
   }
@@ -145,8 +148,11 @@ export class ParametersComponent implements OnInit {
   }
 
   @Input()
-  openDialog(ref: TemplateRef<any>, funcion: (args: any[]) => void, args: any[]): void {
-    this.dialog.open(ref, { data: { funcion: funcion, args: args } });
+  openDialog(ref: TemplateRef<any>, funcion: (args: any[]) => void, form: FormGroup | undefined, args: any[]): void {
+    if (form !== undefined && form.invalid)
+      this.snackBar.open("Le formulaire n'est pas valide")
+    else
+      this.dialog.open(ref, { data: { funcion: funcion, args: args } });
   }
 
   changeUsersRole = (args: any[]): void => {
@@ -159,6 +165,8 @@ export class ParametersComponent implements OnInit {
   }
 
   addRole = (): void => {
+    if (this.newRoleForm.invalid)
+      return
     const adminUser: User = this.getCurrentUser()
     this.roleService.create(this.newRoleForm.get("role")?.value || "", adminUser).subscribe(data => {
       this.showResponseDialog(data, "Le rôle a bien été ajouté")
@@ -166,9 +174,8 @@ export class ParametersComponent implements OnInit {
   }
 
   saveRolePermissions = (args: any[]): void => {
-    this.permissionService.update(args[1], this.getCurrentUser()).subscribe(data => {
-      this.dialog.closeAll()
-      this.ngOnInit()
+    this.permissionService.update(args[1], this.getCurrentUser()).subscribe((data) => {
+      this.showResponseDialog(data, "Les permissions ont bien été changé")
     })
   }
 
@@ -177,30 +184,37 @@ export class ParametersComponent implements OnInit {
   }
 
   getPermissionBy(role_id: number): PermissionsRole {
-    const found = { ...this.rolePermissions.find((x: PermissionsRole) => x.role_id === role_id) }
-    if (found != undefined)
+    let found = this.rolePermissions.find((x: PermissionsRole) => x.role_id === role_id)
+    if (found !== undefined)
       return found
-    return this.defaultPerm
+    found = this.defaultPerm
+    found.role_id = role_id
+    return { ...found }
   }
 
   deleteRole = (args: any[]): void => {
-    this.roleService.delete(args[0], this.getCurrentUser())
+    this.roleService.delete(args[0], this.getCurrentUser()).subscribe((data) => {
+      this.showResponseDialog(data, "Le rôle a bien été supprimé", undefined, "Un utilisateur utilise ce rôle, vous ne pouvez pas le supprimer")
+    })
   }
 
   canAccessAdminPanel() {
     return AuthService.getPermissions().can_access_administration_panel
   }
 
-  private showResponseDialog(data: any, message: string) {
-    if (data === null) {
-      this.snackBar.open("Mauvais mot de passe, veuillez réessayer", "Ok", {
-        duration: 3000,
-      });
-    } else {
+  private showResponseDialog(
+    data: any,
+    message: string,
+    noObjectMessage: string = "Mauvais mot de passe, veuillez réessayer",
+    falseMessage: string = "Something went wrong"
+  ) {
+    if (data === null)
+      this.snackBar.open(noObjectMessage);
+    else if (data === false)
+      this.snackBar.open(falseMessage);
+    else {
       this.ngOnInit();
-      this.snackBar.open(message, "Ok", {
-        duration: 3000,
-      });
+      this.snackBar.open(message);
     }
   }
 

@@ -24,8 +24,9 @@ export class PermissionService {
         return this.http.get(GlobalSettings.getURL() + "permission")
     }
 
-    update(permissionsRole: PermissionsRole, adminUser: User): Observable<any> {
-        return this.http.patch(GlobalSettings.getURL() + "permission", { permissions: permissionsRole, adminUser })
+    update(permissions: PermissionsRole, adminUser: User): Observable<any> {
+        console.log(permissions)
+        return this.http.patch(GlobalSettings.getURL() + "permission", { permissions, adminUser })
     }
 
 }

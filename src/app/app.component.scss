@@ -32,7 +32,7 @@
     background-color: transparent;
     display: flex;
     text-align: center;
-    
+
     .calc-sidenav {
         position: fixed;
         top: auto;
@@ -44,15 +44,23 @@
         align-content: end;
         border: none;
 
-        .calc-card {
-            width: 200px;
+        .templateCalculator {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
 
-            .templateCalculator {
-                grid-template-columns: repeat(auto-fit, minmax(min(100%/3, max(64px, 100%/5)), 1fr));
-                
-                button {
-                    font-size: medium;
-                }
+            .operator {
+                color: var(--red-bordeaux) !important;
+                font-size: large;
+            }
+
+            button {
+                font-size: larger;
+                font-weight: bolder;
+                margin: 1px;
+            }
+
+            button:hover {
+                background-color: rgb(175, 175, 175);
             }
         }
     }
@@ -61,5 +69,40 @@
         position: fixed;
         bottom: 0;
         left: auto;
+    }
+}
+
+.history {
+    background-color: transparent;
+    text-align: center;
+
+    .history-sidenav {
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        @media screen and (max-height: 600px) {
+            top: auto;
+            bottom: 0;
+            left: auto;
+            right: 0;
+        }
+
+        height: fit-content;
+        display: inline-grid;
+        align-content: end;
+        border: none;
+        background-color: white;
+        border-radius: 7px;
+        text-align: center;
+
+        button {
+            width: 50%;
+            border-radius: 0;
+        }
+
+        h1 {
+            margin: 5px;
+        }
     }
 }

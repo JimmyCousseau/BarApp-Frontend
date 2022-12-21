@@ -27,7 +27,7 @@ import { MenuComponent } from './Components/menu/menu.component';
 import { OrdersComponent } from './Components/orders/orders.component';
 import { ParametersComponent } from './Components/parameters/parameters.component';
 import { UnknownPageComponent } from './Components/unknown-page/unknown-page.component';
-
+import { MatGridListModule } from '@angular/material/grid-list';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 
@@ -64,6 +64,7 @@ registerLocaleData(localeFr, 'fr-CA');
     MatDialogModule,
     MatButtonToggleModule,
     MatDividerModule,
+    MatGridListModule,
   ],
   bootstrap: [AppComponent],
 })

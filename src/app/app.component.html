@@ -18,7 +18,15 @@
         </mat-button-toggle>
 
         <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../parameters">
-            Configuration
+            <mat-icon>
+                settings
+            </mat-icon>
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn">
+            <mat-icon>
+                trending_up
+            </mat-icon>
         </mat-button-toggle>
     </mat-button-toggle-group>
 </div>
@@ -26,39 +34,54 @@
 
 <router-outlet></router-outlet>
 
-<mat-sidenav-container class="calculator" [hasBackdrop]="true">
-    <mat-sidenav #sidenav mode="side" class="calc-sidenav">
-        <mat-card class="calc-card">
+<mat-sidenav-container class="calculator" *ngIf="isLoggedIn">
+    <mat-sidenav #calc mode="side" class="calc-sidenav">
+        <mat-card>
             <mat-card-title>
                 Calculator
             </mat-card-title>
             <mat-card-title> {{firstNumber}}{{operator}}{{secondNumber}} </mat-card-title>
             <mat-card-content class="templateCalculator">
-                <button mat-flat-button (click)="addNum('1')">1</button>
-                <button mat-flat-button (click)="addNum('2')">2</button>
-                <button mat-flat-button (click)="addNum('3')">3</button>
-                <button mat-flat-button (click)="addNum('4')">4</button>
-                <button mat-flat-button (click)="addNum('5')">5</button>
-                <button mat-flat-button (click)="addNum('6')">6</button>
+                <button mat-flat-button (click)="clear()" class="accent-color">AC</button>
+                <button mat-flat-button (click)="history.toggle()"><mat-icon>restore</mat-icon></button>
+                <button mat-flat-button (click)="setOperator('%')" class="operator">%</button>
+                <button mat-flat-button (click)="setOperator('/')" class="operator">/</button>
                 <button mat-flat-button (click)="addNum('7')">7</button>
                 <button mat-flat-button (click)="addNum('8')">8</button>
                 <button mat-flat-button (click)="addNum('9')">9</button>
-                <button mat-flat-button></button>
+                <button mat-flat-button (click)="setOperator('x')" class="operator">x</button>
+                <button mat-flat-button (click)="addNum('4')">4</button>
+                <button mat-flat-button (click)="addNum('5')">5</button>
+                <button mat-flat-button (click)="addNum('6')">6</button>
+                <button mat-flat-button (click)="setOperator('-')" class="operator">-</button>
+                <button mat-flat-button (click)="addNum('1')">1</button>
+                <button mat-flat-button (click)="addNum('2')">2</button>
+                <button mat-flat-button (click)="addNum('3')">3</button>
+                <button mat-flat-button (click)="setOperator('+')" class="operator">+</button>
+                <button mat-flat-button (click)="deleteNum()"
+                    class="accent-color"><mat-icon>arrow_left</mat-icon></button>
                 <button mat-flat-button (click)="addNum('0')">0</button>
-                <button mat-flat-button (click)="addNum('.')">.</button>
-            </mat-card-content>
-            <mat-card-content class="templateCalculator">
-                <button mat-flat-button (click)="setOperator('/')">/</button>
-                <button mat-flat-button (click)="setOperator('x')">x</button>
-                <button mat-flat-button (click)="setOperator('+')">+</button>
-                <button mat-flat-button (click)="setOperator('-')">-</button>
-                <button mat-flat-button (click)="deleteNum()" class="accent-color"><mat-icon>arrow_left</mat-icon></button>
+                <button mat-flat-button (click)="addNum('.')">,</button>
                 <button mat-flat-button (click)="calculate()" class="primary-color">=</button>
             </mat-card-content>
         </mat-card>
     </mat-sidenav>
-
     <mat-sidenav-content>
-        <button mat-raised-button (click)="sidenav.toggle()" class="trigger-calc"><mat-icon>calculate</mat-icon></button>
+        <button mat-raised-button (click)="calc.toggle(); history.close()"
+        class="trigger-calc"><mat-icon>calculate</mat-icon></button>
     </mat-sidenav-content>
+</mat-sidenav-container>
+
+<mat-sidenav-container class="history">
+    <mat-sidenav #history class="history-sidenav">
+        <h1>Historique</h1>
+        <div *ngFor="let h of calcHistory">
+            <button mat-flat-button (click)="getBackHistoryOperation(h.f, h.o, h.s)" style="cursor: default">
+                {{h.f}}{{h.o}}{{h.s}}
+            </button>
+            <button mat-flat-button (click)="getBackHistoryResult(h.result)" class="primary-color">
+                ={{h.result}}
+            </button>
+        </div>
+    </mat-sidenav>
 </mat-sidenav-container>

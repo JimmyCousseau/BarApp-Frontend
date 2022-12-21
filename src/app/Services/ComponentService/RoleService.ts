@@ -18,8 +18,8 @@ export class RoleService {
         return this.http.post(GlobalSettings.getURL() + 'role/create', { roleName, adminUser });
     }
 
-    delete(roleName: string, adminUser: User) {
-        return this.http.post(GlobalSettings.getURL() + 'role/delete', { roleName, adminUser });
+    delete(role: string, adminUser: User) {
+        return this.http.post(GlobalSettings.getURL() + 'role/remove', { role, adminUser });
     }
 
 }
