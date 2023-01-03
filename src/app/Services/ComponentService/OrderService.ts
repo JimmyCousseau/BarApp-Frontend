@@ -25,11 +25,11 @@ export class OrderService {
     }
 
     updateEtatByOrder(order: Order): Observable<any> {
-        return this.http.patch(GlobalSettings.getURL() + "order/etat", order)
+        return this.http.patch(GlobalSettings.getURL() + "order/etat", { order: order })
     }
-    
+
     updateEtatByTable(idtable: number, serveur: string): Observable<any> {
-        return this.http.patch(GlobalSettings.getURL() + "order/etat/" + idtable, serveur);
+        return this.http.patch(GlobalSettings.getURL() + "order/etat/" + idtable, { serveur: serveur });
     }
 
 }

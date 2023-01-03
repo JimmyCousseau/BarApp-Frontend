@@ -1,4 +1,8 @@
-<div class="container-global" *ngIf="pageView === 'list'">
+<div class="change-view-map-list" routerLink="../map-orders">
+    <mat-icon>map</mat-icon>
+</div>
+
+<div class="container-global">
     <div class="container">
         <mat-card class="mat-card-template" *ngFor="let table of tables">
             <mat-card-title>
@@ -16,7 +20,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let order of getOrdersByTable(table)"
-                            (click)="openActionDialog(actionDialog, order)">
+                            (click)="openActionDialog(actionDialog, undefined, [order])">
                             <td> {{order.Intitule}} </td>
                             <td> {{order.Quantite}} </td>
                             <td> {{order.Etat}} </td>
@@ -31,96 +35,32 @@
     </div>
 </div>
 
-<div class="change-view-map-list" *ngIf="pageView !== 'modMap' "
-    (click)="pageView === 'map' ? pageView = 'list' : pageView = 'map'">
-
-    <mat-icon *ngIf="pageView === 'list'">map</mat-icon>
-    <mat-icon *ngIf="pageView === 'map'">list</mat-icon>
-</div>
-
-<mat-card *ngIf="pageView === 'map'">
-    <div style="display: inline-flex; justify-content:space-between; width: 100%;">
-        <mat-card-title>
-            La carte
-        </mat-card-title>
-        <button mat-flat-button class="primary-color" (click)="pageView = 'modMap' " *ngIf="pageView == 'map' ">
-            Modifier
-        </button>
-    </div>
-    <mat-grid-list cols={{map.width}} class="map-grid">
-        <mat-grid-tile *ngFor="let b of map.blocks" class="{{b}}">
-            <img src="{{getUrlImg()}}{{b}}" alt="">
-        </mat-grid-tile>
-    </mat-grid-list>
-</mat-card>
-
-<div class="container-global">
-    <div class="container">
-        <mat-card *ngIf="pageView === 'modMap' " class="palette">
-            <div style="display: inline-flex; justify-content:space-between; width: 100%;">
-                <mat-card-title>Palette</mat-card-title>
-                <div>
-                    <button mat-flat-button class="primary-color" (click)="addColumn()">Ajouter une colonne</button>
-                    <button mat-flat-button class="primary-color" (click)="addRow()">Ajouter une ligne</button>
-                </div>
-            </div>
-            <mat-grid-list cols="5" class="map-grid">
-                <mat-grid-tile *ngFor="let d of getDecors()" class={{d}} (click)="setPencil(d)">
-                    <img src="{{getUrlImg()}}{{d}}" alt="">
-                </mat-grid-tile>
-            </mat-grid-list>
-        </mat-card>
-    </div>
-</div>
-
-<mat-card *ngIf="pageView === 'modMap' " class="mod-map">
-    <div class="title-mod-map">
-        <mat-card-title>
-            Modification de la carte
-        </mat-card-title>
-        <button mat-flat-button class="primary-color" (click)="pageView = 'map' " *ngIf="pageView == 'modMap' ">
-            Valider
-        </button>
-    </div>
-    <mat-grid-list cols={{map.width}}>
-        <mat-grid-tile *ngFor="let b of map.blocks; let i = index" (click)="setCell(i)" (mouseenter)="setHover(i)"
-            class="cell-mod {{b}}">
-            <div *ngIf="map.hover === i">
-                <img *ngIf="getPencil()" src="{{getUrlImg()}}{{getPencil()}}" alt="">
-            </div>
-            <div *ngIf="map.hover !== i">
-                <img src="{{getUrlImg()}}{{b}}" alt="">
-            </div>
-        </mat-grid-tile>
-    </mat-grid-list>
-</mat-card>
-
 <ng-template #actionDialog let-data>
     <div class="back-button">
         <mat-icon (click)="closeAllDialog()">cancel</mat-icon>
     </div>
     <h1 mat-dialog-title> Modification du produit </h1>
     <div mat-dialog-content>
-        <p>Quelle action voulez-vous effectuer sur ce produit ?</p>
+        <p>Quelle action voulez-vous effectuer sur ce produit ? </p>
         <p>Informations:</p>
-        <p> - Table: <span class="set-text-bold">{{data.IDTable}}</span> </p>
-        <p> - Intitulé: <span class="set-text-bold">{{data.Intitule}}</span> </p>
-        <p> - Quantité: <span class="set-text-bold">{{data.Quantite}}</span> </p>
-        <p> - État: <span class="set-text-bold">{{data.Etat}}</span> </p>
+        <p> - Table: <span class="set-text-bold">{{data.data.IDTable}}</span> </p>
+        <p> - Intitulé: <span class="set-text-bold">{{data.data.Intitule}}</span> </p>
+        <p> - Quantité: <span class="set-text-bold">{{data.data.Quantite}}</span> </p>
+        <p> - État: <span class="set-text-bold">{{data.data.Etat}}</span> </p>
     </div>
     <div mat-dialog-actions class="mat-dialog-actions">
-        <button mat-fab class="primary-color" (click)="incrementProductQuantity(data)">
+        <button mat-fab class="primary-color" (click)="incrementProductQuantity(data.data)">
             +1
         </button>
-        <button mat-fab class="accent-color" (click)="reduceQuantiteInOrder(data)">
+        <button mat-fab class="accent-color" (click)="reduceQuantiteInOrder(data.data)">
             -1
         </button>
-        <button mat-fab class="third-color" (click)="deleteProduct(data.IDTable, data.Intitule)">
+        <button mat-fab class="third-color" (click)="deleteProduct(data.data.IDTable, data.data.Intitule)">
             <mat-icon>delete</mat-icon>
         </button>
     </div>
     <div mat-dialog-actions class="mat-dialog-actions">
-        <button mat-raised-button (click)="updateOrder(data)">
+        <button mat-raised-button (click)="redirectDialogValidation(data.foo, data.data)">
             Valider
         </button>
     </div>

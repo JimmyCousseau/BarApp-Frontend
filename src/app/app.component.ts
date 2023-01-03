@@ -39,6 +39,10 @@ export class AppComponent {
     });
   }
 
+  havePermission(perm: string) {
+    return JSON.parse(JSON.stringify(AuthService.getPermissions()))[perm]
+  }
+
   getRoutes() {
     return this._router.url;
   }

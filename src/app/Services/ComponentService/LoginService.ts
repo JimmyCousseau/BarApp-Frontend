@@ -7,7 +7,7 @@ import { GlobalSettings } from "./GlobalSettings";
     providedIn: 'root',
 })
 export class LoginService {
-    
+
     constructor(private http: HttpClient) { }
 
     login(username: string | null | undefined, password: string | null | undefined): Observable<any> {

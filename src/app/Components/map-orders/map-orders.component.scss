@@ -1,0 +1,60 @@
+.change-view-map-list {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: auto;
+    padding: 8px 10px;
+    margin-top: 49px;
+    margin-right: 49px;
+    border-radius: 7px;
+    background-color: white;
+    display: grid;
+    cursor: pointer;
+}
+
+.mod-map {
+    user-select: none;
+
+    .title-mod-map {
+        display: inline-flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .cell-mod {
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+.map-grid img {
+    width: 100%;
+    height: 100%;
+}
+
+
+.palette {
+    width: fit-content;
+    min-width: 400px;
+
+    mat-grid-tile {
+        cursor: pointer;
+    }
+}
+
+mat-grid-tile {
+    img {
+        z-index: 1;
+    }
+
+    h1 {
+        z-index: 2;
+        font-size: 50px;
+        font-weight: bold;
+    }
+}

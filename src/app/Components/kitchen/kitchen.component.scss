@@ -1,0 +1,21 @@
+.header-container-fullscreen {
+    display: none !important;
+}
+
+.toggle-fullscreen-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: auto;
+    padding: 8px 10px;
+    border-radius: 7px;
+    box-shadow: 1px 1px 1px 1px black;
+    margin: 3px;
+    display: grid;
+    cursor: pointer;
+}
+
+.toggle-fullscreen-btn:hover {
+    background-color: rgb(204, 204, 204);
+}

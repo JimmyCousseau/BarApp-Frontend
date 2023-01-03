@@ -35,10 +35,6 @@ body {
 }
 
 html {
-  // -webkit-user-select: none;
-  // -moz-user-select: none;
-  // -ms-user-select: none;
-  // user-select: none;
   caret-color: rgba(0, 0, 0, 0);
   background-image: url("./assets/images/background-temp.jpeg");
   background-repeat: repeat-y;
@@ -77,6 +73,7 @@ html {
       background-color: grey !important;
       color: black !important;
     }
+
     tr {
       cursor: pointer;
       text-align: center;
@@ -224,7 +221,6 @@ html {
 }
 
 .mat-dialog-actions {
-  justify-content: center;
   display: inline-flex;
   flex-wrap: wrap;
   justify-content: space-evenly;

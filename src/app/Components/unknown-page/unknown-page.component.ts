@@ -9,6 +9,8 @@ import { AuthService } from '../../Services/Security/auth.service';
 })
 export class UnknownPageComponent implements OnInit {
 
+  private timer: any
+
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -17,15 +19,6 @@ export class UnknownPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.verifyToken().then(() => {
-      this.authService.isLoggedIn.subscribe((isLoggedIn) => {
-        if (isLoggedIn) {
-          this.router.navigate(['menu'])
-        } else {
-          this.router.navigate(['login'])
-        }
-      })
-    })
+    this.authService.verifyToken()
   }
-
 }

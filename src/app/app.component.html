@@ -1,19 +1,27 @@
-<div class="header-container" *ngIf="isLoggedIn">
+<div id="header-container" *ngIf="isLoggedIn">
     <mat-button-toggle-group class="mat-button-toggle-group">
-        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../menu">
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../menu"
+            *ngIf="havePermission('can_access_menu')">
             Menu
         </mat-button-toggle>
 
-        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../orders">
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../orders"
+            *ngIf="havePermission('can_access_checkout')">
             Commandes
         </mat-button-toggle>
 
         <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../checkout"
-            *ngIf="getRole() == 'Serveur' || getRole() == 'Administrateur'">
+            *ngIf="havePermission('can_access_orders')">
             Caisse
         </mat-button-toggle>
 
-        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../history">
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../kitchen"
+            *ngIf="havePermission('can_access_kitchen')">
+            Cuisine
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../history"
+            *ngIf="havePermission('can_access_history')">
             Historique
         </mat-button-toggle>
 
@@ -23,7 +31,8 @@
             </mat-icon>
         </mat-button-toggle>
 
-        <mat-button-toggle mat-raised-button class="navigate-btn">
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../statistics"
+            *ngIf="havePermission('can_access_statistics')">
             <mat-icon>
                 trending_up
             </mat-icon>
@@ -67,8 +76,11 @@
         </mat-card>
     </mat-sidenav>
     <mat-sidenav-content>
-        <button mat-raised-button (click)="calc.toggle(); history.close()"
-        class="trigger-calc"><mat-icon>calculate</mat-icon></button>
+        <button mat-raised-button (click)="calc.toggle(); history.close()" class="trigger-calc">
+            <mat-icon>
+                calculate
+            </mat-icon>
+        </button>
     </mat-sidenav-content>
 </mat-sidenav-container>
 

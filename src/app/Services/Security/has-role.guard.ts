@@ -18,11 +18,8 @@ export class HasRoleGuard implements CanActivate {
     const perm = JSON.parse(JSON.stringify(AuthService.getPermissions()));
     const hasPermission = perm[route.data['permission']]
     
-    if (!hasPermission) {
-      this._snackBar.open("You don't have the permissions", "Ok", {
-        duration: 3000
-      });
-    }
+    if (!hasPermission)
+      this._snackBar.open("You don't have the permissions", "Ok", { duration: 3000 });
     return hasPermission;
   }
 }

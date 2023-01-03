@@ -17,6 +17,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
+import { NgChartsModule } from 'ng2-charts';
 
 import { MatDividerModule } from '@angular/material/divider';
 import { AppComponent } from './app.component';
@@ -28,8 +29,12 @@ import { OrdersComponent } from './Components/orders/orders.component';
 import { ParametersComponent } from './Components/parameters/parameters.component';
 import { UnknownPageComponent } from './Components/unknown-page/unknown-page.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { KitchenComponent } from './Components/kitchen/kitchen.component';
+import { StatisticsComponent } from './Components/statistics/statistics.component';
+
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { MapOrdersComponent } from './Components/map-orders/map-orders.component';
 
 registerLocaleData(localeFr, 'fr-CA');
 
@@ -43,6 +48,9 @@ registerLocaleData(localeFr, 'fr-CA');
     ParametersComponent,
     HistoryComponent,
     UnknownPageComponent,
+    KitchenComponent,
+    StatisticsComponent,
+    MapOrdersComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +73,7 @@ registerLocaleData(localeFr, 'fr-CA');
     MatButtonToggleModule,
     MatDividerModule,
     MatGridListModule,
+    NgChartsModule,
   ],
   bootstrap: [AppComponent],
 })

@@ -11,41 +11,6 @@
     }
 }
 
-.right-wall {
-    border-right: 1px solid black;
-}
-
-.left-wall {
-    border-left: 1px solid black;
-}
-
-.top-wall {
-    border-top: 1px solid black;
-}
-
-.bottom-wall {
-    border-bottom: 1px solid black;
-}
-
-.diagonal-down {
-    background:
-        linear-gradient(to top right,
-            rgba(0, 0, 0, 0) 0%,
-            rgba(0, 0, 0, 0) calc(50% - 1.4px),
-            rgba(0, 0, 0, 1) 50%,
-            rgba(0, 0, 0, 0) calc(50% + 1.4px),
-            rgba(0, 0, 0, 0) 100%);
-}
-
-.diagonal-up {
-    background: linear-gradient(to top left,
-            rgba(0, 0, 0, 0) 0%,
-            rgba(0, 0, 0, 0) calc(50% - 1.4px),
-            rgba(0, 0, 0, 1) 50%,
-            rgba(0, 0, 0, 0) calc(50% + 1.4px),
-            rgba(0, 0, 0, 0) 100%);
-}
-
 .change-view-map-list {
     position: absolute;
     top: 0;
@@ -59,43 +24,4 @@
     background-color: white;
     display: grid;
     cursor: pointer;
-}
-
-.mod-map {
-    user-select: none;
-
-    .title-mod-map {
-        display: inline-flex;
-        justify-content: space-between;
-        width: 100%;
-    }
-
-    .cell-mod:hover {
-        background-color: grey;
-    }
-
-    .cell-mod {
-        cursor: pointer;
-
-        img {
-            width: 100%;
-            height: 100%;
-        }
-    }
-}
-
-.map-grid img {
-    width: 100%;
-    height: 100%;
-}
-
-
-.palette {
-    width: fit-content;
-    min-width: 400px;
-
-    mat-grid-tile:hover {
-        background-color: grey;
-        cursor: pointer;
-    }
 }

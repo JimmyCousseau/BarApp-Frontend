@@ -190,31 +190,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr (click)="data.args[1].can_access_menu = !data.args[1].can_access_menu">
-                <td> Accèder au menu </td>
-                <td *ngIf="data.args[1].can_access_menu"><mat-icon>done</mat-icon></td>
-                <td *ngIf="!data.args[1].can_access_menu"><mat-icon>clear</mat-icon></td>
-            </tr>
-            <tr (click)="data.args[1].can_access_orders = !data.args[1].can_access_orders">
-                <td> Accèder aux commandes </td>
-                <td *ngIf="data.args[1].can_access_orders"><mat-icon>done</mat-icon></td>
-                <td *ngIf="!data.args[1].can_access_orders"><mat-icon>clear</mat-icon></td>
-            </tr>
-            <tr (click)="data.args[1].can_access_checkout = !data.args[1].can_access_checkout">
-                <td> Accèder à la caisse </td>
-                <td *ngIf="data.args[1].can_access_checkout"><mat-icon>done</mat-icon></td>
-                <td *ngIf="!data.args[1].can_access_checkout"><mat-icon>clear</mat-icon></td>
-            </tr>
-            <tr (click)="data.args[1].can_access_history = !data.args[1].can_access_history">
-                <td> Accèder à l'historique </td>
-                <td *ngIf="data.args[1].can_access_history"><mat-icon>done</mat-icon></td>
-                <td *ngIf="!data.args[1].can_access_history"><mat-icon>clear</mat-icon></td>
-            </tr>
-            <tr
-                (click)="data.args[1].can_access_administration_panel = !data.args[1].can_access_administration_panel">
-                <td> Accèder au panel d'administration </td>
-                <td *ngIf="data.args[1].can_access_administration_panel"><mat-icon>done</mat-icon></td>
-                <td *ngIf="!data.args[1].can_access_administration_panel"><mat-icon>clear</mat-icon></td>
+            <tr *ngFor="let d of data.args[1] | keyvalue" (click)="d.value = setFoundPermissions(d.key)">
+                <td *ngIf="d.key !== 'role_id'"> {{d.key}} </td>
+                <td *ngIf="d.value && d.key !== 'role_id'"><mat-icon>done</mat-icon></td>
+                <td *ngIf="!d.value && d.key !== 'role_id'"><mat-icon>clear</mat-icon></td>
             </tr>
         </tbody>
     </table>
@@ -223,7 +202,7 @@
             class="accent-color">
             <mat-icon>delete</mat-icon>
         </button>
-        <button mat-fab (click)="openDialog(passwordVerification, saveRolePermissions, undefined, data.args[0])"
+        <button mat-fab (click)="openDialog(passwordVerification, saveRolePermissions, undefined, data.args[1])"
             class="primary-color">
             <mat-icon>check</mat-icon>
         </button>

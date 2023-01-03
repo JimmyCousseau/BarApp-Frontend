@@ -1,8 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Order } from '../../Interfaces/Order';
-import { User } from '../../Interfaces/User';
 import { OrderService } from '../../Services/ComponentService/OrderService';
 import { AuthService } from '../../Services/Security/auth.service';
 
@@ -14,41 +12,22 @@ import { AuthService } from '../../Services/Security/auth.service';
 })
 export class OrdersComponent implements OnInit {
 
-  private readonly defaultBlock = "c.svg"
-
-  private readonly urlImg: string = "../../../assets/images/map/"
-  private decors: string[] = [this.defaultBlock, "bunny.ico", "ceramic.jpg", "craft.png", "chef.ico", "cook.png"]
   readonly contentOldCell: string[] = []
 
-  private pencil: string = this.defaultBlock
-  map = {
-    width: 5,
-    blocks: [
-      "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "craft.png",
-      "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg",
-      "ceramic.jpg", "bunny.ico", "chef.ico", "cook.png", "ceramic.jpg",
-      "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg",
-      "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg", "ceramic.jpg",
-    ],
-    hover: 0
-  }
-  pageView: "list" | "map" | "modMap" = "list"
   test: number = 40;
   ordersPending: Order[] = [];
   oldIdTable: number = -1;
   grey: boolean = true;
   tables: number[] = [];
-  currentUser: User = { Username: '', Password: '', Role: '' };
 
   constructor(
     private orderService: OrderService,
-    private snackBar: MatSnackBar,
     private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
-    this.currentUser = AuthService.getUser();
-    this.orderService.findAllBy(this.currentUser.Username).subscribe(data => {
+    this.dialog.closeAll()
+    this.orderService.findAllBy(AuthService.getUser().Username).subscribe(data => {
       this.ordersPending = data;
       this.tables.splice(0, this.tables.length)
       this.ordersPending.forEach(order => {
@@ -65,7 +44,7 @@ export class OrdersComponent implements OnInit {
   }
 
   deleteProduct(idtable: number, intitule: string): void {
-    this.orderService.delete(this.currentUser.Username, idtable, intitule).subscribe(() => {
+    this.orderService.delete(AuthService.getUser().Username, idtable, intitule).subscribe(() => {
       this.refresh()
     });
   }
@@ -91,7 +70,7 @@ export class OrdersComponent implements OnInit {
     });
   }
 
-  updateOrder(order: Order): void {
+  updateOrder = (order: Order): void => {
     if (order.Quantite == 0)
       this.deleteProduct(order.IDTable, order.Intitule)
     else
@@ -100,14 +79,14 @@ export class OrdersComponent implements OnInit {
       })
   }
 
-  openActionDialog(ref: TemplateRef<any>, data: Order): void {
-    this.dialog.open(ref, { data: { ...data } });
+  openActionDialog(ref: TemplateRef<any>, foo: ((args: string) => void) | undefined, data: any[]): void {
+    this.dialog.open(ref, { data: { foo: foo, data: { ...data } } });
   }
 
   getOrdersByTable(tableID: number): Order[] {
     let orders: Order[] = [];
     this.ordersPending.forEach((order: Order) => {
-      if (order.IDTable == tableID) {
+      if (order.IDTable === tableID) {
         orders.push(order);
       }
     })
@@ -116,34 +95,10 @@ export class OrdersComponent implements OnInit {
 
   closeAllDialog() { this.dialog.closeAll(); }
 
-  addRow() {
-    for (let i = 0; i < this.map.width; i++)
-      this.map.blocks.push(this.defaultBlock)
+  redirectDialogValidation(func: ((arg: string) => void), data: string): void {
+    if (func !== undefined)
+      func(data)
+    this.dialog.closeAll()
   }
 
-  addColumn() {
-    const length = this.map.blocks.length
-    for (let i = length / this.map.width; i > 0; i--)
-      this.map.blocks.splice((i * this.map.width), 0, this.defaultBlock)
-    this.map.width++
-  }
-
-  setHover(id: number) {
-    this.map.hover = id
-  }
-
-  setCell(cellID: number) {
-    this.map.blocks[cellID] = this.pencil
-  }
-
-  getDecors(): Readonly<string>[] { return this.decors }
-
-  setPencil(pencil: string) {
-    if (this.decors.includes(pencil))
-      this.pencil = pencil;
-  }
-
-  getPencil(): Readonly<string> { return this.pencil }
-
-  getUrlImg(): Readonly<string> { return this.urlImg }
 }

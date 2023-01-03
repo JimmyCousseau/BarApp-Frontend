@@ -1,0 +1,58 @@
+<mat-card *ngIf="isLoaded">
+    <mat-tab-group>
+        <mat-tab label="Général">
+            <mat-card-title>Recette & Fréquence de commande en moyenne dans une journée</mat-card-title>
+            <mat-card-header>
+                Recette moyen des ventes : Utile pour évaluer la taille moyenne des achats effectués par les clients et
+                pour comprendre les tendances de consommation.
+            </mat-card-header>
+            <mat-card-header>
+                Fréquence de commande : Sert à mesurer la fréquence à laquelle les clients effectuent des achats
+                ou bien pour mesurer à laquelle les clients rentrent dans l'établissement.
+            </mat-card-header>
+            <canvas baseChart [data]="dataChart1" [options]="getOptions('')" [type]="'bar'"></canvas>
+        </mat-tab>
+
+        <mat-tab label="Profil client">
+            <mat-card-title> Bonjour je m'appelle théo </mat-card-title>
+            <mat-card-header>
+                Je viens régulièrement dans ton établissement {{dataPeakInVisitHour}} un {{dataPeakInVisitDay}}
+            </mat-card-header>
+            <mat-card-header>
+                Chaques produits que je commande coûtes en moyenne {{STDProductPrice | currency}}
+            </mat-card-header>
+            <mat-card-header>Voici les produits que je préfères :</mat-card-header>
+
+            <canvas baseChart [data]="dataClassementProduct" [options]="getOptions('', 0)" [type]="'pie'"></canvas>
+        </mat-tab>
+
+        <mat-tab label="Revenus">
+            <mat-card-title>Recettes au cours du temps</mat-card-title>
+            <mat-grid-list cols="2" rowHeight="8:3">
+                <mat-grid-tile>
+                    <canvas baseChart [data]="dataRevenuThisWeek" [options]="getOptions('Recettes de cette semaine')"
+                        [legend]="true" [type]="'bar'">
+                    </canvas>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                    <canvas baseChart [data]="dataRevenuThisMonth" [options]="getOptions('Recettes de ce mois')"
+                        [legend]="true" [type]="'bar'">
+                    </canvas>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                    <canvas baseChart [data]="dataRevenuThisYear" [options]="getOptions('Recettes de cette année')"
+                        [legend]="true" [type]="'bar'">
+                    </canvas>
+                </mat-grid-tile>
+
+                <mat-grid-tile>
+                    <canvas baseChart [data]="dataAllRevenu" [options]="getOptions('Recettes de toutes les années')"
+                        [legend]="true" [type]="'bar'">
+                    </canvas>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </mat-tab>
+    </mat-tab-group>
+</mat-card>

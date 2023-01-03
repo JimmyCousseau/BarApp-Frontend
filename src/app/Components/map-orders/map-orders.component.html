@@ -1,0 +1,121 @@
+<div class="change-view-map-list" routerLink="../orders">
+    <mat-icon>list</mat-icon>
+</div>
+
+<mat-card *ngIf="!editionMod">
+    <div style="display: inline-flex; justify-content:space-between; width: 100%;">
+        <mat-card-title>
+            La carte
+        </mat-card-title>
+        <button mat-flat-button class="primary-color" (click)="editionMod = true">
+            Modifier
+        </button>
+    </div>
+    <mat-grid-list cols={{getMapWidth()}} class="map-grid" [gutterSize]="'0px'">
+        <mat-grid-tile *ngFor="let b of getMapBlocks()">
+            <img *ngIf="b.table === -1" src="{{getUrlImg(b.img)}}" alt="" type="file">
+            <img *ngIf="b.table !== -1" src="{{getUrlImg(b.img)}}" alt="" style="cursor: pointer"
+                (click)="openDialog(informationTable, undefined, b.table.toString())">
+        </mat-grid-tile>
+    </mat-grid-list>
+</mat-card>
+
+<div class="container-global" *ngIf="editionMod">
+    <div class="container">
+        <mat-card>
+            <div style="display: inline-flex; justify-content:space-between; width: 100%;">
+                <mat-card-title>Palette</mat-card-title>
+                <div>
+                    <button mat-flat-button class="primary-color" (click)="addColumn()">Ajouter une colonne</button>
+                    <button mat-flat-button class="primary-color" (click)="addRow()">Ajouter une ligne</button>
+                </div>
+            </div>
+            <mat-grid-list cols="5" class="map-grid" [gutterSize]="'0px'">
+                <mat-grid-tile *ngFor="let d of getDecors()" style="cursor: pointer">
+                    <img *ngIf="d.table === -1" src="{{getUrlImg(d.img)}}" alt="" (click)="setPencil(d.img)">
+                    <img *ngIf="d.table === 1" src="{{getUrlImg(d.img)}}" alt=""
+                        (click)="openDialog(setPencilTableID, setPencil, d.img)">
+                </mat-grid-tile>
+            </mat-grid-list>
+        </mat-card>
+    </div>
+</div>
+
+<mat-card *ngIf="editionMod" class="mod-map">
+    <div class="title-mod-map">
+        <mat-card-title>
+            Modification de la carte
+        </mat-card-title>
+        <div>
+            <button mat-flat-button class="third-color" (click)="ngOnInit()">Retour</button>
+            <button mat-flat-button class="primary-color" (click)="openDialog(passwordVerification, validate, '')">
+                Valider
+            </button>
+        </div>
+    </div>
+    <mat-grid-list cols={{getMapWidth()}} (mouseleave)="hover = -1" [gutterSize]="'0px'">
+        <mat-grid-tile *ngFor="let b of getMapBlocks(); let i = index" (click)="setCell(i)" (mouseenter)="hover = i"
+            class="cell-mod">
+
+            <img *ngIf="hover === i" src="{{getUrlImg(getPencil().img)}}" alt="">
+            <img *ngIf="hover !== i && b.table === -1" src="{{getUrlImg(b.img)}}" alt="">
+            <img *ngIf="hover !== i && b.table !== -1" src="{{getUrlImg(b.img)}}" alt="" style="cursor: pointer">
+
+        </mat-grid-tile>
+    </mat-grid-list>
+</mat-card>
+
+<ng-template #informationTable let-data>
+    <div class="back-button">
+        <mat-icon (click)="closeAllDialog()">cancel</mat-icon>
+    </div>
+    <h1 mat-dialog-title> Informations </h1>
+    <div mat-dialog-content>
+        <p>Informations:</p>
+        <p>{{data.data}}</p>
+    </div>
+</ng-template>
+
+<ng-template #setPencilTableID let-data>
+    <div class="back-button">
+        <mat-icon (click)="closeAllDialog()">cancel</mat-icon>
+    </div>
+    <form (ngSubmit)="redirectDialogValidation(data.foo, data.data)" [formGroup]="setBlockIDControl" autocomplete="off"
+        class="form-group">
+        <mat-card class="mat-card">
+            <mat-card-title class="mat-card-title">
+                Veuillez saisir le numéro de la table
+            </mat-card-title>
+
+            <mat-card-content class="mat-card-content">
+                <mat-form-field appearance="outline">
+                    <mat-label>Identifiant de la table</mat-label>
+                    <input matInput placeholder="Ex. 145" formControlName="idtable" [pattern]="'[1-9][0-9]*'" />
+                </mat-form-field>
+                <button mat-flat-button class="primary-color" type="submit">Valider</button>
+            </mat-card-content>
+        </mat-card>
+    </form>
+</ng-template>
+
+<ng-template #passwordVerification let-data>
+    <div class="back-button">
+        <mat-icon (click)="closeAllDialog()">cancel</mat-icon>
+    </div>
+    <h1 mat-dialog-title> Vérification de l'identité </h1>
+    <div mat-dialog-content>
+        <p>
+            Veuillez insérer votre mot de passe
+        </p>
+        <mat-form-field appearance="fill" autocomplete="false">
+            <mat-label> Mot de passe </mat-label>
+            <input matInput [(ngModel)]="password" type="password">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions class="mat-dialog-actions">
+        <button mat-raised-button (click)="redirectDialogValidation(data.foo, '')" class="primary-color">
+            Valider
+        </button>
+    </div>
+
+</ng-template>

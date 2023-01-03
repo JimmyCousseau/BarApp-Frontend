@@ -16,7 +16,7 @@ export class PermissionService {
 
     }
 
-    findOneBy(role: string): Observable<any>{
+    findOneBy(role: string): Observable<any> {
         return this.http.get(GlobalSettings.getURL() + "permission/" + role)
     }
 
@@ -25,7 +25,6 @@ export class PermissionService {
     }
 
     update(permissions: PermissionsRole, adminUser: User): Observable<any> {
-        console.log(permissions)
         return this.http.patch(GlobalSettings.getURL() + "permission", { permissions, adminUser })
     }
 

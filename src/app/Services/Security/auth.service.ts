@@ -15,10 +15,7 @@ export class AuthService {
   isLoggedIn = this._isLoggedIn.asObservable();
 
   private static user: User = { Username: "", Role: "", Password: "" };
-  private static permissions: PermissionsRole = {
-    role_id: 1, can_access_menu: false, can_access_orders: false, can_access_checkout: false,
-    can_access_history: false, can_access_administration_panel: false
-  }
+  private static permissions: PermissionsRole;
 
   constructor(
     private loginService: LoginService,
@@ -31,15 +28,15 @@ export class AuthService {
     const username = localStorage.getItem('log_token_username');
     return this.loginService.verifyToken(token, username)
       .subscribe((response) => {
-        if (response != null) {
+        if (response !== null) {
           AuthService.user = response.user
           AuthService.permissions = response.permissions
-
           this._isLoggedIn.next(true)
           this.router.navigate(['menu'])
         } else {
           this._isLoggedIn.next(false)
-          this.router.navigate(['login'])
+          if (this.router.url !== '/login')
+            this.router.navigate(['login'])
         }
       })
   }
@@ -75,5 +72,5 @@ export class AuthService {
   static getPermissions(): Readonly<PermissionsRole> {
     return AuthService.permissions
   }
-  
+
 }

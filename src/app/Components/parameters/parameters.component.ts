@@ -16,10 +16,7 @@ import { PermissionsRole } from '../../../app/Interfaces/PermissionsRole';
 })
 export class ParametersComponent implements OnInit {
 
-  private readonly defaultPerm: PermissionsRole = {
-    role_id: 0, can_access_menu: false, can_access_orders: false,
-    can_access_history: false, can_access_checkout: false, can_access_administration_panel: false
-  }
+  private readonly defaultPerm: PermissionsRole = { role_id: 0 }
   permFound: PermissionsRole = this.defaultPerm
 
   password: string = "";
@@ -30,7 +27,6 @@ export class ParametersComponent implements OnInit {
   currentUser: User = { Username: "", Password: "", Role: "" };
   users: any;
   rolePermissions: any;
-  actualPerm: PermissionsRole = this.defaultPerm
 
   newPasswordForm = new FormGroup({
     oldPassword: new FormControl(null, Validators.required),
@@ -60,7 +56,6 @@ export class ParametersComponent implements OnInit {
     this.newRoleForm.reset()
 
     this.roleSelected = '';
-    this.actualPerm = AuthService.getPermissions()
     this.currentUser = AuthService.getUser();
 
     this.userService.findAll().subscribe(users => {
@@ -174,7 +169,7 @@ export class ParametersComponent implements OnInit {
   }
 
   saveRolePermissions = (args: any[]): void => {
-    this.permissionService.update(args[1], this.getCurrentUser()).subscribe((data) => {
+    this.permissionService.update(JSON.parse(JSON.stringify(this.permFound)) as PermissionsRole, this.getCurrentUser()).subscribe((data) => {
       this.showResponseDialog(data, "Les permissions ont bien été changé")
     })
   }
@@ -183,13 +178,22 @@ export class ParametersComponent implements OnInit {
     func(args);
   }
 
-  getPermissionBy(role_id: number): PermissionsRole {
-    let found = this.rolePermissions.find((x: PermissionsRole) => x.role_id === role_id)
-    if (found !== undefined)
-      return found
-    found = this.defaultPerm
-    found.role_id = role_id
-    return { ...found }
+  getPermissionBy(role_id: number): any {
+    this.permFound = JSON.parse(JSON.stringify(this.rolePermissions.find((x: PermissionsRole) => x.role_id === role_id)))
+    if (this.permFound !== undefined)
+      return this.permFound
+    
+    let d = this.defaultPerm
+    d.role_id = role_id
+    this.permFound = JSON.parse(JSON.stringify(d))
+    return this.permFound
+  }
+
+  setFoundPermissions(perm: any) {
+    let temp = JSON.parse(JSON.stringify(this.permFound))
+    temp[perm] = !temp[perm]
+    this.permFound = temp
+    return temp[perm]
   }
 
   deleteRole = (args: any[]): void => {
@@ -209,12 +213,12 @@ export class ParametersComponent implements OnInit {
     falseMessage: string = "Something went wrong"
   ) {
     if (data === null)
-      this.snackBar.open(noObjectMessage);
+      this.snackBar.open(noObjectMessage, "ok", { duration: 3000 });
     else if (data === false)
-      this.snackBar.open(falseMessage);
+      this.snackBar.open(falseMessage, "ok", { duration: 3000 });
     else {
       this.ngOnInit();
-      this.snackBar.open(message);
+      this.snackBar.open(message, "ok", { duration: 3000 });
     }
   }
 
