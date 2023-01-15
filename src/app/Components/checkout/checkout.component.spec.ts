@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CheckoutService } from '../../Services/ComponentService/CheckoutService';
+import { CheckoutService } from '../../Services/ComponentService/checkout.service';
 import { AuthService } from '../../Services/Security/auth.service';
 
 import { CheckoutComponent } from './checkout.component';
@@ -13,7 +13,7 @@ describe('CheckoutComponent', () => {
       imports: [AuthService, CheckoutService],
       declarations: [CheckoutComponent]
     })
-    .compileComponents();    
+      .compileComponents();
   });
 
   it('should create', () => {

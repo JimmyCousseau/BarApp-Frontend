@@ -14,10 +14,11 @@ export class HasRoleGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    
-    const perm = JSON.parse(JSON.stringify(AuthService.getPermissions()));
+
+    const role = AuthService.getRole()
+    const perm = JSON.parse(JSON.stringify(role));
     const hasPermission = perm[route.data['permission']]
-    
+
     if (!hasPermission)
       this._snackBar.open("You don't have the permissions", "Ok", { duration: 3000 });
     return hasPermission;

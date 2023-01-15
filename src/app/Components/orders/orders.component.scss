@@ -12,16 +12,14 @@
 }
 
 .change-view-map-list {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: auto;
-    left: auto;
-    padding: 8px 10px;
-    margin-top: 49px;
-    margin-right: 49px;
-    border-radius: 7px;
-    background-color: white;
-    display: grid;
+    display: inline-flex;
+    justify-content: right;
+    width: 97%;
     cursor: pointer;
+
+    mat-icon {
+        background-color: white;
+        border-radius: 7px;
+        padding: 8px 10px;
+    }
 }

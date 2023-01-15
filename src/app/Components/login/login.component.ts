@@ -15,7 +15,11 @@ export class LoginComponent implements OnInit {
     password: new FormControl(null, Validators.required)
   })
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {
+
   }
   ngOnInit(): void {
     this.authService.verifyToken()
@@ -28,7 +32,7 @@ export class LoginComponent implements OnInit {
     this.authService
       .login(this.form.get('username')?.value, this.form.get('password')?.value)
       .subscribe((response: any) => {
-        this.router.navigate(['menu']);
+        this.router.navigate(['../parameters']);
       });
   }
 }

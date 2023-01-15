@@ -1,38 +1,40 @@
 <div class="container-global ng-star-inserted">
     <div class="container">
-        <mat-card id="sections">
-            <mat-card-title> {{currentSection ? currentSection : "Menu"}} </mat-card-title>
 
-            <mat-card-content>
-                <button mat-raised-button *ngIf="currentSection != null" (click)="backButton()" class="section-btn primary-color">
-                    <span class="btn-text">
-                        Retour
-                    </span>
-                </button>
-                <div *ngFor="let sec of sections">
-                    <button mat-raised-button *ngIf="sec.sectionParente == currentSection"
-                        (click)="changeSections(sec.sectionCourante)" class="section-btn primary-color">
+        <mat-card id="sections">
+            <mat-card-title> {{current_section ? current_section : "Menu"}} </mat-card-title>
+            <mat-grid-list cols="2" [gutterSize]="'1px'">
+                <mat-grid-tile *ngIf="current_section != null">
+                    <button mat-raised-button (click)="backButton()" class="section-btn fourth-color">
                         <span class="btn-text">
-                            {{sec.sectionCourante}}
+                            Retour
                         </span>
                     </button>
-                </div>
-            </mat-card-content>
+                </mat-grid-tile>
+                <mat-grid-tile *ngFor="let sec of getChildSections()">
+                    <button mat-raised-button *ngIf="sec.parent_section == current_section"
+                        (click)="changeSections(sec.current_section)" class="section-btn primary-color">
+                        <span class="btn-text">
+                            {{sec.current_section}}
+                        </span>
+                    </button>
+                </mat-grid-tile>
+            </mat-grid-list>
         </mat-card>
 
         <mat-card *ngIf="haveProductsInside()" id="products">
             <mat-card-title>Produits</mat-card-title>
 
-            <mat-card-content>
-                <div *ngFor="let prod of products">
-                    <button mat-raised-button *ngIf="prod.Section == currentSection" class="products-btn primary-color"
+            <mat-grid-list cols="{{getNumberColumns()}}" [gutterSize]="'1px'">
+                <mat-grid-tile *ngFor="let prod of getProductsOfSection()">
+                    <button mat-raised-button class="products-btn secundary-color"
                         (click)="incrementProductQuantity(prod)">
                         <span class="btn-text">
-                            {{prod.Intitule}}
+                            {{prod.name}}
                         </span>
                     </button>
-                </div>
-            </mat-card-content>
+                </mat-grid-tile>
+            </mat-grid-list>
         </mat-card>
     </div>
 </div>
@@ -45,21 +47,27 @@
             </mat-card-title>
 
             <mat-card-content>
-                <table class='styled-table'>
-                    <thead>
-                        <tr>
-                            <th> Intitulé </th>
-                            <th> Prix </th>
-                            <th> Quantité </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let order of orders" (click)="openActionDialog(actionDialog, order)">
-                            <td> {{order.Intitule}} </td>
-                            <td> {{order.Prix}} </td>
-                            <td> {{order.Quantite}} </td>
-                        </tr>
-                    </tbody>
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 styled-table1">
+
+                    <ng-container matColumnDef="intitule">
+                        <th mat-header-cell *matHeaderCellDef> Intitulé </th>
+                        <td mat-cell *matCellDef="let order"> {{order.name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="prix">
+                        <th mat-header-cell *matHeaderCellDef> Prix </th>
+                        <td mat-cell *matCellDef="let order"> {{order.price}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="quantite">
+                        <th mat-header-cell *matHeaderCellDef> Quantité </th>
+                        <td mat-cell *matCellDef="let order"> {{order.amount}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let order; columns: displayedColumns;"
+                        (click)="openActionDialog(actionDialog, order)"></tr>
+
                 </table>
             </mat-card-content>
         </mat-card>
@@ -76,7 +84,7 @@
             <mat-card-content>
                 <mat-card-title>
                     <span class="mat-display-2" style="color: black">
-                        {{tableID}}
+                        {{getTableID()}}
                     </span>
                 </mat-card-title>
             </mat-card-content>
@@ -109,7 +117,9 @@
                 <button mat-fab class="third-color" (click)="incrementTableNumber(9)">
                     9
                 </button>
-                <button mat-fab class="accent-color"></button>
+                <button mat-fab class="accent-color" (click)="clearTableNumber()">
+                    AC
+                </button>
                 <button mat-fab class="third-color" (click)="incrementTableNumber(0)">
                     0
                 </button>
@@ -138,8 +148,8 @@
     <div mat-dialog-content>
         <p>Quelle action voulez-vous effectuer sur ce produit ?</p>
         <p>Informations:</p>
-        <p> - Intitulé: <span class="set-text-bold">{{data.Intitule}}</span> </p>
-        <p> - Quantité: <span class="set-text-bold">{{data.Quantite}}</span> </p>
+        <p> - Intitulé: <span class="set-text-bold">{{data.name}}</span> </p>
+        <p> - Quantité: <span class="set-text-bold">{{data.amount}}</span> </p>
     </div>
     <div mat-dialog-actions class="mat-dialog-actions">
         <button mat-fab class="primary-color" (click)="incrementProductQuantity(data)">

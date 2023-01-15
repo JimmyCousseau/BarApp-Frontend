@@ -1,7 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { AppComponent } from '../../app.component';
 import { Order } from '../../Interfaces/Order';
-import { OrderService } from '../../Services/ComponentService/OrderService';
+import { OrderService } from '../../Services/ComponentService/order.service';
 import { AuthService } from '../../Services/Security/auth.service';
 
 
@@ -14,27 +17,24 @@ export class OrdersComponent implements OnInit {
 
   readonly contentOldCell: string[] = []
 
-  test: number = 40;
   ordersPending: Order[] = [];
   oldIdTable: number = -1;
-  grey: boolean = true;
   tables: number[] = [];
+  displayedColumns = ['intitule', 'quantite', 'etat']
 
   constructor(
     private orderService: OrderService,
     private dialog: MatDialog,
+    private appComponent: AppComponent,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
     this.dialog.closeAll()
-    this.orderService.findAllBy(AuthService.getUser().Username).subscribe(data => {
+    this.orderService.findAllBy(AuthService.getUser().username).subscribe(data => {
       this.ordersPending = data;
-      this.tables.splice(0, this.tables.length)
-      this.ordersPending.forEach(order => {
-        if (!this.tables.includes(order.IDTable)) {
-          this.tables.push(order.IDTable);
-        }
-      })
+      console.log(data)
+      this.tables = this.ordersPending.map(order => order.table_id).filter((v, i, s) => s.indexOf(v) === i)
     })
   }
 
@@ -44,53 +44,41 @@ export class OrdersComponent implements OnInit {
   }
 
   deleteProduct(idtable: number, intitule: string): void {
-    this.orderService.delete(AuthService.getUser().Username, idtable, intitule).subscribe(() => {
+    this.orderService.delete(AuthService.getUser().username, idtable, intitule).subscribe(() => {
       this.refresh()
     });
   }
 
   reduceQuantiteInOrder(order: Order): void {
-    if (order.Quantite > 0)
-      order.Quantite--
+    if (order.amount > 0)
+      order.amount--
   }
 
   incrementProductQuantity(order: Order): void {
-    order.Quantite++
+    order.amount++
   }
 
   orderDealtByTable(tableID: number): void {
-    this.orderService.updateEtatByTable(tableID, AuthService.getUser().Username).subscribe(() => {
-      this.refresh()
-    });
-  }
-
-  orderDealtByOrder(order: Order): void {
-    this.orderService.update(order).subscribe(() => {
-      this.refresh()
+    this.orderService.updateStateByTable(tableID, AuthService.getUser().username).subscribe(() => {
+      this.router.navigate(['../checkout', tableID])
     });
   }
 
   updateOrder = (order: Order): void => {
-    if (order.Quantite == 0)
-      this.deleteProduct(order.IDTable, order.Intitule)
+    if (order.amount == 0)
+      this.deleteProduct(order.table_id, order.name)
     else
       this.orderService.update(order).subscribe(() => {
         this.refresh()
       })
   }
 
-  openActionDialog(ref: TemplateRef<any>, foo: ((args: string) => void) | undefined, data: any[]): void {
+  openActionDialog(ref: TemplateRef<any>, foo: ((args: any) => void) | undefined, data: any): void {
     this.dialog.open(ref, { data: { foo: foo, data: { ...data } } });
   }
 
-  getOrdersByTable(tableID: number): Order[] {
-    let orders: Order[] = [];
-    this.ordersPending.forEach((order: Order) => {
-      if (order.IDTable === tableID) {
-        orders.push(order);
-      }
-    })
-    return orders;
+  getDataSource(table: number): MatTableDataSource<Order> {
+    return new MatTableDataSource<Order>(this.ordersPending.filter((order) => order.table_id === table))
   }
 
   closeAllDialog() { this.dialog.closeAll(); }
@@ -100,5 +88,7 @@ export class OrdersComponent implements OnInit {
       func(data)
     this.dialog.closeAll()
   }
+
+  setStateOrderPage() { this.appComponent.setLastStateOrderPage("map") }
 
 }

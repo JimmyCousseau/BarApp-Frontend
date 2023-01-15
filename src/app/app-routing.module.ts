@@ -10,48 +10,50 @@ import { OrdersComponent } from './Components/orders/orders.component';
 import { ParametersComponent } from './Components/parameters/parameters.component';
 import { StatisticsComponent } from './Components/statistics/statistics.component';
 import { UnknownPageComponent } from './Components/unknown-page/unknown-page.component';
+import { Permission } from './Interfaces/Role';
 import { AuthGuard } from './Services/Security/auth.guard';
 import { HasRoleGuard } from './Services/Security/has-role.guard';
 
 const routes: Routes = [
+  { path: '', component: UnknownPageComponent },
   {
     path: 'menu', component: MenuComponent,
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: "can_access_menu" }
+    data: { permission: Permission.ACCESS_MENU }
   },
   {
     path: 'orders', component: OrdersComponent,
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: "can_access_orders" }
+    data: { permission: Permission.ACCESS_ORDERS }
   },
   {
     path: 'map-orders', component: MapOrdersComponent,
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: "can_access_orders" }
+    data: { permission: Permission.ACCESS_ORDERS }
   },
   {
     path: 'parameters', component: ParametersComponent,
     canActivate: [AuthGuard]
   },
   {
-    path: 'checkout', component: CheckoutComponent,
+    path: 'checkout/:id', component: CheckoutComponent,
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: "can_access_checkout" }
+    data: { permission: Permission.ACCESS_CHECKOUT }
   },
   {
     path: 'kitchen', component: KitchenComponent,
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: "can_access_kitchen" }
+    data: { permission: Permission.ACCESS_KITCHEN }
   },
   {
     path: 'history', component: HistoryComponent,
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: "can_access_history" }
+    data: { permission: Permission.ACCESS_HISTORY }
   },
   {
     path: 'statistics', component: StatisticsComponent,
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: "can_access_statistics" }
+    data: { permission: Permission.ACCESS_STATISTICS }
   },
   { path: 'login', component: LoginComponent },
   { path: '**', component: UnknownPageComponent },

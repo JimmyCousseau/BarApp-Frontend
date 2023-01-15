@@ -35,8 +35,8 @@
                                 <mat-card-title class="mat-card-title">
                                     Ajouter un utilisateur
                                 </mat-card-title>
-                                <div style="display: grid; justify-content: space-evenly;">
 
+                                <div style="display: grid; justify-content: space-evenly;">
                                     <mat-card-content>
                                         <mat-form-field appearance="outline">
                                             <mat-label>Nom de l'utilisateur</mat-label>
@@ -51,8 +51,8 @@
                                             <mat-label>Rôle de l'utilisateur</mat-label>
                                             <mat-select [(value)]="roleSelected" formControlName="role">
                                                 <mat-option class="mat-option" *ngFor="let role of roleList"
-                                                    [value]="role.Role">
-                                                    {{role.Role}}
+                                                    [value]="role.role">
+                                                    {{role.role}}
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
@@ -69,50 +69,55 @@
 
                             <mat-divider class="mat-divider"></mat-divider>
 
-                            <mat-card-title class="mat-card-title">Modifier un utilisateur</mat-card-title>
-                            <table class="styled-table">
-                                <thead>
-                                    <tr>
-                                        <th> Nom de l'utilisateur </th>
-                                        <th> Role </th>
-                                        <th> Actions </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let user of users">
-                                        <td> {{user.Username}} </td>
-                                        <td>
+                            <mat-card-title class="mat-card-title">
+                                Modifier un utilisateur
+                            </mat-card-title>
+
+                            <div style="display: grid; justify-content: space-evenly;">
+                                <table mat-table [dataSource]="dataUsers" class="mat-elevation-z8 styled-table1">
+
+                                    <ng-container matColumnDef="name">
+                                        <th mat-header-cell *matHeaderCellDef> Nom d'utilisateur </th>
+                                        <td mat-cell *matCellDef="let user"> {{user.username}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="role">
+                                        <th mat-header-cell *matHeaderCellDef> Rôle </th>
+                                        <td mat-cell *matCellDef="let user">
                                             <mat-form-field appearance="outline">
-                                                <mat-select [(value)]="user.Role"
+                                                <mat-select [(value)]="user.role"
                                                     (selectionChange)="openDialog(passwordVerification, changeUsersRole, undefined, [user])">
                                                     <mat-option class="mat-option" *ngFor="let role of roleList"
-                                                        [value]="role.Role">
-                                                        {{role.Role}}
+                                                        [value]="role.role">
+                                                        {{role.role}}
                                                     </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </td>
-                                        <td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="actions">
+                                        <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                        <td mat-cell *matCellDef="let user">
                                             <button mat-raised-button
-                                                (click)="openDialog(passwordVerification, deleteUser, undefined, [user.Username, user.Role])">
+                                                (click)="openDialog(passwordVerification, deleteUser, undefined, [user.rsername, user.role])">
                                                 <mat-icon>delete</mat-icon>
                                             </button>
                                         </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let user; columns: displayedColumns;"></tr>
+
+                                </table>
+                            </div>
 
                             <mat-divider class="mat-divider"></mat-divider>
 
-                            <mat-card-title class="mat-card-title">Rôles</mat-card-title>
-                            <mat-card-content class="role-list-btn">
-                                <div *ngFor="let role of roleList">
-                                    <button mat-raised-button
-                                        (click)="openDialog(modifyRolePermissions, saveRolePermissions, undefined, [role.Role, getPermissionBy(role.role_id)] )">
-                                        {{role.Role}}
-                                    </button>
-                                </div>
-                            </mat-card-content>
+                            <mat-card-title class="mat-card-title">
+                                Ajouter un rôles
+                            </mat-card-title>
+
                             <mat-card-content class="mat-card-content">
                                 <div style="display: grid; justify-content: space-evenly;">
                                     <form class="mat-form" [formGroup]="newRoleForm"
@@ -128,6 +133,21 @@
                                             Ajouter le rôle
                                         </button>
                                     </form>
+                                </div>
+                            </mat-card-content>
+
+                            <mat-divider class="mat-divider"></mat-divider>
+
+                            <mat-card-title class="mat-card-title">
+                                Modifier un rôle
+                            </mat-card-title>
+
+                            <mat-card-content class="role-list-btn">
+                                <div *ngFor="let role of roleList">
+                                    <button mat-raised-button
+                                        (click)="openDialog(modifyRolePermissions, saveRolePermissions, undefined, [role.role, getPermissionBy(role.role)] )">
+                                        {{role.role}}
+                                    </button>
                                 </div>
                             </mat-card-content>
 
@@ -182,21 +202,32 @@
             </span>
         </p>
     </div>
-    <table class="styled-table">
-        <thead>
-            <tr>
-                <th> Permission </th>
-                <th> Valeur </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let d of data.args[1] | keyvalue" (click)="d.value = setFoundPermissions(d.key)">
-                <td *ngIf="d.key !== 'role_id'"> {{d.key}} </td>
-                <td *ngIf="d.value && d.key !== 'role_id'"><mat-icon>done</mat-icon></td>
-                <td *ngIf="!d.value && d.key !== 'role_id'"><mat-icon>clear</mat-icon></td>
-            </tr>
-        </tbody>
-    </table>
+
+    <div style="display: grid; justify-content: space-evenly; user-select: none;">
+        <table mat-table [dataSource]="getPermissions(data.args[1] | keyvalue)" class="mat-elevation-z8 styled-table1">
+
+            <ng-container matColumnDef="permission">
+                <th mat-header-cell *matHeaderCellDef> Permission </th>
+                <td mat-cell *matCellDef="let perm">
+                    {{perm.key}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef> Valeur </th>
+                <td mat-cell *matCellDef="let perm">
+                    <div *ngIf="perm.value"><mat-icon>done</mat-icon></div>
+                    <div *ngIf="!perm.value"><mat-icon>clear</mat-icon></div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsPermissions"></tr>
+            <tr mat-row *matRowDef="let perm; columns: displayedColumnsPermissions;"
+                (click)="perm.value = setFoundPermissions(perm.key)"></tr>
+
+        </table>
+    </div>
+
     <div mat-dialog-actions class="mat-dialog-actions">
         <button mat-fab (click)="openDialog(passwordVerification, deleteRole, undefined, data.args)"
             class="accent-color">

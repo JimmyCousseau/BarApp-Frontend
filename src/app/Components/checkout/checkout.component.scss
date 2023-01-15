@@ -1,0 +1,23 @@
+tr.mat-row:hover {
+    cursor: default;
+}
+
+.table-selector {
+    max-width: 250px;
+    width: 20vw;
+    min-width: 200px;
+}
+
+.table-btn {
+    display: inline-flex;
+    flex-wrap: wrap;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    font-size: large;
+    border-radius: 10px;
+    margin: 0px;
+    line-height: normal;
+}

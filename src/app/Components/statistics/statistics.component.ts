@@ -15,7 +15,7 @@ export class StatisticsComponent implements OnInit {
   private readonly blue_night = "#03224c"
   private readonly gold = "#D79A10"
   private readonly dayOfWeek: string[] = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
-  private readonly monthOfYear: string[] = ["Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre", "Janvier"]
+  private readonly monthOfYear: string[] = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 
   dataChart1: ChartConfiguration['data'] = { datasets: [], labels: [] }
   dataRevenuThisWeek: ChartConfiguration['data'] = { datasets: [], labels: [] }
@@ -27,6 +27,7 @@ export class StatisticsComponent implements OnInit {
 
   dataPeakInVisitHour: any
   dataPeakInVisitDay: any
+  dataPeakInVisitMonth: any
   STDProductPrice: any
   isLoaded = false
 
@@ -50,6 +51,7 @@ export class StatisticsComponent implements OnInit {
     })
     this.statisticsService.findRevenuThisYear().subscribe((data) => {
       this.dataRevenuThisYear = this.getRevenuThisYear(data)
+      this.dataPeakInVisitMonth = this.getPeakInVisitMonth(data)
     })
     this.statisticsService.findAllRevenu().subscribe((data) => {
       this.dataAllRevenu = this.getRevenuAllYears(data)
@@ -66,9 +68,9 @@ export class StatisticsComponent implements OnInit {
     let dataNbVentes: number[] = []
     let dataPrix: number[] = []
     for (let i of data) {
-      label.push(i.Horodatage + "h")
-      dataNbVentes.push(i.Quantite)
-      dataPrix.push(i.Prix)
+      label.push(i.date + "h")
+      dataNbVentes.push(i.amount)
+      dataPrix.push(i.price_sold)
     }
 
     return {
@@ -81,25 +83,30 @@ export class StatisticsComponent implements OnInit {
   }
 
   private getPeakInVisitsHour(dataChart1: any): string {
-    let data = dataChart1.sort((a: any, b: any) => b.Horodatage - a.Horodatage)
+    let data = dataChart1.sort((a: any, b: any) => b.date - a.date)
     if (data.length > 1)
-      return "à " + data[0].Horodatage + "h et à " + data[1].Horodatage + "h"
+      return "à " + data[0].date + "h et à " + data[1].date + "h"
     if (data.length > 0)
-      return " à " + data[0].Horodatage
+      return " à " + data[0].date
     return " Je n'ai pas encore été défini"
   }
 
   private getPeakInVisitsDay(dataRevenuThisWeek: any): string {
-    let data = dataRevenuThisWeek.sort((a: any, b: any) => b.Horodatage - a.Horodatage)
-    return data.length > 0 ? this.dayOfWeek[data[0].Horodatage] : ""
+    let data = dataRevenuThisWeek.sort((a: any, b: any) => b.date - a.date)
+    return data.length > 0 ? this.dayOfWeek[data[0].date] : "?"
+  }
+
+  private getPeakInVisitMonth(dataRevenuThisYear: any) {
+    let data = dataRevenuThisYear.sort((a: any, b: any) => b.date - a.date)
+    return data.length > 0 ? this.monthOfYear[data[0].date - 1] : "?"
   }
 
   private getSTDProductPrice(dataAllProductOrdered: any) {
     let price = 0
     let quantity = 0
     for (let i of dataAllProductOrdered) {
-      price += i.Prix * parseFloat(i.Quantite)
-      quantity += parseFloat(i.Quantite)
+      price += i.Prix * parseFloat(i.amount)
+      quantity += parseFloat(i.amount)
     }
     return price / quantity
   }
@@ -107,9 +114,9 @@ export class StatisticsComponent implements OnInit {
   private getClassementProducts(dataAllProductOrdered: any): ChartConfiguration['data'] {
     let data = []
     let label = []
-    for (let i of dataAllProductOrdered.sort((a: any, b: any) => b.Quantite - a.Quantite)) {
-      data.push(i.Quantite)
-      label.push(i.Intitule)
+    for (let i of dataAllProductOrdered.sort((a: any, b: any) => b.amount - a.amount)) {
+      data.push(i.amount)
+      label.push(i.name)
     }
     return {
       labels: label,
@@ -126,8 +133,8 @@ export class StatisticsComponent implements OnInit {
       let numDay = new Date(Date.now() - dayToMilliseconds(i)).getDay()
       label.push(this.dayOfWeek[numDay])
 
-      let found = dataRevenuThisWeek.find((x: any) => x.Horodatage === numDay + 1)
-      data.push(found ? found.Prix : 0)
+      let found = dataRevenuThisWeek.find((x: any) => x.date === numDay + 1)
+      data.push(found ? found.price_sold : 0)
     }
     return {
       labels: label,
@@ -143,8 +150,8 @@ export class StatisticsComponent implements OnInit {
     for (let i = 30; i >= 0; i--) {
       let numDay = new Date(Date.now() - dayToMilliseconds(i)).getDate()
       label.push(numDay + "")
-      let found = dataRevenuThisMonth.find((x: any) => x.Horodatage === numDay)
-      data.push(found ? found.Prix : 0)
+      let found = dataRevenuThisMonth.find((x: any) => x.date === numDay)
+      data.push(found ? found.price_sold : 0)
     }
     return {
       labels: label,
@@ -160,8 +167,8 @@ export class StatisticsComponent implements OnInit {
     for (let i = this.monthOfYear.length - 1; i >= 0; i--) {
       let numMonth = new Date(Date.now() - monthToMilliseconds(i)).getMonth() + 1
       label.push(numMonth + "")
-      let found = dataRevenuThisYear.find((x: any) => x.Horodatage === numMonth)
-      data.push(found ? found.Prix : 0)
+      let found = dataRevenuThisYear.find((x: any) => x.date === numMonth)
+      data.push(found ? found.price_sold : 0)
     }
 
     return {
@@ -176,8 +183,8 @@ export class StatisticsComponent implements OnInit {
     let data: number[] = []
     let label: string[] = []
     for (let i of dataAllRevenu) {
-      label.push(i.Horodatage)
-      data.push(i.Prix)
+      label.push(i.date)
+      data.push(i.price_sold)
     }
     return {
       labels: label,

@@ -18,16 +18,16 @@ export class KitchenComponent implements OnInit {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
       this.isFullScreen = true
-      let x = document.getElementById('header-container')
+      let x = document.getElementById('app-component')
       if (x)
         x.style.display = 'none'
     }
     else {
       document.exitFullscreen()
       this.isFullScreen = false
-      let x = document.getElementById('header-container')
+      let x = document.getElementById('app-component')
       if (x)
-        x.style.display = 'inline-flex';
+        x.style.display = 'blocks';
     }
   }
 

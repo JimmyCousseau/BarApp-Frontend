@@ -1,38 +1,45 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { PermissionsRole } from '../../../app/Interfaces/PermissionsRole';
-import { User } from '../../Interfaces/User';
-import { LoginService } from '../ComponentService/LoginService';
+import { Role } from '../../Interfaces/Role';
+import { UserProxy } from '../../Interfaces/User';
+import { LoginService } from '../ComponentService/login.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private _isLoggedIn = new BehaviorSubject<boolean>(false);
-  isLoggedIn = this._isLoggedIn.asObservable();
+  private readonly TOKEN = 'log_token'
+  private readonly TOKEN_USERNAME = 'log_token_username'
 
-  private static user: User = { Username: "", Role: "", Password: "" };
-  private static permissions: PermissionsRole;
+  private static user: UserProxy = { username: "", role: "" };
+  private static role: Role;
 
   constructor(
     private loginService: LoginService,
     private _snackBar: MatSnackBar,
     private router: Router,
-  ) { }
+  ) {
+  }
 
-  async verifyToken(): Promise<any> {
-    const token = localStorage.getItem('log_token');
-    const username = localStorage.getItem('log_token_username');
-    return this.loginService.verifyToken(token, username)
+  get token() {
+    return localStorage.getItem(this.TOKEN)
+  }
+
+  verifyToken() {
+    const token = this.token
+    const username = localStorage.getItem(this.TOKEN_USERNAME);
+    this.loginService.verifyToken(token, username)
       .subscribe((response) => {
         if (response !== null) {
           AuthService.user = response.user
-          AuthService.permissions = response.permissions
+          AuthService.role = response.role
           this._isLoggedIn.next(true)
-          this.router.navigate(['menu'])
+          this.router.navigate(['../parameters'])
         } else {
           this._isLoggedIn.next(false)
           if (this.router.url !== '/login')
@@ -46,11 +53,11 @@ export class AuthService {
       .pipe(
         tap((response: any) => {
           if (response != null) {
-            localStorage.setItem('log_token', response.token)
-            localStorage.setItem('log_token_username', response.user.Username)
+            localStorage.setItem(this.TOKEN, response.token)
+            localStorage.setItem(this.TOKEN_USERNAME, response.user.username)
 
             AuthService.user = response.user
-            AuthService.permissions = response.permissions
+            AuthService.role = response.role
 
             this._isLoggedIn.next(true)
           } else {
@@ -64,13 +71,16 @@ export class AuthService {
       )
   }
 
-  static getUser(): Readonly<User> {
-    AuthService.user.Password = "";
+  isLoggedIn(): Observable<boolean> {
+    return this._isLoggedIn.asObservable()
+  }
+
+  static getUser(): Readonly<UserProxy> {
     return AuthService.user;
   }
 
-  static getPermissions(): Readonly<PermissionsRole> {
-    return AuthService.permissions
+  static getRole(): Readonly<Role> {
+    return AuthService.role
   }
 
 }

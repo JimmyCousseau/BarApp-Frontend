@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Role } from './Interfaces/Role';
 import { AuthService } from './Services/Security/auth.service';
 
 
@@ -10,8 +11,12 @@ import { AuthService } from './Services/Security/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  private lastStateOrderPage: "list" | "map" = "list";
+  private role!: Role
+
   title = 'BarApp';
-  isLoggedIn = false;
+
   firstNumber: string = "0";
   secondNumber: string = "";
   openHistory: boolean = false;
@@ -27,28 +32,17 @@ export class AppComponent {
   operator: keyof typeof AppComponent.math = ' ';
 
   constructor(private _router: Router,
-    private readonly authService: AuthService,
+    public readonly authService: AuthService,
     private titleService: Title,
   ) {
     this.titleService.setTitle($localize`${this.title}`)
+    this.authService.verifyToken()
   }
 
   ngOnInit() {
-    this.authService.isLoggedIn.subscribe(data => {
-      this.isLoggedIn = data;
+    this.authService.isLoggedIn().subscribe(data => {
+      this.role = AuthService.getRole()
     });
-  }
-
-  havePermission(perm: string) {
-    return JSON.parse(JSON.stringify(AuthService.getPermissions()))[perm]
-  }
-
-  getRoutes() {
-    return this._router.url;
-  }
-
-  getRole(): string {
-    return AuthService.getUser().Role;
   }
 
   deleteNum(): void {
@@ -121,4 +115,8 @@ export class AppComponent {
     this.operator = o
     this.secondNumber = s
   }
+
+  getLastStateOrderPage(): Readonly<"map" | "list"> { return this.lastStateOrderPage }
+  setLastStateOrderPage(state: "map" | "list") { this.lastStateOrderPage = state }
+  getRole(): Readonly<Role> { return this.role }
 }

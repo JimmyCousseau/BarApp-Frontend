@@ -2,12 +2,12 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { RoleService } from '../../Services/ComponentService/RoleService';
-import { UserService } from '../../Services/ComponentService/UserService';
-import { User } from '../../Interfaces/User';
+import { RoleService } from '../../Services/ComponentService/role.service';
+import { UserService } from '../../Services/ComponentService/user.service';
+import { User, UserProxy } from '../../Interfaces/User';
 import { AuthService } from '../../Services/Security/auth.service';
-import { PermissionService } from '../../Services/ComponentService/PermissionService';
-import { PermissionsRole } from '../../../app/Interfaces/PermissionsRole';
+import { MatTableDataSource } from '@angular/material/table';
+import { Role } from '../../Interfaces/Role';
 
 @Component({
   selector: 'app-parameters',
@@ -16,16 +16,28 @@ import { PermissionsRole } from '../../../app/Interfaces/PermissionsRole';
 })
 export class ParametersComponent implements OnInit {
 
-  private readonly defaultPerm: PermissionsRole = { role_id: 0 }
-  permFound: PermissionsRole = this.defaultPerm
+  private readonly defaultPerm: Role = {
+    role: "",
+    access_administration_panel: false,
+    access_menu: false,
+    access_kitchen: false,
+    access_checkout: false,
+    access_history: false,
+    access_orders: false,
+    access_statistics: false,
+  }
+  permFound: Role = this.defaultPerm
+
+  displayedColumns = ['name', 'role', 'actions']
+  displayedColumnsPermissions = ['permission', 'value']
+  dataUsers!: MatTableDataSource<any>
 
   password: string = "";
 
   roleSelected = '';
   roleSelectedForChange = '';
   roleList: any;
-  currentUser: User = { Username: "", Password: "", Role: "" };
-  users: any;
+  currentUser: UserProxy = { username: "", role: "" };
   rolePermissions: any;
 
   newPasswordForm = new FormGroup({
@@ -47,7 +59,6 @@ export class ParametersComponent implements OnInit {
     private userService: UserService,
     private roleService: RoleService,
     private dialog: MatDialog,
-    private permissionService: PermissionService,
   ) { }
 
   ngOnInit(): void {
@@ -59,19 +70,20 @@ export class ParametersComponent implements OnInit {
     this.currentUser = AuthService.getUser();
 
     this.userService.findAll().subscribe(users => {
-      this.users = users;
-      this.users.forEach((user: User, i: number) => {
-        if (user.Username === this.currentUser.Username) {
-          this.users.splice(i, 1);
+      let u = <any>users
+      u.forEach((user: UserProxy, i: number) => {
+        if (user.username === this.currentUser.username) {
+          u.splice(i, 1)
         }
-      });
+      })
+      this.dataUsers = new MatTableDataSource(u)
     });
 
     this.roleService.findAll().subscribe(roleList => {
       this.roleList = roleList;
     })
 
-    this.permissionService.findAll().subscribe(permissions => {
+    this.roleService.findAll().subscribe(permissions => {
       this.rolePermissions = permissions;
     })
 
@@ -91,12 +103,11 @@ export class ParametersComponent implements OnInit {
     if (this.newUserForm.invalid) {
       return;
     }
-    const newUser: User = {
-      Username: this.newUserForm.get('username')?.value || '',
-      Role: this.newUserForm.get('role')?.value || '',
-      Password: 'it doesnt matter'
+    const newUser: UserProxy = {
+      username: this.newUserForm.get('username')?.value || '',
+      role: this.newUserForm.get('role')?.value || '',
     };
-    const currentUser: User = this.getCurrentUser()
+    const currentUser: UserProxy = this.getCurrentUser()
 
     this.userService.create(newUser, currentUser).subscribe((data: any) => {
       this.showResponseDialog(data, "Utilisateur enregistré !")
@@ -125,17 +136,16 @@ export class ParametersComponent implements OnInit {
   deleteUser = (args: any[]): void => {
     if (args.length < 2)
       return;
-    const userToDelete: User = {
-      Username: args[0],
-      Role: args[1],
-      Password: 'it doesnt matter'
-    };
+    const userToDelete: UserProxy = {
+      username: args[0],
+      role: args[1],
+    }
 
     const adminUser: User = this.getCurrentUser()
 
     this.userService.delete(userToDelete, adminUser).subscribe((data: any) => {
       this.showResponseDialog(data, "Utilisateur supprimé !")
-    });
+    })
   }
 
   closeAllDialog() {
@@ -153,7 +163,7 @@ export class ParametersComponent implements OnInit {
   changeUsersRole = (args: any[]): void => {
     if (args.length < 1)
       return
-    const adminUser: User = this.getCurrentUser()
+    const adminUser: UserProxy = this.getCurrentUser()
     this.userService.updateRole(args[0], adminUser).subscribe(data => {
       this.showResponseDialog(data, "Le rôle a bien été changé !")
     });
@@ -162,14 +172,14 @@ export class ParametersComponent implements OnInit {
   addRole = (): void => {
     if (this.newRoleForm.invalid)
       return
-    const adminUser: User = this.getCurrentUser()
+    const adminUser: UserProxy = this.getCurrentUser()
     this.roleService.create(this.newRoleForm.get("role")?.value || "", adminUser).subscribe(data => {
       this.showResponseDialog(data, "Le rôle a bien été ajouté")
     })
   }
 
   saveRolePermissions = (args: any[]): void => {
-    this.permissionService.update(JSON.parse(JSON.stringify(this.permFound)) as PermissionsRole, this.getCurrentUser()).subscribe((data) => {
+    this.roleService.update(JSON.parse(JSON.stringify(this.permFound)) as Role, this.getCurrentUser()).subscribe((data) => {
       this.showResponseDialog(data, "Les permissions ont bien été changé")
     })
   }
@@ -178,13 +188,15 @@ export class ParametersComponent implements OnInit {
     func(args);
   }
 
-  getPermissionBy(role_id: number): any {
-    this.permFound = JSON.parse(JSON.stringify(this.rolePermissions.find((x: PermissionsRole) => x.role_id === role_id)))
-    if (this.permFound !== undefined)
+  getPermissionBy(role: string): any {
+    this.permFound = this.rolePermissions.find((x: Role) => x.role === role)
+    if (this.permFound !== undefined) {
+      this.permFound = JSON.parse(JSON.stringify(this.permFound))
       return this.permFound
-    
+    }
+
     let d = this.defaultPerm
-    d.role_id = role_id
+    d.role = role
     this.permFound = JSON.parse(JSON.stringify(d))
     return this.permFound
   }
@@ -203,7 +215,12 @@ export class ParametersComponent implements OnInit {
   }
 
   canAccessAdminPanel() {
-    return AuthService.getPermissions().can_access_administration_panel
+    return AuthService.getRole().access_administration_panel
+  }
+
+  getPermissions(permissions: { key: string, value: string }[]) {
+    permissions = permissions.filter((elem) => elem.key !== 'role')
+    return new MatTableDataSource(permissions)
   }
 
   private showResponseDialog(
@@ -224,9 +241,9 @@ export class ParametersComponent implements OnInit {
 
   private getCurrentUser(): User {
     const currentUser = {
-      Username: this.currentUser.Username,
-      Role: this.currentUser.Role,
-      Password: this.password
+      username: this.currentUser.username,
+      role: this.currentUser.role,
+      password: this.password,
     };
     this.password = '';
     return currentUser;

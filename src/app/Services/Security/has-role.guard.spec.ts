@@ -1,20 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { User } from '../../Interfaces/User';
+import { UserProxy } from '../../Interfaces/User';
 import { AuthService } from './auth.service';
 import { HasRoleGuard } from './has-role.guard';
 
 class MockAuthService {
   isLoggedIn = true;
-  private user: User = { Username: "Jimmy", Role: "Administrateur", Password: "" }
+  private user: UserProxy = { username: "Jimmy", role: "Administrateur", Password: "" }
   login(username: string | null | undefined, password: string | null | undefined) {
     return true;
   }
   getUserUsername() {
-    return this.user.Username;
+    return this.user.username;
   }
   getUserRole() {
-    return this.user.Role;
+    return this.user.role;
   }
 }
 

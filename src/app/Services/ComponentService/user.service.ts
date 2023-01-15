@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { User } from "src/app/Interfaces/User";
-import { GlobalSettings } from "./GlobalSettings";
+import { UserProxy } from "src/app/Interfaces/User";
+import { GlobalSettings } from "./globale-settings.service";
 
 @Injectable({
     providedIn: 'root',
@@ -14,19 +14,19 @@ export class UserService {
         return this.http.get(GlobalSettings.getURL() + 'user');
     }
 
-    updatePassword(userToModify: User, password: string) {
+    updatePassword(userToModify: UserProxy, password: string) {
         return this.http.patch(GlobalSettings.getURL() + 'user/update-password/' + password, { userToModify });
     }
 
-    updateRole(userToModify: User, adminUser: User) {
+    updateRole(userToModify: UserProxy, adminUser: UserProxy) {
         return this.http.patch(GlobalSettings.getURL() + 'user/update-role', { userToModify, adminUser });
     }
 
-    create(userToCreate: User, adminUser: User) {
+    create(userToCreate: UserProxy, adminUser: UserProxy) {
         return this.http.post(GlobalSettings.getURL() + 'user', { userToCreate, adminUser });
     }
 
-    delete(userToDelete: User, adminUser: User) {
+    delete(userToDelete: UserProxy, adminUser: UserProxy) {
         return this.http.post(GlobalSettings.getURL() + 'user/delete', { userToDelete, adminUser });
     }
 

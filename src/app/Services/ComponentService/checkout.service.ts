@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { GlobalSettings } from "./GlobalSettings";
+import { GlobalSettings } from "./globale-settings.service";
 
 
 @Injectable({
@@ -15,8 +15,8 @@ export class CheckoutService {
         return this.http.get(GlobalSettings.getURL() + 'checkout');
     }
 
-    confirmPaiement(server: string, idtable: number): Observable<any> {
-        return this.http.post(GlobalSettings.getURL() + 'checkout/paid', { idtable, server });
+    confirmPaiement(waiter: string, tableID: number): Observable<any> {
+        return this.http.post(GlobalSettings.getURL() + 'checkout/paid', { table_id: tableID, waiter: waiter });
     }
 
 }

@@ -15,6 +15,11 @@
   color: white !important;
 }
 
+.fourth-color {
+  background-color: var(--gold) !important;
+  color: black !important;
+}
+
 .text-third-color {
   color: var(--royal-blue) !important;
 }
@@ -43,87 +48,80 @@ html {
 }
 
 /**************** Table design ***************/
-.styled-table {
-  min-width: fit-content;
-  border-collapse: collapse;
-  margin: auto auto;
-  font-size: 0.9em;
-  font-family: sans-serif;
-  color: #ffffff;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+.styled-table1 {
 
-  thead {
-    tr {
-      color: var(--red-bordeaux);
+  .mat-header-cell {
+    color: var(--red-bordeaux);
+    background-color: white;
+    text-align: center;
+    padding: 10px 7px;
+    font-size: 1em;
+    font-family: sans-serif;
+    font-weight: bold;
+  }
+
+  .mat-sort-header-container {
+    display: inline-flex;
+    text-align: center;
+    align-items: center;
+  }
+
+  td.mat-cell {
+    color: inherit;
+    font-size: 0.9em;
+    border-collapse: collapse;
+    font-family: sans-serif;
+    text-align: center;
+
+    .mat-select-value {
+      color: inherit !important;
+    }
+
+    .mat-form-field-appearance-outline,
+    .mat-form-field-outline {
+      color: inherit !important;
+    }
+
+    .mat-form-field-wrapper {
+      padding: 5px !important;
+    }
+
+    .mat-select-trigger {
+      color: inherit !important;
+    }
+  }
+
+  tr.mat-row:hover {
+    background-color: grey !important;
+    cursor: pointer;
+  }
+
+  tr.mat-row {
+    &:nth-of-type(odd) {
+      background-color: var(--royal-blue);
+      color: white;
+
+      .mat-select-arrow {
+        border-top-color: white !important;
+      }
+    }
+
+    &:nth-of-type(even) {
       background-color: white;
-      text-align: center;
-    }
-  }
+      color: black;
 
-  th {
-    padding: 10px 7px;
-  }
-
-  td {
-    padding: 10px 7px;
-  }
-
-  tbody {
-    tr:hover {
-      background-color: grey !important;
-      color: black !important;
-    }
-
-    tr {
-      cursor: pointer;
-      text-align: center;
-      border-bottom: 1px solid #dddddd;
-
-      &:nth-of-type(odd) {
-        background-color: var(--royal-blue);
-        color: white;
-
-        .mat-form-field-outline {
-          color: inherit;
-        }
-
-        .mat-select-arrow {
-          color: inherit;
-        }
-
-        .mat-select-value {
-          color: inherit;
-        }
-      }
-
-      &:nth-of-type(even) {
-        background-color: white;
-        color: black;
-
-        .mat-form-field-outline {
-          color: inherit;
-        }
-
-        .mat-select-arrow {
-          color: inherit;
-        }
-
-        .mat-select-value {
-          color: inherit;
-        }
-      }
-
-      &:last-of-type {
-        border-bottom: 2px solid var(--red-bordeaux);
+      .mat-select-arrow {
+        border-top-color: black !important;
       }
     }
 
-    tr.active-row {
-      font-weight: bold;
-      color: var(--red-bordeaux);
-    }
+  }
+
+  &:last-of-type {
+    border-bottom: 2px solid var(--red-bordeaux);
   }
 }
+
 
 /**************** Global containers design ***************/
 
@@ -139,6 +137,7 @@ html {
     width: inherit;
   }
 }
+
 
 /**************** Mat card design ***************/
 

@@ -1,5 +1,6 @@
 export interface Products {
-    Intitule: string;
-    Prix: number;
-    Section: string;
+    name: string;
+    price_sold: number;
+    price_bought: number;
+    section: string;
 }

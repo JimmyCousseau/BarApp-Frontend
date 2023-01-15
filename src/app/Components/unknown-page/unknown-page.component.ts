@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from '../../Services/Security/auth.service';
 
 @Component({
@@ -9,10 +8,8 @@ import { AuthService } from '../../Services/Security/auth.service';
 })
 export class UnknownPageComponent implements OnInit {
 
-  private timer: any
 
   constructor(
-    private router: Router,
     private authService: AuthService,
   ) {
 

@@ -1,9 +1,16 @@
 export interface Order {
-    Horodatage: Date;
-    Intitule: string;
-    IDCommande: number;
-    Serveur: string;
-    IDTable: number;
-    Quantite: number;
-    Etat: string;
+    id?: number;
+    date: Date;
+    name: string;
+    waiter: string;
+    table_id: number;
+    amount: number;
+    state: string;
+    price?: number;
+}
+
+export interface MenuOrder {
+    name: string
+    amount: number
+    price: number
 }

@@ -1,5 +1,8 @@
-export interface User {
-    Username: string;
-    Password: string;
-    Role: string;
+export interface UserProxy {
+    username: string;
+    role: string;
+}
+
+export interface User extends UserProxy {
+    password: string;
 }

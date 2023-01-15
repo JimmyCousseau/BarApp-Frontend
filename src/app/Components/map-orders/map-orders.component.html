@@ -1,9 +1,9 @@
-<div class="change-view-map-list" routerLink="../orders">
+<div class="change-view-map-list" routerLink="../orders" (click)="setStateOrderPage()">
     <mat-icon>list</mat-icon>
 </div>
 
-<mat-card *ngIf="!editionMod">
-    <div style="display: inline-flex; justify-content:space-between; width: 100%;">
+<mat-card *ngIf="!editionMod && getMapWidth() != 0">
+    <div class="title-mat-card">
         <mat-card-title>
             La carte
         </mat-card-title>
@@ -13,28 +13,37 @@
     </div>
     <mat-grid-list cols={{getMapWidth()}} class="map-grid" [gutterSize]="'0px'">
         <mat-grid-tile *ngFor="let b of getMapBlocks()">
-            <img *ngIf="b.table === -1" src="{{getUrlImg(b.img)}}" alt="" type="file">
-            <img *ngIf="b.table !== -1" src="{{getUrlImg(b.img)}}" alt="" style="cursor: pointer"
+            <img *ngIf="b.table === -1" src="{{getUrlImg(b.img)}}" alt="" draggable="false">
+
+            <div *ngIf="b.table !== -1" class="interactive-block"
                 (click)="openDialog(informationTable, undefined, b.table.toString())">
+
+                <img src="{{getUrlImg(b.img)}}" alt="" draggable="false">
+                <div class="badge-tile">
+                    <span mat-mini-fab><mat-icon>people</mat-icon></span>
+                    <span mat-mini-fab>{{b.table}}</span>
+                </div>
+            </div>
         </mat-grid-tile>
     </mat-grid-list>
 </mat-card>
 
 <div class="container-global" *ngIf="editionMod">
     <div class="container">
-        <mat-card>
-            <div style="display: inline-flex; justify-content:space-between; width: 100%;">
+        <mat-card class="palette">
+            <div class="title-mat-card">
                 <mat-card-title>Palette</mat-card-title>
                 <div>
                     <button mat-flat-button class="primary-color" (click)="addColumn()">Ajouter une colonne</button>
                     <button mat-flat-button class="primary-color" (click)="addRow()">Ajouter une ligne</button>
                 </div>
             </div>
-            <mat-grid-list cols="5" class="map-grid" [gutterSize]="'0px'">
-                <mat-grid-tile *ngFor="let d of getDecors()" style="cursor: pointer">
-                    <img *ngIf="d.table === -1" src="{{getUrlImg(d.img)}}" alt="" (click)="setPencil(d.img)">
+            <mat-grid-list cols="5" [gutterSize]="'0px'">
+                <mat-grid-tile *ngFor="let d of getDecors()">
+                    <img *ngIf="d.table === -1" src="{{getUrlImg(d.img)}}" alt="" (click)="setPencil(d.img)"
+                        draggable="false">
                     <img *ngIf="d.table === 1" src="{{getUrlImg(d.img)}}" alt=""
-                        (click)="openDialog(setPencilTableID, setPencil, d.img)">
+                        (click)="openDialog(setPencilTableID, setPencil, d.img)" draggable="false">
                 </mat-grid-tile>
             </mat-grid-list>
         </mat-card>
@@ -55,11 +64,29 @@
     </div>
     <mat-grid-list cols={{getMapWidth()}} (mouseleave)="hover = -1" [gutterSize]="'0px'">
         <mat-grid-tile *ngFor="let b of getMapBlocks(); let i = index" (click)="setCell(i)" (mouseenter)="hover = i"
-            class="cell-mod">
+            (dragover)="setCell(i)" class="cell-mod">
 
-            <img *ngIf="hover === i" src="{{getUrlImg(getPencil().img)}}" alt="">
-            <img *ngIf="hover !== i && b.table === -1" src="{{getUrlImg(b.img)}}" alt="">
-            <img *ngIf="hover !== i && b.table !== -1" src="{{getUrlImg(b.img)}}" alt="" style="cursor: pointer">
+            <div *ngIf="hover === i" class="interactive-block">
+                <img *ngIf="getPencil().table === -1" src="{{getUrlImg(getPencil().img)}}" alt="">
+
+                <div *ngIf="getPencil().table !== -1">
+                    <img src="{{getUrlImg(getPencil().img)}}" alt="">
+                    <div class="badge-tile">
+                        <span mat-mini-fab>{{getPencil().table}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="hover !== i" class="interactive-block">
+                <img *ngIf="b.table === -1" src="{{getUrlImg(b.img)}}" alt="">
+
+                <div *ngIf="b.table !== -1">
+                    <img src="{{getUrlImg(b.img)}}" alt="">
+                    <div class="badge-tile">
+                        <span mat-mini-fab>{{b.table}}</span>
+                    </div>
+                </div>
+            </div>
 
         </mat-grid-tile>
     </mat-grid-list>

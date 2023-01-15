@@ -2,9 +2,10 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { User } from '../../Interfaces/User';
+import { User, UserProxy } from '../../Interfaces/User';
 import { MapOrdersService } from '../../Services/ComponentService/map-orders.service';
 import { AuthService } from '../../Services/Security/auth.service';
+import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-map-orders',
@@ -38,23 +39,23 @@ export class MapOrdersComponent implements OnInit {
 
   private map = {
     width: 0,
-    blocks: [{ img: "", table: -1 }],
+    blocks: [{ ...this.defaultBlock }],
   }
 
   constructor(
     private mapService: MapOrdersService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private appComponent: AppComponent,
   ) {
   }
 
   ngOnInit(): void {
     this.editionMod = false
     this.mapService.getMap().subscribe((data: any) => {
-      if (data !== null) {
-        this.map.width = data.width
-        this.map.blocks = data.blocks
-      }
+      this.map.width = 1
+      if (data !== null)
+        this.map = data
     })
   }
 
@@ -71,40 +72,39 @@ export class MapOrdersComponent implements OnInit {
   }
 
   openDialog(ref: TemplateRef<any>, foo: ((args: any) => void) | undefined, data: string): void {
-    console.log(data)
     this.dialog.open(ref, { data: { foo: foo, data: data } });
   }
 
   redirectDialogValidation(func: ((args: string) => void), data: string): void {
-    console.log(data)
     if (func !== undefined)
       func(data)
-    this.dialog.closeAll()
   }
 
   validate = (): void => {
     const currentUser = this.getCurrentUser()
     this.mapService.upsertMap(JSON.stringify(this.map), currentUser).subscribe((data) => {
       this.showResponseDialog(data, "La carte a bien été enregistré")
-      if (data !== null)
+      if (data !== null) {
         this.editionMod = false
+        this.dialog.closeAll()
+      }
     })
   }
 
   setPencil = (pencil: any) => {
-    console.log(pencil)
     if (!this.decors.some(decor => decor.img === pencil)) {
-      this.pencil.img = ""
+      this.pencil = { ...this.defaultBlock }
       return
     }
     this.pencil.table = -1
+
     let formValue = this.setBlockIDControl?.value.idtable
-    if (formValue !== undefined && formValue !== null) {
-      let table = parseInt(formValue)
-      this.pencil.table = table
-    }
+    if (!this.setBlockIDControl.invalid && formValue !== undefined && formValue !== null)
+      this.pencil.table = parseInt(formValue)
+
     this.setBlockIDControl.reset()
     this.pencil.img = pencil
+    this.dialog.closeAll()
   }
 
   setCell(cellID: number) {
@@ -122,6 +122,8 @@ export class MapOrdersComponent implements OnInit {
 
   getMapWidth(): Readonly<number> { return this.map.width }
   getMapBlocks() { return this.map.blocks }
+
+  setStateOrderPage() { this.appComponent.setLastStateOrderPage("list") }
 
   private showResponseDialog(
     data: any,
@@ -142,9 +144,9 @@ export class MapOrdersComponent implements OnInit {
   private getCurrentUser(): User {
     const user = AuthService.getUser()
     const currentUser = {
-      Username: user.Username,
-      Role: user.Role,
-      Password: this.password
+      username: user.username,
+      role: user.role,
+      password: this.password
     };
     this.password = '';
     return currentUser;

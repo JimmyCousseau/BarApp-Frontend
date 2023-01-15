@@ -6,53 +6,30 @@
 }
 
 #sections {
+    max-width: 250px;
     width: 20vw;
     min-width: 200px;
+}
 
-    .mat-card-content {
-        justify-content: initial;
-
-        .section-btn {
-            height: fit-content;
-            width: 100%;
-            font-size: large;
-            box-shadow: 1px 1px black;
-            margin: 1px;
-            border-radius: 6px;
-        }
-    }
+.section-btn,
+.products-btn {
+    display: inline-flex;
+    flex-wrap: wrap;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    font-size: large;
+    border-radius: 6px;
+    margin: 0px;
+    line-height: normal;
 }
 
 #products {
     max-width: 500px;
-    width: 50vw;
-    min-width: 25vh;
-
-    .mat-card-content {
-        display: inline-flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-
-        .mat-raised-button {
-            line-height: normal;
-            padding-top: 3px;
-            padding-bottom: 3px;
-        }
-
-        .products-btn {
-            display: inline-flex;
-            flex-wrap: wrap;
-            height: fit-content;
-            min-height: fit-content;
-            width: 120px;
-            justify-content: space-evenly;
-            align-content: center;
-            font-size: large;
-            margin: 1px;
-            box-shadow: 1px 1px black;
-            border-radius: 6px;
-        }
-    }
+    width: 40vw;
+    min-width: 200px;
 }
 
 #set-table-id {

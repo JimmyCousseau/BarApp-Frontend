@@ -1,21 +1,68 @@
 .change-view-map-list {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: auto;
-    left: auto;
-    padding: 8px 10px;
-    margin-top: 49px;
-    margin-right: 49px;
-    border-radius: 7px;
-    background-color: white;
-    display: grid;
+    display: inline-flex;
+    justify-content: right;
+    width: 97%;
     cursor: pointer;
+
+    mat-icon {
+        background-color: white;
+        border-radius: 7px;
+        padding: 8px 10px;
+    }
+}
+
+.title-mat-card {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.map-grid {
+
+    img {
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        position: absolute;
+    }
+}
+
+.interactive-block {
+    cursor: pointer;
+    height: inherit;
+    width: 100%;
+
+    img {
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        position: absolute;
+    }
+
+    .badge-tile {
+        z-index: 4;
+        height: 100%;
+        width: 100%;
+        justify-content: right;
+        display: inline-flex;
+
+        span {
+            background-color: var(--red-bordeaux);
+            color: white;
+            z-index: 10;
+            border-radius: 50%;
+            height: 24px;
+            width: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-weight: bold;
+        }
+    }
 }
 
 .mod-map {
-    user-select: none;
-
     .title-mod-map {
         display: inline-flex;
         justify-content: space-between;
@@ -32,29 +79,18 @@
     }
 }
 
-.map-grid img {
-    width: 100%;
-    height: 100%;
-}
-
-
 .palette {
     width: fit-content;
     min-width: 400px;
 
     mat-grid-tile {
         cursor: pointer;
-    }
-}
-
-mat-grid-tile {
-    img {
         z-index: 1;
-    }
+        position: absolute;
 
-    h1 {
-        z-index: 2;
-        font-size: 50px;
-        font-weight: bold;
+        img {
+            height: inherit;
+            width: inherit;
+        }
     }
 }

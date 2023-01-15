@@ -3,19 +3,19 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../Services/Security/auth.service';
 import { LoginComponent } from '../../Components/login/login.component';
-import { User } from '../../Interfaces/User';
+import { UserProxy } from '../../Interfaces/User';
 
 class MockAuthService {
   isLoggedIn = true;
-  private user: User = { Username: "Jimmy", Role: "Administrateur", Password: "" }
+  private user: UserProxy = { username: "Jimmy", role: "Administrateur", Password: "" }
   login(username: string | null | undefined, password: string | null | undefined): boolean {
     return true;
   }
   getUserUsername(): string {
-    return this.user.Username;
+    return this.user.username;
   }
   getUserRole(): string {
-    return this.user.Role;
+    return this.user.role;
   }
 }
 

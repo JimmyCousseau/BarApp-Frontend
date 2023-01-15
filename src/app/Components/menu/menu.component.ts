@@ -1,10 +1,14 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MenuService } from '../../Services/ComponentService/MenuService';
+import { MenuService } from '../../Services/ComponentService/menu.service';
 import { Products } from '../../Interfaces/Products';
 import { Sections } from '../../Interfaces/Sections';
-import { SendOrder } from '../../Interfaces/SendOrder';
 import { AuthService } from '../../Services/Security/auth.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { MenuOrder, Order } from 'src/app/Interfaces/Order';
+
+
 
 
 @Component({
@@ -13,134 +17,116 @@ import { AuthService } from '../../Services/Security/auth.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-  products: Products[] = [];
-  sections: Sections[] = [];
-  currentSection: string = "";
-  orders: SendOrder[] = [];
-  tableID: number = 0;
-  currentUsername: string = "";
+  products: Products[] = []
+  sections: Sections[] = []
+  current_section: string | null = null
+  private orders!: MenuOrder[]
+  private tableID!: number
+  currentUsername: string = ""
+
+  dataSource!: MatTableDataSource<MenuOrder>
+  displayedColumns = ['intitule', 'prix', 'quantite']
 
   constructor(
     private menuService: MenuService,
     private dialog: MatDialog,
-  ) {}
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
     this.menuService.findAllSections().subscribe(data => {
       this.sections = data;
-      this.currentSection = this.sections[0].sectionParente;
     });
     this.menuService.findAllProducts().subscribe(data => {
       this.products = data;
     });
     this.menuService.sharedOrder.subscribe(order => this.orders = order);
-    this.tableID = 1;
-    this.currentUsername = AuthService.getUser().Username;
-  }
-
-  reset(): void {
-    this.ngOnInit()
-    this.orders = []
-    this.menuService.resetSharedOrder()
-    this.tableID = 1
+    this.menuService.sharedSection.subscribe(current_section => this.current_section = current_section)
+    this.menuService.sharedTableID.subscribe(id => this.tableID = id)
+    this.refreshDataSource()
+    this.currentUsername = AuthService.getUser().username;
   }
 
   changeSections(section: string): void {
-    this.currentSection = section;
+    this.menuService.changeSection(section)
   }
 
   backButton(): void {
-    this.sections.forEach(section => {
-      if (section.sectionCourante == this.currentSection) {
-        this.currentSection = section.sectionParente;
-      }
-    })
-  }
-
-  haveSectionChild(): boolean {
-    let having: boolean = false;
-    this.sections.forEach(section => {
-      if (section.sectionParente == this.currentSection) {
-        having = true;
-      }
-    });
-    return having;
+    let found = this.sections.find((section) => section.current_section === this.current_section)
+    this.current_section = found !== undefined ? found.parent_section : ""
   }
 
   haveProductsInside(): boolean {
-    let having: boolean = false;
-    this.products.forEach(product => {
-      if (product.Section == this.currentSection) {
-        having = true;
-      }
-    });
-    return having;
+    return this.products.some((product) => product.section === this.current_section)
   }
 
   isOrderContainItems(): boolean {
-    if (this.orders.length === 0) {
-      return false;
-    }
-    return true;
+    return this.orders.length !== 0
   }
 
-  incrementProductQuantity(product: Products | SendOrder): void {
-    let hasAdded = false;
-    this.orders.forEach(order => {
-      if (order.Intitule == product.Intitule) {
-        order.Quantite++;
-        hasAdded = true;
-      }
-    });
-    if (!hasAdded) {
-      this.orders.push({ Intitule: product.Intitule, Prix: product.Prix, Quantite: 1 });
-    }
+  incrementProductQuantity(product: Products): void {
+    let quantite = this.orders.find((order: any) => order.name === product.name)
+    quantite !== undefined
+      ? quantite.amount++
+      : this.orders.push({ name: product.name, price: product.price_sold === undefined ? 0 : product.price_sold, amount: 1 })
+    this.refreshDataSource()
   }
 
-  reduceQuantiteInOrder(product: SendOrder): void {
+  private refreshDataSource(): void { this.dataSource = new MatTableDataSource<MenuOrder>(this.orders) }
+
+  reduceQuantiteInOrder(product: Order): void {
     this.orders.forEach((order, index) => {
-      if (order.Intitule == product.Intitule) {
-        if (order.Quantite == 1) {
+      if (order.name === product.name) {
+        if (order.amount === 1) {
           this.orders.splice(index, 1);
           this.dialog.closeAll();
         }
         else
-          order.Quantite--;
+          order.amount--;
       }
     })
   }
 
-  validateDeleteProductInOrder(product: SendOrder): void {
+  validateDeleteProductInOrder(product: Order): void {
     this.orders.forEach((order, index) => {
-      if (order.Intitule == product.Intitule) this.orders.splice(index, 1);
+      if (order.name === product.name) this.orders.splice(index, 1);
     })
     this.dialog.closeAll();
     this.ngOnInit();
   }
 
   sendOrderToPrepare(): void {
-    let tempOrder = this.orders;
-    tempOrder.forEach((order) => {
+    this.orders.forEach((order) => {
       this.menuService.sendOrderToPrepare(this.currentUsername, this.tableID, order).subscribe(() => {
-        this.reset();
+        this.router.navigate(['../orders'])
+        this.menuService.resetShared()
       });
     })
   }
 
-  openActionDialog(ref: TemplateRef<any>, data: SendOrder) {
+  openActionDialog(ref: TemplateRef<any>, data: Order) {
     this.dialog.open(ref, { data: data });
   }
 
-  incrementTableNumber(nb: number) {
-    let str = this.tableID.toString() + nb.toString();
-    this.tableID = Number(str);
-    if (this.tableID > 255)
-      this.tableID = 255;
+  incrementTableNumber(table: number) {
+    let nb = Number(this.tableID.toString() + table.toString())
+    this.menuService.changeTableID(nb > 255 ? 255 : nb)
   }
 
-  decrementTableNumber() {
-    this.tableID = Math.floor(this.tableID / 10); 
+  decrementTableNumber() { this.menuService.changeTableID(Math.floor(this.tableID / 10)) }
+  clearTableNumber() { this.menuService.changeTableID(0) }
+  getTableID(): Readonly<number> { return this.tableID }
+  getOrders(): Readonly<MenuOrder[]> { return this.orders }
+
+  getProductsOfSection(): Readonly<Products[]> { return this.products.filter((product) => product.section === this.current_section) }
+
+  getChildSections(): Readonly<Sections[]> { return this.sections.filter((section) => section.parent_section === this.current_section) }
+
+  getNumberColumns() {
+    let obj = document.getElementById('products')
+    return obj !== null ? obj.clientWidth / 120 : 2
   }
+
 
   closeAllDialog() {
     this.dialog.closeAll();

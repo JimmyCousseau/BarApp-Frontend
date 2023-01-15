@@ -18,6 +18,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { NgChartsModule } from 'ng2-charts';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 import { MatDividerModule } from '@angular/material/divider';
 import { AppComponent } from './app.component';
@@ -74,6 +78,10 @@ registerLocaleData(localeFr, 'fr-CA');
     MatDividerModule,
     MatGridListModule,
     NgChartsModule,
+    MatBadgeModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
   ],
   bootstrap: [AppComponent],
 })
