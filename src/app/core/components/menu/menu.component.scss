@@ -1,0 +1,49 @@
+#sections {
+    max-width: 250px;
+    width: 20vw;
+    min-width: 200px;
+}
+
+#products {
+    max-width: 500px;
+    width: 40vw;
+    min-width: 200px;
+}
+
+.btn {
+    display: inline-flex;
+    flex-wrap: wrap;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    font-size: large;
+    border-radius: 6px;
+    margin: 0px;
+    line-height: normal;
+
+    span {
+        white-space: normal;
+        vertical-align: baseline;
+        line-height: normal;
+        justify-content: center;
+    }
+}
+
+#set-table-id {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%/3, max(64px, 100%/5)), 1fr));
+}
+
+.change-view-menu-mod {
+    display: inline-flex;
+    justify-content: right;
+    width: 97%;
+
+    mat-icon {
+        cursor: pointer;
+        background-color: white;
+        border-radius: 7px;
+        padding: 8px 10px;
+    }
+}

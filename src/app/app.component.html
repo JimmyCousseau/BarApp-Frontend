@@ -1,29 +1,28 @@
-<div id="app-component">
-    <div class="header-container" *ngIf="authService.isLoggedIn() | async">
+<div id="app-component" *ngIf="mayDisplayHeader()">
+    <div class="header-container" *ngIf="isLoggedIn() | async">
         <mat-button-toggle-group class="mat-button-toggle-group">
-            <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../menu"
-                *ngIf="getRole().access_menu">
+            <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../menu" *ngIf="role.access_menu">
                 Menu
             </mat-button-toggle>
 
             <mat-button-toggle mat-raised-button class="navigate-btn"
                 routerLink="{{getLastStateOrderPage() === 'list' ? '../orders' : '../map-orders'}}"
-                *ngIf="getRole().access_orders">
+                *ngIf="role.access_orders">
                 Commandes
             </mat-button-toggle>
 
             <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../checkout/0"
-                *ngIf="getRole().access_checkout">
+                *ngIf="role.access_checkout">
                 Caisse
             </mat-button-toggle>
 
             <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../kitchen"
-                *ngIf="getRole().access_kitchen">
+                *ngIf="role.access_kitchen">
                 Cuisine
             </mat-button-toggle>
 
             <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../history"
-                *ngIf="getRole().access_history">
+                *ngIf="role.access_history">
                 Historique
             </mat-button-toggle>
 
@@ -34,15 +33,21 @@
             </mat-button-toggle>
 
             <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../statistics"
-                *ngIf="getRole().access_statistics">
+                *ngIf="role.access_statistics">
                 <mat-icon>
                     trending_up
+                </mat-icon>
+            </mat-button-toggle>
+
+            <mat-button-toggle mat-raised-button class="navigate-btn" (click)="openDialog(exitDialog)">
+                <mat-icon>
+                    exit_to_app
                 </mat-icon>
             </mat-button-toggle>
         </mat-button-toggle-group>
     </div>
 
-    <mat-sidenav-container class="calculator" *ngIf="authService.isLoggedIn() | async">
+    <mat-sidenav-container class="calculator" *ngIf="isLoggedIn() | async">
         <mat-sidenav #calc mode="side" class="calc-sidenav">
             <mat-card>
                 <mat-card-title>
@@ -97,5 +102,10 @@
         </mat-sidenav>
     </mat-sidenav-container>
 </div>
+
+<ng-template #exitDialog>
+    <app-are-you-sure-template [dataSource]="{foo: disconnect, data: null}"
+        message="Vous êtes sur le point de vous déconnecter, êtes-vous sûr ?"></app-are-you-sure-template>
+</ng-template>
 
 <router-outlet></router-outlet>

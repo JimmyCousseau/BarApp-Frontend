@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
-import { Role } from './Interfaces/Role';
-import { AuthService } from './Services/Security/auth.service';
+import { Component, TemplateRef } from '@angular/core'
+import { MatDialog } from '@angular/material/dialog'
+import { Title } from '@angular/platform-browser'
+import { Router } from '@angular/router'
+import { Observable } from 'rxjs'
+import { Role } from './core/Interfaces/Role'
+import { AuthService } from './core/authentification/auth.service'
 
 
 @Component({
@@ -12,14 +14,14 @@ import { AuthService } from './Services/Security/auth.service';
 })
 export class AppComponent {
 
-  private lastStateOrderPage: "list" | "map" = "list";
-  private role!: Role
+  private lastStateOrderPage: "list" | "map" = "list"
 
-  title = 'BarApp';
+  title = 'BarApp'
 
-  firstNumber: string = "0";
-  secondNumber: string = "";
-  openHistory: boolean = false;
+  role!: Role
+  firstNumber: string = "0"
+  secondNumber: string = ""
+  openHistory: boolean = false
   calcHistory: { result: string, f: string, o: keyof typeof AppComponent.math, s: string }[] = []
   private static math = {
     ' ': function (x: number, y: number) { return x },
@@ -29,11 +31,13 @@ export class AppComponent {
     '-': function (x: number, y: number) { return (x - y).toPrecision(4) },
     '%': function (x: number, y: number) { return (x % y).toPrecision(4) },
   }
-  operator: keyof typeof AppComponent.math = ' ';
+  operator: keyof typeof AppComponent.math = ' '
 
-  constructor(private _router: Router,
-    public readonly authService: AuthService,
+  constructor(
+    private authService: AuthService,
     private titleService: Title,
+    private dialog: MatDialog,
+    private router: Router,
   ) {
     this.titleService.setTitle($localize`${this.title}`)
     this.authService.verifyToken()
@@ -41,8 +45,8 @@ export class AppComponent {
 
   ngOnInit() {
     this.authService.isLoggedIn().subscribe(data => {
-      this.role = AuthService.getRole()
-    });
+      this.role = this.authService.getRole()
+    })
   }
 
   deleteNum(): void {
@@ -118,5 +122,19 @@ export class AppComponent {
 
   getLastStateOrderPage(): Readonly<"map" | "list"> { return this.lastStateOrderPage }
   setLastStateOrderPage(state: "map" | "list") { this.lastStateOrderPage = state }
-  getRole(): Readonly<Role> { return this.role }
+
+  isLoggedIn(): Observable<boolean> { return this.authService.isLoggedIn() }
+
+  mayDisplayHeader(): boolean {
+    return !this.router.isActive('', { paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored' })
+  }
+
+  openDialog(ref: TemplateRef<any>): void {
+    this.dialog.open(ref)
+  }
+
+  disconnect = (): void => {
+    this.authService.disconnect()
+    this.dialog.closeAll()
+  }
 }

@@ -1,0 +1,18 @@
+<app-base-template></app-base-template>
+
+<form (ngSubmit)="redirectDialogValidation(dataSource.foo, dataSource.data)" [formGroup]="setBlockIDControl"
+    autocomplete="off" class="form-group">
+    <mat-card class="mat-card">
+        <mat-card-title class="mat-card-title">
+            Veuillez saisir le numéro de la table
+        </mat-card-title>
+
+        <mat-card-content class="mat-card-content">
+            <mat-form-field appearance="outline">
+                <mat-label>Identifiant de la table</mat-label>
+                <input matInput placeholder="Ex. 145" formControlName="idtable" [pattern]="'[1-9][0-9]*'" />
+            </mat-form-field>
+            <button mat-flat-button class="primary-color" type="submit">Valider</button>
+        </mat-card-content>
+    </mat-card>
+</form>

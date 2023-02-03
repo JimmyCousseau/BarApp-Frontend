@@ -1,5 +1,7 @@
 @import './theme.scss';
 
+$images-root: "./assets/images/";
+
 .primary-color {
   background-color: var(--red-bordeaux) !important;
   color: white !important;
@@ -41,7 +43,7 @@ body {
 
 html {
   caret-color: rgba(0, 0, 0, 0);
-  background-image: url("./assets/images/background-temp.jpeg");
+  background-image: url($images-root + "background.png");
   background-repeat: repeat-y;
   background-size: cover;
   background-color: rgb(24, 24, 24);
@@ -72,6 +74,9 @@ html {
     border-collapse: collapse;
     font-family: sans-serif;
     text-align: center;
+    padding: 0px 10px;
+    max-width: 200px;
+    word-wrap: break-word;
 
     .mat-select-value {
       color: inherit !important;
@@ -255,8 +260,12 @@ h2 {
   margin: 2vh 0 6vh 0;
 }
 
-/**************** Other global classes desing ***************/
+/**************** Lazy loading image ***************/
 
-.set-text-bold {
-  font-weight: bold;
+.lazy-loading {
+  background-image: url($images-root + "Loadingsome.gif");
+  display: inline-flex;
+  width: 200px;
+  height: 200px;
+  background-size: cover;
 }

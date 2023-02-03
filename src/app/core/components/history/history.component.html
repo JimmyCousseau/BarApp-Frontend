@@ -1,0 +1,76 @@
+<div class="container-global">
+    <div class="container">
+        <div class="mat-card-container">
+            <mat-card>
+                <mat-card-title i18n>Historique</mat-card-title>
+                <mat-card-subtitle i18n>
+                    Retrouvez ici l'historique des commandes. La date indique la première fois que
+                    la commande a été prise.
+                    <br>
+                    Pour avoir plus d'informations, veuillez cliquer sur la cellule correspondante
+                    <br>
+                    Il est possible de rechercher un élément de l'historique par rapport au serveur, date, intitule du
+                    produit, état, etc..
+                </mat-card-subtitle>
+                <mat-card-content>
+
+                    <mat-form-field>
+                        <mat-label> Rechercher </mat-label>
+                        <input matInput type="text" placeholder="Rechercher" search #input
+                            (keyup)="applyFilter($event)" />
+                    </mat-form-field>
+
+                    <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event)"
+                        class="mat-elevation-z8 styled-table1">
+
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header="date"> Date </th>
+                            <td mat-cell *matCellDef="let element"> {{element.date | date:'YYYY-MM-dd, HH:mm:ss'}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="table">
+                            <th mat-header-cell mat-sort-header="table" *matHeaderCellDef> Table </th>
+                            <td mat-cell *matCellDef="let element"> {{element.table_id}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="waiter">
+                            <th mat-header-cell mat-sort-header="waiter" *matHeaderCellDef> Serveur </th>
+                            <td mat-cell *matCellDef="let element"> {{element.waiter}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell mat-sort-header="name" *matHeaderCellDef> Intitulé </th>
+                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell mat-sort-header="amount" *matHeaderCellDef> Quantité </th>
+                            <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row (click)="openDialog(actionDialog, null, row)"
+                            *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                        <!-- SHOWS WHEN DATA DOES NOT EXIST (SEARCH) -->
+                        <tr *matNoDataRow>
+                            <td class="mat-cell" colspan="5">
+                                Aucun élément n'existe pour "{{input.value}}"
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </mat-card-content>
+                <mat-paginator [pageSizeOptions]="[10, 15, 25, 50]" showFirstLastButtons
+                    aria-label="Select page of history content">
+                </mat-paginator>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<ng-template #actionDialog let-data>
+    <app-history-template [dataSource]="data"></app-history-template>
+</ng-template>
