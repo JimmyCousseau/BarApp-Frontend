@@ -1,0 +1,35 @@
+<header-dialog></header-dialog>
+<h1 mat-dialog-title> Modification du produit </h1>
+<div mat-dialog-content>
+    <p>Quelle action voulez-vous effectuer sur ce produit ?</p>
+    <p>Informations:</p>
+    <p> - Intitulé: <b>{{dataSource.data.name}}</b> </p>
+    <p> - Quantité: <b>{{dataSource.data.amount}}</b> </p>
+    <p> - Prix unitaire: <b>{{dataSource.data.unit_price | currency}}</b> </p>
+    <p> - Note sur le produit: </p>
+    <p>
+        <mat-form-field appearance="fill">
+            <textarea matInput [value]="dataSource.data.note" disabled>
+            </textarea>
+        </mat-form-field>
+    </p>
+    <div *ngFor="let label of getLabels()" style="display: inline-flex; flex-wrap: wrap;">
+        <button mat-flat-button class="primary-color"
+            (click)="dataSource.data.note = addLabelToNote(label.label)">{{label.label}}</button>
+    </div>
+    <div>
+        <button mat-flat-button class="accent-color"
+            (click)="dataSource.data.note = removeLabelToNote()"><mat-icon>arrow_left</mat-icon></button>
+    </div>
+</div>
+<div mat-dialog-actions class="mat-dialog-actions">
+    <button mat-fab class="primary-color" (click)="incrementAmount()">
+        +1
+    </button>
+    <button mat-fab class="accent-color" (click)="redirectDialogValidation(dataSource.foo[0], dataSource.data)">
+        -1
+    </button>
+    <button mat-fab class="third-color" (click)="redirectDialogValidation(dataSource.foo[1], dataSource.data)">
+        <mat-icon>delete</mat-icon>
+    </button>
+</div>

@@ -9,7 +9,7 @@ import { Observable } from 'rxjs'
 })
 export class StateService {
 
-  private readonly baseUrl = environment.baseUrl
+  private readonly baseUrl = environment.baseUrl + "state"
 
   constructor(
     private http: HttpClient,
@@ -18,7 +18,7 @@ export class StateService {
   }
 
   findAll(): Observable<State[]> {
-    return this.http.get<State[]>(this.baseUrl + 'state')
+    return this.http.get<State[]>(this.baseUrl)
   }
 
 }

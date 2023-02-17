@@ -1,0 +1,38 @@
+.mat-divider {
+    margin: 1em 0;
+}
+
+.mat-card {
+    max-width: 600px;
+}
+
+.role-list-btn {
+    display: inline-flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+    button {
+        display: inline-flex;
+        flex-wrap: wrap;
+        height: fit-content;
+        width: 120px;
+        text-align: center;
+        justify-content: center;
+        margin: 3px;
+        padding: 10px;
+        white-space: normal;
+        word-break: break-word;
+        line-height: normal;
+    }
+}
+
+.center-content {
+    justify-content: space-evenly;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+
+    button {
+        padding: 0px 40px;
+    }
+}

@@ -1,0 +1,60 @@
+<header-dialog></header-dialog>
+<h1 mat-dialog-title i18n>Modification</h1>
+<div mat-dialog-content i18n>
+    <p>Informations sur le produit de cette commande</p>
+
+    <p> - Horodatage <b>
+            {{dataSource.data.date | date:'dd/MM/YY, hh\'h\'mm\'m\'ss\'s\''}}
+        </b>
+    </p>
+    <p> - Serveur: <b> {{dataSource.data.waiter}} </b></p>
+    <p> - Table: <b> {{dataSource.data.table_id}} </b></p>
+    <p> - Intitulé: <b> {{dataSource.data.name}} </b></p>
+    <p> - Prix unitaire: <b> {{dataSource.data.unit_price | currency }} </b></p>
+    <p>
+        <mat-form-field appearance="fill" *ngIf="canModifyLabel">
+            <textarea matInput [value]="formGroup.value.note" disabled>
+                </textarea>
+        </mat-form-field>
+    </p>
+    <p *ngIf="!canModifyLabel"> - Notes: <b>{{dataSource.data.note}}</b></p>
+
+    <ng-form [formGroup]="formGroup">
+        <div *ngIf="canModifyLabel">
+            <div *ngFor="let label of getLabels()" style="display: inline-flex; flex-wrap: wrap;">
+                <button mat-flat-button class="primary-color"
+                    (click)="addLabelToNote(label.label)">{{label.label}}</button>
+            </div>
+            <div>
+                <button mat-flat-button class="accent-color"
+                    (click)="removeLabelToNote()"><mat-icon>arrow_left</mat-icon></button>
+            </div>
+        </div>
+        <mat-form-field appearance="fill">
+            <mat-label>Quantité</mat-label>
+            <input matInput type="number" formControlName="amount" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>État</mat-label>
+            <mat-select formControlName="state">
+                <mat-option *ngFor="let state of states" [value]="state.state">
+                    {{state.state}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </ng-form>
+
+</div>
+<div mat-dialog-actions class="mat-dialog-actions" i18n>
+    <button mat-fab *ngIf="dataSource.data" class="secundary-color"
+        (click)="openDialog(deleteDialog, deleteOrder, null)">
+        <mat-icon>delete</mat-icon>
+    </button>
+    <button mat-fab type="submit" class="third-color" (click)="updateOrder()">
+        <mat-icon>check</mat-icon>
+    </button>
+</div>
+
+<ng-template #deleteDialog let-data>
+    <are-you-sure-dialog [dataSource]="data"></are-you-sure-dialog>
+</ng-template>

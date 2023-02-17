@@ -1,0 +1,11 @@
+<header-dialog></header-dialog>
+<h1 mat-dialog-title> Êtes-vous sûr ? </h1>
+<div mat-dialog-content>
+    <p>{{message}}</p>
+</div>
+<div mat-dialog-actions class="mat-dialog-actions">
+    <button mat-fab class="primary-color" (click)="redirectDialogValidation(dataSource.foo, dataSource.data)">
+        Oui
+    </button>
+    <button mat-fab class="secundary-color" (click)="closeAllDialog()"> Non </button>
+</div>

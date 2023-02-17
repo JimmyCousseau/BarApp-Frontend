@@ -9,28 +9,28 @@ import { Observable } from "rxjs";
 })
 export class UserService {
 
-    private readonly baseUrl = environment.baseUrl
+    private readonly baseUrl = environment.baseUrl + "user"
 
     constructor(private http: HttpClient) { }
 
     findAll(): Observable<UserProxy[]> {
-        return this.http.get<UserProxy[]>(this.baseUrl + 'user');
+        return this.http.get<UserProxy[]>(this.baseUrl);
     }
 
     updatePassword(user: UserProxy, password: string): Observable<boolean> {
-        return this.http.patch<boolean>(this.baseUrl + 'user/update-password/' + password, { user: user, passwd: password })
+        return this.http.patch<boolean>(this.baseUrl + '/update-password/' + password, { user: user, passwd: password })
     }
 
     updateRole(user: UserProxy): Observable<boolean> {
-        return this.http.patch<boolean>(this.baseUrl + 'user/update-role', { user: user });
+        return this.http.patch<boolean>(this.baseUrl + '/update-role', { user: user });
     }
 
-    create(user: UserProxy): Observable<boolean> {
-        return this.http.post<boolean>(this.baseUrl + 'user', { user: user });
+    insert(user: UserProxy): Observable<boolean> {
+        return this.http.post<boolean>(this.baseUrl, { user: user });
     }
 
-    delete(user: UserProxy): Observable<boolean> {
-        return this.http.post<boolean>(this.baseUrl + 'user/delete', { user: user });
+    delete(username: string): Observable<boolean> {
+        return this.http.delete<boolean>(this.baseUrl + '/' + username);
     }
 
 }

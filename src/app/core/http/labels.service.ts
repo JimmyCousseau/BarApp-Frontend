@@ -9,7 +9,7 @@ import { Observable } from 'rxjs'
 })
 export class LabelsService {
 
-  private baseUrl = environment.baseUrl
+  private baseUrl = environment.baseUrl + "labels"
 
   constructor(
     private http: HttpClient,
@@ -18,19 +18,19 @@ export class LabelsService {
   }
 
   findAll(): Observable<Labels[]> {
-    return this.http.get<Labels[]>(this.baseUrl + 'labels')
+    return this.http.get<Labels[]>(this.baseUrl)
   }
 
   create(labels: Labels): Observable<boolean> {
-    return this.http.post<boolean>(this.baseUrl + 'labels', { label: labels })
+    return this.http.post<boolean>(this.baseUrl, { label: labels })
   }
 
   update(label: Labels): Observable<boolean> {
-    return this.http.patch<boolean>(this.baseUrl + 'labels', { label: label })
+    return this.http.patch<boolean>(this.baseUrl, { label: label })
   }
 
   delete(id: number): Observable<boolean> {
-    return this.http.delete<boolean>(this.baseUrl + 'labels/' + id)
+    return this.http.delete<boolean>(this.baseUrl + '/' + id)
   }
 
 }

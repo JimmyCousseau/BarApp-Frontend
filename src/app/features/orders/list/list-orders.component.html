@@ -1,0 +1,16 @@
+<div *ngIf="ordersPending">
+    <div class="container-global">
+        <div class="container">
+            <mat-card class="mat-card-template" *ngFor="let table of tables">
+                <mat-card-title>
+                    Table n°{{table}}
+                </mat-card-title>
+
+                <mat-card-content>
+                    <app-order-table-template [dataSource]="{ foo: null, data: getDataSource(table) }">
+                    </app-order-table-template>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

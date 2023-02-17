@@ -1,0 +1,17 @@
+.container {
+    max-width: 1500px;
+}
+
+.mat-card {
+    height: fit-content;
+    margin: 1.5%;
+
+    .mat-card-title {
+        font-size: 30px;
+    }
+}
+
+.mat-card-template {
+    width: 400px;
+    height: auto;
+}

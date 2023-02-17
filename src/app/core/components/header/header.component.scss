@@ -1,0 +1,26 @@
+// ::ng-deep .snackbar {
+//     white-space: pre-wrap;
+// }
+
+.mat-button-toggle-group {
+    max-width: inherit;
+    display: inline-flex;
+    flex-wrap: wrap;
+    border-color: transparent;
+    justify-content: center;
+}
+
+.header-container {
+    display: inline-flex;
+    width: 100%;
+    justify-content: space-evenly;
+    margin-bottom: 3vh;
+
+    button {
+        display: inline;
+        width: inherit;
+        text-align: center;
+        cursor: pointer;
+        margin: 0 5px 0 5px;
+    }
+}

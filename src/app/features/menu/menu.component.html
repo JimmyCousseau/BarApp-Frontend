@@ -1,0 +1,186 @@
+<div *ngIf="products && sections">
+    <div *ngIf="canSwapMod()">
+        <div class="change-view-menu-mod" *ngIf="!isMenuMod()" (click)="swapMod()">
+            <mat-icon>edit</mat-icon>
+        </div>
+        <div class="change-view-menu-mod" *ngIf="isMenuMod()" (click)="swapMod()">
+            <mat-icon>exit_to_app</mat-icon>
+        </div>
+    </div>
+
+    <div class="container-global ng-star-inserted">
+        <div class="container">
+            <mat-card id="sections">
+                <mat-card-title> {{current_section ? current_section : "Menu"}} </mat-card-title>
+                <mat-grid-list cols="2" [gutterSize]="'1px'">
+                    <mat-grid-tile *ngIf="current_section != null">
+                        <button mat-raised-button (click)="backButton()" class="btn fourth-color">
+                            <span>
+                                Retour
+                            </span>
+                        </button>
+                    </mat-grid-tile>
+                    <mat-grid-tile *ngFor="let sec of getChildSections()">
+                        <button mat-raised-button *ngIf="sec.parent_section === current_section"
+                            (click)="isMenuMod() ? openDialog(sectionDialog, null, sec) : changeSections(sec.current_section)"
+                            class="btn primary-color">
+                            <span>
+                                {{sec.current_section}}
+                            </span>
+                        </button>
+                    </mat-grid-tile>
+                    <mat-grid-tile *ngIf="isMenuMod()">
+                        <button mat-raised-button
+                            (click)="openDialog(sectionDialog, null, { current_section: getCurrentSection().current_section})"
+                            class="btn primary-color">
+                            <span>
+                                +
+                            </span>
+                        </button>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-card>
+
+            <mat-card id="products">
+                <mat-card-title>Produits</mat-card-title>
+
+                <mat-grid-list cols="{{getNumberColumns()}}" [gutterSize]="'1px'">
+                    <mat-grid-tile *ngFor="let prod of getProductsOfSection()">
+                        <button mat-raised-button class="btn secundary-color"
+                            (click)="isMenuMod() ? openDialog(productDialog, null, prod) : incrementProductAmount(prod)">
+                            <span>
+                                {{prod.name}}
+                            </span>
+                        </button>
+                    </mat-grid-tile>
+                    <mat-grid-tile *ngIf="isMenuMod()">
+                        <button mat-raised-button
+                            (click)="openDialog(productDialog, null, { section: getCurrentSection() })"
+                            class="btn secundary-color">
+                            <span>
+                                +
+                            </span>
+                        </button>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-card>
+        </div>
+    </div>
+
+    <div *ngIf="isOrderContainItems() && !isMenuMod()">
+        <div class="container-global">
+            <div class="container">
+                <mat-card class="mat-card">
+                    <mat-card-title>
+                        Commande en cours
+                    </mat-card-title>
+
+                    <mat-card-content>
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 styled-table1">
+
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef> Intitulé </th>
+                                <td mat-cell *matCellDef="let order"> {{order.name}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef> Quantité </th>
+                                <td mat-cell *matCellDef="let order"> {{order.amount}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="note">
+                                <th mat-header-cell *matHeaderCellDef> Note </th>
+                                <td mat-cell *matCellDef="let order"> {{order.note}} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="['name', 'amount', 'note']"></tr>
+                            <tr mat-row *matRowDef="let order; columns: ['name', 'amount', 'note'];"
+                                (click)="openDialog(actionDialog, [reduceQuantiteInOrder, deleteProductInOrder], order)">
+                            </tr>
+
+                        </table>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="container-global">
+            <div class="container">
+                <mat-card class="mat-card">
+                    <mat-card-title>
+                        Numéro de table
+                    </mat-card-title>
+
+                    <mat-card-content>
+                        <mat-card-title>
+                            <span class="mat-display-2" style="color: black">
+                                {{getTableID()}}
+                            </span>
+                        </mat-card-title>
+                    </mat-card-content>
+
+                    <mat-card-content id="set-table-id">
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(1)">
+                            1
+                        </button>
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(2)">
+                            2
+                        </button>
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(3)">
+                            3
+                        </button>
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(4)">
+                            4
+                        </button>
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(5)">
+                            5
+                        </button>
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(6)">
+                            6
+                        </button>
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(7)">
+                            7
+                        </button>
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(8)">
+                            8
+                        </button>
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(9)">
+                            9
+                        </button>
+                        <button mat-fab class="accent-color" (click)="clearTableNumber()">
+                            AC
+                        </button>
+                        <button mat-fab class="third-color" (click)="incrementTableNumber(0)">
+                            0
+                        </button>
+
+                        <button mat-fab class="accent-color" (click)="decrementTableNumber()">
+                            <mat-icon>arrow_left</mat-icon>
+                        </button>
+                    </mat-card-content>
+
+                    <mat-card-content>
+                        <form (ngSubmit)="sendOrderToPrepare()" autocomplete="off" class="mat-form">
+                            <button mat-raised-button type="submit" class="primary-color">
+                                Valider
+                            </button>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #actionDialog let-data>
+    <prod-in-order-dialog [dataSource]="data"></prod-in-order-dialog>
+</ng-template>
+
+<ng-template #productDialog let-data>
+    <product-dialog [dataSource]="data"></product-dialog>
+</ng-template>
+
+<ng-template #sectionDialog let-data>
+    <section-dialog [dataSource]="data"></section-dialog>
+</ng-template>

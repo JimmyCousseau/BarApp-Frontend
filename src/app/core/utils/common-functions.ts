@@ -1,5 +1,3 @@
-import { TemplateRef } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 export function showResponseDialog(
@@ -22,11 +20,19 @@ export function showResponseDialog(
 }
 
 export function monthToMilliseconds(month: number) {
-    return 1000 * 60 * 60 * 24 * 31 * month
+    return 1000 * 60 * 60 * 24 * 30 * month
 }
 
 export function dayToMilliseconds(day: number) {
     return 1000 * 60 * 60 * 24 * day
+}
+
+export function millisecondsToDay(milliseconds: number): number {
+    return (milliseconds % (1000 * 60 * 60 * 24))
+}
+
+export function millisecondsToHours(milliseconds: number): number {
+    return (milliseconds / (1000 * 60 * 60))
 }
 
 export function getValueForm(value: any): any {

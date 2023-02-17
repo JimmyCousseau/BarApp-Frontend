@@ -259,13 +259,3 @@ h2 {
   text-align: center;
   margin: 2vh 0 6vh 0;
 }
-
-/**************** Lazy loading image ***************/
-
-.lazy-loading {
-  background-image: url($images-root + "Loadingsome.gif");
-  display: inline-flex;
-  width: 200px;
-  height: 200px;
-  background-size: cover;
-}

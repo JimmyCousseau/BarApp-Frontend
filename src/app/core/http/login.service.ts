@@ -9,23 +9,23 @@ import { environment } from "../../../environments/environment";
 })
 export class LoginService {
 
-    private readonly baseUrl = environment.baseUrl
+    private readonly baseUrl = environment.baseUrl + 'login'
 
     constructor(private http: HttpClient) { }
 
     login(user: User): Observable<any> {
-        return this.http.post<any>(this.baseUrl + 'login', { username: user.username, password: user.password });
+        return this.http.post<any>(this.baseUrl, { username: user.username, password: user.password });
     }
 
     verifyToken(token: string | null | undefined, username: string | null | undefined): Observable<any> {
-        return this.http.post<any>(this.baseUrl + 'login/verifyToken', { username, token });
+        return this.http.post<any>(this.baseUrl + '/verifyToken', { username, token });
     }
 
     verifyIdentification(user: User): Observable<boolean> {
-        return this.http.post<boolean>(this.baseUrl + 'login/verifyIdentification', { user })
+        return this.http.post<boolean>(this.baseUrl + '/verifyIdentification', { user })
     }
 
     disconnect(username: string): Observable<boolean> {
-        return this.http.delete<boolean>(this.baseUrl + 'login/disconnect/' + username)
+        return this.http.delete<boolean>(this.baseUrl + '/disconnect/' + username)
     }
 }

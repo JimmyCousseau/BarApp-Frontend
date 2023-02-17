@@ -1,0 +1,225 @@
+<div *ngIf="map">
+    <mat-card *ngIf="!editionMod">
+        <div class="title-mat-card">
+            <mat-card-title>
+                La carte
+            </mat-card-title>
+            <button mat-flat-button class="primary-color" (click)="editionMod = true">
+                Modifier
+            </button>
+        </div>
+        <mat-grid-list cols={{map.width}} class="map-grid" [gutterSize]="'0px'">
+            <mat-grid-tile *ngFor="let b of map.blocks">
+
+                <img *ngIf="b.table < 0" [src]="getUrlImg(b.img)" alt="" draggable="false">
+
+                <div *ngIf="b.table >= 0" class="interactive-block"
+                    (click)="openDialog(informationTable, null, getOrdersBy(b.table))">
+
+                    <img [src]="getUrlImg(b.img)" alt="" draggable="false">
+                    <div class="badge-tile">
+                        <span mat-flat-button *ngIf="haveOrders(b.table)">
+                            {{getLongestTimeWaitingTable(b.table)}}
+                        </span>
+                        <span mat-mini-fab *ngIf="haveOrders(b.table)"><mat-icon>people</mat-icon></span>
+                        <span mat-mini-fab>{{b.table}}</span>
+                    </div>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </mat-card>
+
+    <div class="container-global" *ngIf="editionMod">
+        <div class="container">
+            <mat-card class="palette">
+                <div class="title-mat-card">
+                    <mat-card-title>Palette</mat-card-title>
+                </div>
+                <mat-grid-list cols="5" [gutterSize]="'0px'">
+                    <mat-grid-tile *ngFor="let d of decors">
+                        <img src="{{getUrlImg(d.img)}}" alt="" (click)="setPencil(d.img)" draggable="false">
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </mat-card>
+        </div>
+    </div>
+
+    <mat-card *ngIf="editionMod" class="mod-map">
+        <div class="title-mod-map">
+            <mat-card-title>
+                Modification de la carte
+            </mat-card-title>
+            <div>
+                <button mat-flat-button class="third-color" (click)="ngOnInit()">Retour</button>
+                <button mat-flat-button class="primary-color"
+                    (click)="openDialog(passwordVerification, validate, null)">
+                    Valider
+                </button>
+            </div>
+        </div>
+        <div>
+            <mat-grid-list cols={{mapMod.width}} [gutterSize]="'0px'">
+                <!-- For the angle of the map -->
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile *ngFor="let col of [].constructor(map.width); let i = index">
+                    <div class="action-table-top">
+                        <div>
+                            <div class="add-btn-1" (click)="addColumn(i)">
+                                <div>
+                                    +
+                                </div>
+                            </div>
+                            <div class="add-btn-2" (click)="addColumn(i + 1)">
+                                <div>
+                                    +
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="remove-btn" (click)="removeColumn(i)">
+                                <div>
+                                    -
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+                <!-- For the angle of the map -->
+                <mat-grid-tile></mat-grid-tile>
+            </mat-grid-list>
+            <mat-grid-list cols={{mapMod.width}} (mouseleave)="hover = -1" [gutterSize]="'0px'">
+                <mat-grid-tile *ngFor="let b of mapMod.blocks; let i = index" class="cell-mod">
+
+                    <div class="interactive-block" *ngIf="b.img" (click)="openSetCellDialog(setPencilTableID, i)"
+                        (mouseenter)="hover = i" (dragover)="openSetCellDialog(setPencilTableID, i)">
+
+                        <div class="interactive-block">
+                            <div *ngIf="hover === i">
+                                <img src="{{getUrlImg(getPencil().img)}}" alt="">
+                                <div class="badge-tile" *ngIf="getPencil().table >= 0">
+                                    <span mat-mini-fab>{{getPencil().table}}</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="hover !== i">
+                                <img src="{{getUrlImg(b.img)}}" alt="">
+                                <div class="badge-tile" *ngIf="b.table >= 0">
+                                    <span mat-mini-fab>{{b.table}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-table-top" *ngIf="!b.img">
+                        <div>
+                            <div>
+                                <div class="remove-btn" (click)="removeRow(i)">
+                                    <div>
+                                        -
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: grid">
+                                <div class="add-btn-1" (click)="addRow(i)">
+                                    <div>
+                                        +
+                                    </div>
+                                </div>
+                                <div class="add-btn-2" (click)="addRow(i + mapMod.width)">
+                                    <div>
+                                        +
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <mat-grid-list cols={{mapMod.width}} [gutterSize]="'0px'">
+                <!-- For the angle of the map -->
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile *ngFor="let col of [].constructor(map.width); let i = index">
+                    <div class="action-table-top">
+                        <div>
+                            <div class="add-btn-1" (click)="addColumn(i)">
+                                <div>
+                                    +
+                                </div>
+                            </div>
+                            <div class="add-btn-2" (click)="addColumn(i + 1)">
+                                <div>
+                                    +
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="remove-btn" (click)="removeColumn(i)">
+                                <div>
+                                    -
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+                <!-- For the angle of the map -->
+                <mat-grid-tile></mat-grid-tile>
+            </mat-grid-list>
+        </div>
+    </mat-card>
+    <mat-card *ngIf="getTablesOutOfMap().length > 0">
+        <mat-card-title>
+            Commandes hors-carte
+        </mat-card-title>
+        <div class="container-global">
+            <div class="container">
+                <mat-card *ngFor="let table of getTablesOutOfMap()" class="mat-card-template">
+                    <mat-card-title style="text-align: left">
+                        Table n°{{table}}
+                    </mat-card-title>
+                    <mat-card-content>
+                        <app-order-table-template [dataSource]="{ foo: null, data: getOrdersBy(table)}">
+                        </app-order-table-template>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+<ng-template #informationTable let-data>
+    <header-dialog></header-dialog>
+    <div *ngIf="data.data[0]">
+        <mat-card-title>
+            Table n°
+            <strong>
+                {{data.data[0] ? data.data[0].table_id : ''}}
+            </strong>
+        </mat-card-title>
+
+        <mat-card-subtitle>
+            Les clients attendent depuis
+            <strong>
+                {{getLongestTimeWaitingTable(data.data[0] ? data.data[0].table_id : 0)}}
+            </strong>
+        </mat-card-subtitle>
+        <app-order-table-template [dataSource]="data"></app-order-table-template>
+    </div>
+    <div *ngIf="!data.data[0]">
+        <mat-card-title>
+            Table sans commande !
+        </mat-card-title>
+        <mat-card-subtitle>
+            Aucune commande n'est en cours pour cette table, <br>
+            tu peux sois aller voir les clients pour lui demander s'il a besoin de quelque chose, <br>
+            ou bien attribuer la table à des clients si elle est libre :) <br>
+        </mat-card-subtitle>
+    </div>
+</ng-template>
+
+<ng-template #setPencilTableID let-data>
+    <pencil-dialog [dataSource]="data"></pencil-dialog>
+</ng-template>
+
+<ng-template #passwordVerification let-data>
+    <password-verification-dialog [dataSource]="data"></password-verification-dialog>
+</ng-template>

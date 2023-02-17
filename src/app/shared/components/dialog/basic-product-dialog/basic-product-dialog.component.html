@@ -1,0 +1,30 @@
+<header-dialog></header-dialog>
+
+<mat-card-title>
+    Produit de base
+</mat-card-title>
+
+<mat-card-subtitle *ngIf="dataSource.data">
+    Nom du produit à modifier: <strong>{{dataSource.data.name}}</strong>
+</mat-card-subtitle>
+
+<div style="display: grid" [formGroup]="productForm">
+    <mat-form-field appearance="fill">
+        <mat-label> Nom du produit </mat-label>
+        <input matInput type="text" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label> Quantité </mat-label>
+        <input matInput type="number" formControlName="amount" />
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions class="mat-dialog-actions">
+    <button mat-fab class="primary-color" (click)="dataSource.data ? update() : create()">
+        <mat-icon>check</mat-icon>
+    </button>
+    <button mat-fab class="third-color" *ngIf="dataSource.data" (click)="delete()">
+        <mat-icon>delete</mat-icon>
+    </button>
+</div>

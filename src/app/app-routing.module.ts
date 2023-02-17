@@ -1,62 +1,47 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CheckoutComponent } from './core/components/checkout/checkout.component';
-import { HistoryComponent } from './core/components/history/history.component';
-import { KitchenComponent } from './core/components/kitchen/kitchen.component';
-import { LoginComponent } from './core/components/login/login.component';
-import { MapOrdersComponent } from './core/components/map-orders/map-orders.component';
-import { MenuComponent } from './core/components/menu/menu.component';
-import { OrdersComponent } from './core/components/orders/orders.component';
-import { ParametersComponent } from './core/components/parameters/parameters.component';
-import { StatisticsComponent } from './core/components/statistics/statistics.component';
-import { UnknownPageComponent } from './core/components/unknown-page/unknown-page.component';
-import { Permission } from './core/Interfaces/Role';
 import { AuthGuard } from './core/guards/auth.guard';
 import { HasRoleGuard } from './core/guards/has-role.guard';
+import { Permission } from './core/Interfaces/Role';
 
 const routes: Routes = [
-  { path: '', component: UnknownPageComponent },
+  { path: '', loadChildren: () => import('./features/login/login.module').then(m => m.LoginModule) },
   {
-    path: 'menu', component: MenuComponent,
+    path: 'menu', loadChildren: () => import('./features/menu/menu.module').then(m => m.MenuModule),
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: Permission.ACCESS_MENU }
+    data: { permission: Permission.ACCESS_MENU },
   },
   {
-    path: 'orders', component: OrdersComponent,
+    path: 'checkout/:id', loadChildren: () => import('./features/checkout/checkout.module').then(m => m.CheckoutModule),
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: Permission.ACCESS_ORDERS }
+    data: { permission: Permission.ACCESS_CHECKOUT },
   },
   {
-    path: 'map-orders', component: MapOrdersComponent,
-    canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: Permission.ACCESS_ORDERS }
-  },
-  {
-    path: 'parameters', component: ParametersComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'checkout/:id', component: CheckoutComponent,
-    canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: Permission.ACCESS_CHECKOUT }
-  },
-  {
-    path: 'kitchen', component: KitchenComponent,
-    canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: Permission.ACCESS_KITCHEN }
-  },
-  {
-    path: 'history', component: HistoryComponent,
+    path: 'history', loadChildren: () => import('./features/history/history.module').then(m => m.HistoryModule),
     canActivate: [AuthGuard, HasRoleGuard],
     data: { permission: Permission.ACCESS_HISTORY }
   },
   {
-    path: 'statistics', component: StatisticsComponent,
+    path: 'kitchen', loadChildren: () => import('./features/kitchen/kitchen.module').then(m => m.KitchenModule),
     canActivate: [AuthGuard, HasRoleGuard],
-    data: { permission: Permission.ACCESS_STATISTICS }
+    data: { permission: Permission.ACCESS_KITCHEN },
   },
-  { path: 'login', component: LoginComponent },
-  { path: '**', component: UnknownPageComponent },
+  { path: 'login', loadChildren: () => import('./features/login/login.module').then(m => m.LoginModule) },
+  {
+    path: 'orders', loadChildren: () => import('./features/orders/orders.module').then(m => m.OrdersModule),
+    canActivate: [AuthGuard, HasRoleGuard],
+    data: { permission: Permission.ACCESS_ORDERS }
+  },
+  {
+    path: 'parameters', loadChildren: () => import('./features/parameters/parameters.module').then(m => m.ParametersModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'statistics', loadChildren: () => import('./features/statistics/statistics.module').then(m => m.StatisticsModule),
+    canActivate: [AuthGuard, HasRoleGuard],
+    data: { permission: Permission.ACCESS_STATISTICS },
+  },
+  { path: '**', loadChildren: () => import('./features/login/login.module').then(m => m.LoginModule) },
 ];
 
 @NgModule({

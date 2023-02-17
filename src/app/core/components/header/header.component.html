@@ -1,0 +1,70 @@
+<div class="header-container">
+    <mat-button-toggle-group class="mat-button-toggle-group">
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../menu" *ngIf="role.access_menu">
+            Menu
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../orders" *ngIf="role.access_orders">
+            Commandes
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../checkout/0"
+            *ngIf="role.access_checkout">
+            Caisse
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../kitchen" *ngIf="role.access_kitchen">
+            Cuisine
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../history" *ngIf="role.access_history">
+            Historique
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../statistics"
+            *ngIf="role.access_statistics">
+            <mat-icon>
+                trending_up
+            </mat-icon>
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button [matMenuTriggerFor]="notificationMenu" class="navigate-btn"
+            (click)="hideBadge = true">
+            <mat-icon matBadge="{{productsWarningAmount.length}}" [matBadgeHidden]="hideBadge">
+                notifications
+            </mat-icon>
+        </mat-button-toggle>
+
+        <mat-menu #notificationMenu="matMenu">
+            <button mat-menu-item *ngFor="let prod of productsWarningAmount" (click)="openDialog(modProd, null, prod)">
+                <mat-icon>warning</mat-icon>
+                <span>
+                    Alert stock:
+                    {{prod.name}}
+                </span>
+            </button>
+        </mat-menu>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" routerLink="../parameters">
+            <mat-icon>
+                settings
+            </mat-icon>
+        </mat-button-toggle>
+
+        <mat-button-toggle mat-raised-button class="navigate-btn" (click)="openDialog(exitDialog, disconnect, null)">
+            <mat-icon>
+                exit_to_app
+            </mat-icon>
+        </mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+
+<ng-template #exitDialog let-data>
+    <are-you-sure-dialog [dataSource]="data" message="Vous êtes sur le point de vous déconnecter, êtes-vous sûr ?">
+    </are-you-sure-dialog>
+</ng-template>
+
+<ng-template #modProd let-data>
+    <product-dialog [dataSource]="data">
+    </product-dialog>
+</ng-template>

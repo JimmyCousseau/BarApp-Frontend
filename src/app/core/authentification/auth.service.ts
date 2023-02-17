@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { LoginService } from '../../core/http/login.service';
 import { Role } from '../Interfaces/Role';
 import { User, UserProxy } from '../Interfaces/User';
-import { LoginService } from '../../core/http/login.service';
 
 
 @Injectable({
@@ -16,13 +15,30 @@ export class AuthService {
   private readonly TOKEN = 'log_token'
   private readonly TOKEN_USERNAME = 'log_token_username'
 
-  private user!: UserProxy
-  private role!: Role
+  private readonly defaultUser: UserProxy = {
+    username: "",
+    role: "",
+  }
+
+  private readonly defaultRole: Role = {
+    role: "",
+    access_administration_panel: false,
+    access_checkout: false,
+    access_history: false,
+    access_kitchen: false,
+    access_menu: false,
+    access_orders: false,
+    access_statistics: false,
+    modify_map: false,
+    modify_menu: false,
+  }
+
+  private user: UserProxy = this.defaultUser
+  private role: Role = this.defaultRole
 
   constructor(
     private loginService: LoginService,
-    private _snackBar: MatSnackBar,
-    private router: Router,
+    private snackBar: MatSnackBar,
   ) {
   }
 
@@ -31,29 +47,29 @@ export class AuthService {
     return token ? token : ""
   }
 
-  verifyToken(): void {
+  verifyToken(): Observable<any> {
     const token = this.getToken()
     const username = localStorage.getItem(this.TOKEN_USERNAME);
-    this.loginService.verifyToken(token, username)
-      .subscribe((response) => {
-        if (response !== null) {
-          this.user = response.user
-          this.role = response.role
-          this._isLoggedIn.next(true)
-          this.router.navigate(['../parameters'])
-        } else {
-          this._isLoggedIn.next(false)
-          if (this.router.url !== '/login')
-            this.router.navigate(['login'])
-        }
-      })
+    return this.loginService.verifyToken(token, username)
+      .pipe(
+        tap((response) => {
+          if (response !== null) {
+            this.user = response.user
+            this.role = response.role
+            this._isLoggedIn.next(true)
+          } else {
+            this._isLoggedIn.next(false)
+          }
+          return true;
+        })
+      )
   }
 
-  login(user: User) {
+  login(user: User): Observable<any> {
     return this.loginService.login(user)
       .pipe(
         tap((response: any) => {
-          if (response != null) {
+          if (response !== null) {
             localStorage.setItem(this.TOKEN, response.token)
             localStorage.setItem(this.TOKEN_USERNAME, response.user.username)
 
@@ -63,7 +79,7 @@ export class AuthService {
             this._isLoggedIn.next(true)
           } else {
             this._isLoggedIn.next(false)
-            this._snackBar.open("Mauvais identifiant / mot de passe,\nVeuillez réessayer", "Ok", {
+            this.snackBar.open("Mauvais identifiant / mot de passe,\nVeuillez réessayer", "Ok", {
               duration: 3000,
               panelClass: ['snackbar'],
             })
@@ -85,10 +101,13 @@ export class AuthService {
   }
 
   disconnect(): void {
-    this.loginService.disconnect(this.getUser().username).subscribe((response: boolean) => {
-      this.router.navigate(['/login'])
+    if (!this.user)
+      return
+    this.loginService.disconnect(this.user.username).subscribe((response: boolean) => {
       localStorage.removeItem(this.TOKEN)
       localStorage.removeItem(this.TOKEN_USERNAME)
+      this.user = this.defaultUser
+      this.role = this.defaultRole
       this._isLoggedIn.next(false)
     })
   }

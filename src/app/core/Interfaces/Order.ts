@@ -5,6 +5,7 @@ export interface Order {
     waiter: string
     table_id: number
     amount: number
+    unit_price: number
     state: string
     note: string
 }

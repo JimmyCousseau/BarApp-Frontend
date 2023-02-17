@@ -1,0 +1,109 @@
+<header-dialog></header-dialog>
+
+<h1 mat-dialog-title> Produit </h1>
+<div style="display: inline-flex">
+    <div mat-dialog-content [formGroup]="productForm" style="display: grid">
+
+        <mat-form-field>
+            <mat-label> Nom du produit </mat-label>
+            <input matInput type="text" placeholder="p.e Monaco" formControlName="productName" />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="!productForm.value.composedProduct">
+            <mat-label> Prix de vente </mat-label>
+            <input matInput type="number" placeholder="p.e 3.50" formControlName="productPriceSold" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> Prix d'achat </mat-label>
+            <input matInput type="number" placeholder="p.e 1.99" formControlName="productPriceBought" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> Quantité </mat-label>
+            <input matInput type="number" placeholder="p.e 1.99" formControlName="productAmount" />
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> Section </mat-label>
+            <mat-select formControlName="productSection">
+                <!-- An empty option in case the product need to be on the root -->
+                <mat-option value=""></mat-option>
+                <mat-option *ngFor="let section of sections" value="{{section.current_section}}">
+                    {{section.current_section}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="productNeedPreparation">
+            Doit passer en cuisine
+        </mat-checkbox>
+
+        <mat-checkbox formControlName="composedProduct">
+            Produit composé
+        </mat-checkbox>
+        <div *ngIf="productForm.value.composedProduct">
+            <table mat-table [dataSource]="recipes" class="mat-elevation-z8 styled-table1" *ngIf="recipes.length > 0"
+                style="width: 100%; margin-top: 30px">
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Intitulé </th>
+                    <td mat-cell *matCellDef="let recipe"> {{getNameBasicProduct(recipe.basic_product_id)}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef> Quantité </th>
+                    <td mat-cell *matCellDef="let recipe"> {{recipe.amountUsed}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef> Supprimer </th>
+                    <td mat-cell *matCellDef="let recipe">
+                        <button mat-flat-button class="primary-color" (click)="deleteRecipe(recipe.basic_product_id)">
+                            X
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="['name', 'amount', 'delete']"></tr>
+                <tr mat-row *matRowDef="let recipe; columns: ['name', 'amount', 'delete'];">
+                </tr>
+
+            </table>
+
+            <div [formGroup]="recipeForm" style="margin-top: 25px">
+                <mat-form-field>
+                    <mat-label> Produit basic </mat-label>
+                    <mat-select formControlName="basicProductId">
+                        <mat-option *ngFor="let bp of basicProducts" value="{{bp.id}}">
+                            {{bp.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label> Quantité utilisé </mat-label>
+                    <input matInput formControlName="amountUsed" type="number" placeholder="p.e 5" />
+                </mat-form-field>
+            </div>
+            <button mat-flat-button (click)="addRecipe()" class="primary-color" style="width: 100%">
+                Ajouter
+            </button>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions class="mat-dialog-actions">
+    <button mat-fab *ngIf="dataSource.data" class="secundary-color"
+        (click)="openDialog(deleteDialog, deleteProduct, dataSource.data.name)">
+        <mat-icon>delete</mat-icon>
+    </button>
+    <button mat-fab type="submit" class="third-color" (click)="productDialogResponse()">
+        <mat-icon>check</mat-icon>
+    </button>
+</div>
+
+<ng-template #deleteDialog let-data>
+    <are-you-sure-dialog [dataSource]="data"
+        message="Toutes les commandes contenant ce produit ne le contiendront plus">
+    </are-you-sure-dialog>
+</ng-template>

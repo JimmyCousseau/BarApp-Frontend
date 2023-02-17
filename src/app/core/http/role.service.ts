@@ -9,24 +9,24 @@ import { Role } from "../Interfaces/Role";
 })
 export class RoleService {
 
-    private readonly baseUrl = environment.baseUrl
+    private readonly baseUrl = environment.baseUrl + "role"
 
     constructor(private http: HttpClient) { }
 
     findAll(): Observable<Role[]> {
-        return this.http.get<Role[]>(this.baseUrl + 'role');
+        return this.http.get<Role[]>(this.baseUrl);
     }
 
-    create(roleName: string): Observable<boolean> {
-        return this.http.post<boolean>(this.baseUrl + 'role/create', { roleName });
+    insert(roleName: string): Observable<boolean> {
+        return this.http.post<boolean>(this.baseUrl, { roleName });
     }
 
     delete(role: string): Observable<boolean> {
-        return this.http.post<boolean>(this.baseUrl + 'role/remove', { role });
+        return this.http.delete<boolean>(this.baseUrl + '/' + role);
     }
 
     update(role: Role): Observable<boolean> {
-        return this.http.patch<boolean>(this.baseUrl + "role", { role: role })
+        return this.http.patch<boolean>(this.baseUrl, { role: role })
     }
 
 }
