@@ -26,6 +26,7 @@ export class UserService {
     }
 
     insert(user: UserProxy): Observable<boolean> {
+        console.log("INSERT")
         return this.http.post<boolean>(this.baseUrl, { user: user });
     }
 

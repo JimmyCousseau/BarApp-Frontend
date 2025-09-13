@@ -31,7 +31,7 @@
                     </mat-grid-tile>
                     <mat-grid-tile *ngIf="isMenuMod()">
                         <button mat-raised-button
-                            (click)="openDialog(sectionDialog, null, { current_section: getCurrentSection().current_section})"
+                            (click)="openDialog(sectionDialog, null, null)"
                             class="btn primary-color">
                             <span>
                                 +
@@ -160,11 +160,9 @@
                     </mat-card-content>
 
                     <mat-card-content>
-                        <form (ngSubmit)="sendOrderToPrepare()" autocomplete="off" class="mat-form">
-                            <button mat-raised-button type="submit" class="primary-color">
-                                Valider
-                            </button>
-                        </form>
+                        <button mat-raised-button type="button" (click)="sendOrderToPrepare()" class="primary-color">
+                            Valider
+                        </button>
                     </mat-card-content>
                 </mat-card>
             </div>

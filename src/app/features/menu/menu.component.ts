@@ -112,7 +112,7 @@ export class MenuComponent extends Dialog implements OnInit {
     this.orders.forEach((order) => {
       order.table_id = this.tableID
       const result = this.getNeedPreparation(order.name)
-      this.orderService.sendOrderToPrepare(result ? result : false, order).subscribe(() => {
+      this.orderService.sendOrderToPrepare(result || false, order).subscribe(() => {
         this.reset()
         this.router.navigate(['../orders'])
       });
@@ -150,7 +150,7 @@ export class MenuComponent extends Dialog implements OnInit {
   getTableID(): number { return this.tableID }
   getProductsOfSection(): Products[] { return this.products.filter((product) => product.section === this.current_section) }
   getChildSections(): Sections[] { return this.sections.filter((section) => section.parent_section === this.current_section) }
-  getCurrentSection(): Sections { return { id: 0, parent_section: this.current_section, current_section: "" } }
+  getCurrentSection(): Sections { return { _id: 0, parent_section: this.current_section, current_section: "" } }
   getNumberColumns() {
     let obj = document.getElementById('products')
     return obj !== null ? obj.clientWidth / 120 : 2

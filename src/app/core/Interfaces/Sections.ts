@@ -1,5 +1,5 @@
 export interface Sections {
-    id: number
+    _id: number
     current_section: string;
     parent_section: string | null;
 }

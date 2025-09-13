@@ -19,7 +19,7 @@ export class SectionDialog extends HeaderDialog implements OnInit {
 
   sectionForm = new FormGroup({
     currentSection: new FormControl("", [Validators.required, Validators.maxLength(30)]),
-    parentSection: new FormControl("", [Validators.required, Validators.maxLength(30)]),
+    parentSection: new FormControl("", [Validators.maxLength(30)]),
   })
 
   sections: Sections[] = []
@@ -33,8 +33,8 @@ export class SectionDialog extends HeaderDialog implements OnInit {
   }
   override ngOnInit(): void {
     this.sectionForm.setValue({
-      currentSection: this.dataSource.data.current_section,
-      parentSection: this.dataSource.data.parent_section,
+      currentSection: this.dataSource.data?.current_section || null,
+      parentSection: this.dataSource.data?.parent_section || null,
     })
     this.sectionService.findAll().subscribe((sections: Sections[]) => {
       this.sections = sections
@@ -52,11 +52,10 @@ export class SectionDialog extends HeaderDialog implements OnInit {
       return
 
     const section: Sections = {
-      id: this.dataSource.data.id,
-      parent_section: currentSection,
-      current_section: parentSection,
+      _id: this.dataSource.data?._id,
+      parent_section: parentSection || null,
+      current_section: currentSection,
     }
-
     if (this.dataSource.data === null || this.dataSource.data === undefined)
       this.addSection(section)
     else

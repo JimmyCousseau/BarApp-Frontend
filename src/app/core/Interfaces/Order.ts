@@ -1,5 +1,5 @@
 export interface Order {
-    id?: number
+    _id?: number
     date: Date
     name: string
     waiter: string

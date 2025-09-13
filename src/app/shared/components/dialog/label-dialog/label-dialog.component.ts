@@ -35,16 +35,16 @@ export class LabelDialog extends HeaderDialog {
   updateLabel(): void {
     const label = {
       label: getValueForm(this.labelForm.value.labelName),
-      id: getValueForm(this.dataSource.data?.id)
+      _id: getValueForm(this.dataSource.data?._id)
     }
     this.labelService.update(label).subscribe(() => this.dialog.closeAll())
   }
 
   createLabel(): void {
-    this.labelService.create({ id: 0, label: getValueForm(this.labelForm.value.labelName) }).subscribe(() => this.dialog.closeAll())
+    this.labelService.create({ _id: 0, label: getValueForm(this.labelForm.value.labelName) }).subscribe(() => this.dialog.closeAll())
   }
 
   deleteLabel(): void {
-    this.labelService.delete(getValueForm(this.dataSource.data?.id)).subscribe(() => this.dialog.closeAll())
+    this.labelService.delete(getValueForm(this.dataSource.data?._id)).subscribe(() => this.dialog.closeAll())
   }
 }

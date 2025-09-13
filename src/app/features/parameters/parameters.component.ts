@@ -113,15 +113,20 @@ export class ParametersComponent extends Dialog implements OnInit {
   }
 
   addUser = (): void => {
+    console.log("ICI")
     if (this.newUserForm.invalid) {
+      console.log("INVALID")
       return
     }
+    console.log("OK")
     const newUser: UserProxy = {
       username: getValueForm(this.newUserForm.value.username),
       role: getValueForm(this.newUserForm.value.role),
     };
+    console.log(newUser);
 
     this.userService.insert(newUser).subscribe((data: any) => {
+      console.log(data)
       showResponseDialog(this.snackBar, data, "Utilisateur enregistré !")
     });
   }

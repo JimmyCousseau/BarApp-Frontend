@@ -1,5 +1,5 @@
 export interface BasicProducts {
-    id: number;
+    _id: number;
     name: string;
     amount: number;
 }

@@ -14,7 +14,13 @@ export class LoginService {
     constructor(private http: HttpClient) { }
 
     login(user: User): Observable<any> {
-        return this.http.post<any>(this.baseUrl, { username: user.username, password: user.password });
+        console.log(user)
+        const res = this.http.post<any>(this.baseUrl, {
+          username: user.username,
+          password: user.password,
+        });
+        res.forEach((next) => console.log(next))
+        return res
     }
 
     verifyToken(token: string | null | undefined, username: string | null | undefined): Observable<any> {

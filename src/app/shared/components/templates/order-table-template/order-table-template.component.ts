@@ -30,6 +30,7 @@ export class OrderTableTemplate extends HeaderDialog {
       return
     this.orderService.updateStatePrepared(this.dataSource.data[0]).subscribe(() => {
       this.router.navigate(['../checkout', this.dataSource.data[0].table_id])
+      console.log(this.dataSource.data)
       this.closeAllDialog()
     });
   }

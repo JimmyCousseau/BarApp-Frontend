@@ -36,7 +36,7 @@ export class BasicProductDialogComponent extends HeaderDialog {
 
   update(): void {
     const product = {
-      id: getValueForm(this.dataSource.data?.id),
+      _id: getValueForm(this.dataSource.data?._id),
       name: getValueForm(this.productForm.value.name),
       amount: getValueForm(this.productForm.value.amount)
     }
@@ -45,14 +45,14 @@ export class BasicProductDialogComponent extends HeaderDialog {
 
   create(): void {
     this.basicProductService.insert({
-      id: 0,
+      _id: 0,
       name: getValueForm(this.productForm.value.name),
       amount: getValueForm(this.productForm.value.amount)
     }).subscribe(() => this.dialog.closeAll())
   }
 
   delete(): void {
-    this.basicProductService.delete(getValueForm(this.dataSource.data?.id)).subscribe(() => this.dialog.closeAll())
+    this.basicProductService.delete(getValueForm(this.dataSource.data?._id)).subscribe(() => this.dialog.closeAll())
   }
 
 }

@@ -25,7 +25,7 @@ export class OrderService {
     }
 
     findAllPendingBy(): Observable<Order[]> {
-        return this.http.get<Order[]>(this.baseUrl + "/pending/" + this.authService.getUser().username);
+        return this.http.get<Order[]>(this.baseUrl + "/pending");
     }
 
     findAllBeingPrepared(): Observable<Order[]> {

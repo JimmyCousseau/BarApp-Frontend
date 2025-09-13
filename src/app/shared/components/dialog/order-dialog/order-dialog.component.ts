@@ -67,10 +67,10 @@ export class OrderDialog extends HeaderDialog implements OnInit {
   }
 
   deleteOrder = (): void => {
-    if (!this.dataSource.data.id)
+    console.log(this.dataSource.data)
+    if (!this.dataSource.data._id)
       return
-
-    this.orderService.delete(this.dataSource.data.id).subscribe(() => this.closeAllDialog())
+    this.orderService.delete(this.dataSource.data._id).subscribe(() => this.closeAllDialog())
   }
 
   addLabelToNote(label: string): void {

@@ -39,7 +39,7 @@
             Doit passer en cuisine
         </mat-checkbox>
 
-        <mat-checkbox formControlName="composedProduct">
+        <!-- <mat-checkbox formControlName="composedProduct">
             Produit composé
         </mat-checkbox>
         <div *ngIf="productForm.value.composedProduct">
@@ -89,12 +89,12 @@
             <button mat-flat-button (click)="addRecipe()" class="primary-color" style="width: 100%">
                 Ajouter
             </button>
-        </div>
+        </div> -->
     </div>
 </div>
 <div mat-dialog-actions class="mat-dialog-actions">
-    <button mat-fab *ngIf="dataSource.data" class="secundary-color"
-        (click)="openDialog(deleteDialog, deleteProduct, dataSource.data.name)">
+    <button mat-fab *ngIf="isProduct(dataSource.data) || false" class="secundary-color"
+        (click)="openDialog(deleteDialog, deleteProduct, isProduct(dataSource.data) ? dataSource.data.name : '')">
         <mat-icon>delete</mat-icon>
     </button>
     <button mat-fab type="submit" class="third-color" (click)="productDialogResponse()">
